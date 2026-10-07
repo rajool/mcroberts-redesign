@@ -1,0 +1,16 @@
+{#
+/**
+ * @file
+ * region primary_menu → block mainnavigation (system_menu_block:main, design/ia.json "primary": 7 items; level 2 =
+ * columns, the first one the most-requested links). W3C APG disclosure navigation with top-level links: each label
+ * links to its hub, the button beside it opens the panel (menu--main.html.twig). The mini crest and the compact
+ * Student Absent? pill show once the header is stuck (js/nav.js).
+ */
+#}
+{% set nav_attributes = attributes|without('role', 'aria-labelledby') %}
+{% if mcroberts_region and mcroberts_region != 'primary_menu' %}
+<nav{{ nav_attributes.addClass('block', 'block-menu').setAttribute('aria-label', label|default('Main navigation')) }}>{{ title_prefix }}{{ title_suffix }}{{ content }}</nav>
+{% else %}
+<!-- region primary_menu → block mainnavigation (system_menu_block:main): disclosure navigation with top-level links -->
+<nav{{ nav_attributes.addClass('primary', 'region', 'region-primary-menu').setAttribute('aria-label', 'Main navigation') }}><div class="wrap"><a class="mini-crest" href="{{ mcroberts.home }}" tabindex="-1" aria-hidden="true"><img src="{{ mcroberts.crest.src }}" alt="" width="{{ mcroberts.crest.w }}" height="{{ mcroberts.crest.h }}"></a>{{ title_prefix }}{{ title_suffix }}{{ content }}{% include '@mcroberts/includes/absent-pill.html.twig' with {c: mcroberts, cls: 'sticky-absent'} only %}</div></nav>
+{% endif %}

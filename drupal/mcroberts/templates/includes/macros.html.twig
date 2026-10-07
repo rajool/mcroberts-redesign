@@ -1,0 +1,55 @@
+{#
+/**
+ * @file
+ * Shared markup of the McRoberts theme: the static build's icon(), date_chip(), menu_link() and group_title().
+ *
+ * Import with: {% import '@mcroberts/includes/macros.html.twig' as m %}
+ */
+#}
+{% macro icon(name, cls) -%}
+<svg class="{{ cls|default('icon') }}" aria-hidden="true" focusable="false"><use href="#i-{{ name }}"/></svg>
+{%- endmacro %}
+
+{# A date chip: month, day number, weekday. p = Calendar::parts(). #}
+{% macro chip(p, cls) -%}
+<time class="{{ cls|default('date-chip') }}" datetime="{{ p.iso }}"><span class="m">{{ p.m }}</span><span class="n">{{ p.n }}</span><span class="d">{{ p.d }}</span></time>
+{%- endmacro %}
+
+{# The large date chip with the year (article sidebar, event page). #}
+{% macro chip_lg(p) -%}
+<time class="date-chip date-chip--lg" datetime="{{ p.iso }}"><span class="m">{{ p.m }}</span><span class="n">{{ p.n }}</span><span class="d">{{ p.d }}</span><span class="y">{{ p.y }}</span></time>
+{%- endmacro %}
+
+{#
+  One menu link (build.py menu_link()): aria-current on the page itself, is-active-trail on the link that stands
+  for it. arrow: the arrow (or, for an http link, the external mark) after the label; without it only the external
+  mark. glue: the mark stays on the line of the label's last word.
+#}
+{% macro menu_link(l, cls, arrow, glue) -%}
+{%- import _self as m -%}
+{%- set classes = [cls, l.trail ? 'is-active-trail' : '']|filter(c => c) -%}
+{%- if l.http -%}
+  {%- set mark = m.icon('ext', 'icon ext-mark') -%}
+{%- elseif arrow -%}
+  {%- set mark = m.icon('arrow') -%}
+{%- else -%}
+  {%- set mark = '' -%}
+{%- endif -%}
+<a{% if classes %} class="{{ classes|join(' ') }}"{% endif %} href="{{ l.url }}"{% if l.current %} aria-current="page"{% endif %}>
+{%- if glue and mark and l.head -%}
+<span>{{ l.head }} <span class="nowrap">{{ l.last }}{{ mark }}</span></span>
+{%- else -%}
+<span>{{ l.label }}</span>{{ mark }}
+{%- endif -%}
+</a>
+{%- endmacro %}
+
+{# A menu column's heading (build.py group_title()): a link when the menu item links, nothing when it has none. #}
+{% macro group_title(g, tag, cls, gid, glue) -%}
+{%- import _self as m -%}
+{%- if g.label -%}
+<{{ tag }} class="{{ cls }}"{% if gid %} id="{{ gid }}"{% endif %}>
+{%- if g.href -%}{{ m.menu_link(g.href|merge({label: g.label}), '', true, glue) }}{%- else -%}{{ g.label }}{%- endif -%}
+</{{ tag }}>
+{%- endif -%}
+{%- endmacro %}

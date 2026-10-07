@@ -1,0 +1,74 @@
+# Schema for the McRoberts theme settings (core theme_settings plus the keys below).
+mcroberts.settings:
+  type: theme_settings
+  label: 'McRoberts settings'
+  mapping:
+    mcroberts_concept_banner:
+      type: boolean
+      label: 'Show the design-concept banner and send noindex'
+    mcroberts_contact:
+      type: mapping
+      label: 'Contact fallback'
+      mapping:
+        address_line1:
+          type: string
+          label: 'Street address'
+        locality:
+          type: string
+          label: City
+        administrative_area:
+          type: string
+          label: Province
+        postal_code:
+          type: string
+          label: 'Postal code'
+        map_url:
+          type: string
+          label: 'Map link'
+        phone:
+          type: string
+          label: Phone
+        email:
+          type: string
+          label: Email
+    mcroberts_absent:
+      type: mapping
+      label: 'Student Absent? fallback'
+      mapping:
+        label:
+          type: label
+          label: Label
+        path:
+          type: string
+          label: 'Page path'
+        number_label:
+          type: label
+          label: 'Number label'
+        number_uri:
+          type: string
+          label: 'Number link'
+    mcroberts_district:
+      type: mapping
+      label: District
+      mapping:
+        name:
+          type: label
+          label: Name
+        url:
+          type: string
+          label: Link
+    mcroberts_languages:
+      type: sequence
+      label: 'Translate languages fallback'
+      sequence:
+        type: string
+        label: 'Language code'
+    mcroberts_paths:
+      type: sequence
+      label: 'Page paths'
+      sequence:
+        type: string
+        label: Path
+    mcroberts_webcal:
+      type: string
+      label: 'Calendar feed'

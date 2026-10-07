@@ -1,0 +1,11 @@
+{#
+/**
+ * @file
+ * Translate (GTranslate block, gtranslate_block): .gtranslate_wrapper kept; a native select over the visual button,
+ * the languages of the block configuration with their native names. js/a11y.js keeps every copy in step.
+ *
+ * Variables: c (Site::chrome()), uid (unique per copy), variant (utility, desktop, bar, drawer).
+ */
+#}
+{% import '@mcroberts/includes/macros.html.twig' as m %}
+<div class="translate gtranslate_wrapper"><span class="tool-btn" aria-hidden="true">{{ m.icon('globe') }}{% if variant != 'utility' %}<span class="label-gt">Translate</span>{% endif %}<span class="current" translate="no">English</span></span><label class="vh" for="gt-{{ uid }}">Translate</label><select id="gt-{{ uid }}" class="gt_selector notranslate" translate="no" data-gt-select>{% for o in c.languages %}<option value="{{ o.value }}" lang="{{ o.lang }}"{% if o.selected %} selected{% endif %}>{{ o.label }}</option>{% endfor %}</select>{{ m.icon('chev', 'chev') }}</div>

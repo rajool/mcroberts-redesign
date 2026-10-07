@@ -1,0 +1,10 @@
+{#
+/**
+ * @file
+ * field_media_file (media type file): a document card per file (type badge, file name, download icon); the media
+ * reference field around it makes the list (field--entity-reference.html.twig).
+ *
+ * Variables: mcroberts_cards (_mcroberts_file_card() items).
+ */
+#}
+{% for f in mcroberts_cards %}{% include '@mcroberts/includes/file-card.html.twig' with {f: f} only %}{% endfor %}

@@ -1,0 +1,84 @@
+/* ==========================================================================
+   McRoberts theme: design tokens ("Crest & Canopy")
+   Drupal: mcroberts.libraries.yml → global-styling (theme layer). Plain CSS custom properties, no preprocessor.
+   Colours derive from the crest (forest green, black, white) plus paper and brass for the editorial voice.
+   ========================================================================== */
+/* Metric-matched fallbacks: until Newsreader and Noto Sans arrive (display=swap), text is set in a local face
+   scaled to their widths and line metrics, so the swap re-wraps nothing and moves nothing (no layout shift).
+   Values tuned in Chrome against the web fonts on this site's own pages at 390 and 1280px (fewest re-wrapped lines;
+   Newsreader at heading sizes, where its optical size runs narrow). Regular and bold are separate faces, so bold is
+   never synthesised from the regular. */
+@font-face { font-family: "Newsreader Fallback"; src: local("Georgia"), local("Gelasio"); font-weight: 100 549; font-style: normal;
+  size-adjust: 94.5%; ascent-override: 78.3%; descent-override: 27.5%; line-gap-override: 0%; }
+@font-face { font-family: "Newsreader Fallback"; src: local("Georgia Bold"), local("Georgia-Bold"), local("Gelasio Bold"); font-weight: 550 900; font-style: normal;
+  size-adjust: 88%; ascent-override: 84.1%; descent-override: 29.5%; line-gap-override: 0%; }
+@font-face { font-family: "Newsreader Fallback"; src: local("Georgia Italic"), local("Georgia-Italic"), local("Gelasio Italic"); font-weight: 100 900; font-style: italic;
+  size-adjust: 94.5%; ascent-override: 78.3%; descent-override: 27.5%; line-gap-override: 0%; }
+@font-face { font-family: "Noto Sans Fallback"; src: local("Arial"), local("ArialMT"), local("Liberation Sans"), local("Arimo"); font-weight: 100 549; font-style: normal;
+  size-adjust: 104%; ascent-override: 102.8%; descent-override: 28.2%; line-gap-override: 0%; }
+@font-face { font-family: "Noto Sans Fallback"; src: local("Arial Bold"), local("Arial-BoldMT"), local("Liberation Sans Bold"), local("Arimo Bold"); font-weight: 550 900; font-style: normal;
+  size-adjust: 100.5%; ascent-override: 106.4%; descent-override: 29.2%; line-gap-override: 0%; }
+
+:root {
+  /* Paper and ink */
+  --paper: #f7f3ea;
+  --paper-2: #efe7d6;
+  --paper-3: #fbf8f1;
+  --card: #fffdf8;
+  --ink: #14211a;
+  --ink-2: #4b5a50;
+  --ink-3: #5b6a60;
+
+  /* Crest greens */
+  --forest: #1f4d2b;
+  --forest-600: #2f6b3d;
+  --forest-800: #173d22;
+  --forest-900: #10291a;
+
+  /* Accents: brass is text-safe on paper (5.6:1), gold is text-safe on forest (5.1:1+) */
+  --brass: #7a5c14;
+  --gold: #e3b65a;
+  --gold-soft: #f3e2b8;
+  --sage: #a9c3a8;
+  --mist: #d6e4d3;
+
+  /* Bell blocks A-D: one colour code everywhere (rotation tables, Today strip, Today card), from the palette */
+  --blk-a: #d6e4d3;   /* mist */
+  --blk-b: #f3e2b8;   /* gold-soft */
+  --blk-c: #e8dcc6;   /* paper, a shade deeper */
+  --blk-d: #bfd4bc;   /* sage tint */
+
+  /* Rules */
+  --rule: #d9cfba;
+  --rule-soft: #e7dfcf;
+  --rule-dark: rgba(247, 243, 234, .18);
+
+  /* news_alerts row classes (.standard-alert / .urgent-alert) */
+  --alert-standard-bg: #f2c14e;
+  --alert-standard-fg: #14211a;
+  --alert-urgent-bg: #9b1c1f;
+  --alert-urgent-fg: #ffffff;
+
+  /* Type */
+  --serif: "Newsreader", "Newsreader Fallback", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  --sans: "Noto Sans", "Noto Sans Fallback", system-ui, -apple-system, "Segoe UI", "PingFang SC", "Hiragino Sans", "Microsoft YaHei", sans-serif;
+
+  /* Layout */
+  --gutter: clamp(1rem, 4vw, 3.5rem);
+  --wrap: 82.5rem;
+  --radius: .875rem;
+  --radius-sm: .5rem;
+  --arch: 999px 999px .6rem .6rem;   /* the canopy motif: arch-topped wells, chips and photos */
+  --mast-h: 7rem;
+  --nav-h: 3.5rem;
+  --sticky-sentinel: var(--mast-h);  /* where the sticky header counts as "stuck" (see js/nav.js) */
+
+  /* Motion and depth */
+  --ease: cubic-bezier(.2, .7, .2, 1);
+  --shadow-1: 0 1px 0 rgba(20, 33, 26, .04), 0 10px 24px -18px rgba(16, 41, 26, .45);
+  --shadow-2: 0 2px 0 rgba(20, 33, 26, .03), 0 30px 60px -30px rgba(16, 41, 26, .45);
+}
+
+@container page (width < 62.9375rem) {
+  body > * { --mast-h: 4.25rem; --sticky-sentinel: 0px; }   /* inside the page container (see the note below) */
+}

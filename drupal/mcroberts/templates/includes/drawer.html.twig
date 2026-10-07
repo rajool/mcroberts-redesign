@@ -1,0 +1,16 @@
+{#
+/**
+ * @file
+ * Phone menu: a native modal dialog (focus trap and Esc for free) holding the same menu main as an accordion (one
+ * section open at a time: details name), then menu utility, Translate and Accessibility Settings.
+ *
+ * Variables: c (Site::chrome()), tops (Site::primaryFor(): menu main decorated for this page).
+ */
+#}
+{% import '@mcroberts/includes/macros.html.twig' as m %}
+<!-- Phone menu: native modal dialog (focus trap + Esc for free); the same menu main, then menu utility, plus Translate -->
+<dialog class="drawer" id="menu-drawer" aria-label="Menu"><div class="drawer-head">{% include '@mcroberts/includes/lockup.html.twig' with {c: c, post: false, eager: false} only %}<button class="close-btn" type="button" data-close-dialog commandfor="menu-drawer" command="close" autofocus>{{ m.icon('close') }}Close</button></div><div class="drawer-body">{% include '@mcroberts/includes/search-form.html.twig' with {action: c.search_action, uid: 'drawer'} only %}<div class="drawer-tools">{% include '@mcroberts/includes/translate.html.twig' with {c: c, uid: 'drawer', variant: 'drawer'} only %}{% include '@mcroberts/includes/a11y-button.html.twig' with {cls: 'tool-btn', label: false} only %}</div><nav aria-label="Main navigation"><ul class="drawer-nav">
+{%- for t in tops -%}
+<li><details name="drawer-nav"{% if t.section %} open{% endif %}><summary>{{ t.label }}{{ m.icon('chev', 'chev') }}</summary><div class="drawer-panel"><a class="drawer-section-link" href="{{ t.url }}"{% if t.current %} aria-current="page"{% endif %}><span>{{ t.label }}</span>{{ m.icon('arrow') }}</a><ul class="drawer-featured">{% for l in t.groups[0].children %}<li>{{ m.menu_link(l, '', false) }}</li>{% endfor %}</ul>{% for g in t.groups|slice(1) %}<div class="drawer-group">{{ m.group_title(g, 'p', 'drawer-group-title') }}<ul>{% for l in g.children %}<li>{{ m.menu_link(l, '', false) }}</li>{% endfor %}</ul></div>{% endfor %}</div></details></li>
+{%- endfor -%}
+</ul></nav><ul class="drawer-signin"><li class="drawer-absent">{% include '@mcroberts/includes/absent-pill.html.twig' with {c: c} only %}</li>{% for n in c.signin %}<li><a href="{{ n.url }}">{{ n.label }}{% if n.http %}{{ m.icon('ext') }}{% endif %}</a></li>{% endfor %}</ul><button class="close-btn drawer-close-end" type="button" data-close-dialog commandfor="menu-drawer" command="close">{{ m.icon('close') }}Close</button></div></dialog>

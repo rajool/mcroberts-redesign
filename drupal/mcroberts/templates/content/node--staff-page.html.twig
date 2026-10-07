@@ -1,0 +1,21 @@
+{#
+/**
+ * @file
+ * Our Staff (node staff_page with view staff_page_list, block_2): the search filter and group chips stay at the top,
+ * one table per staff group (row cards on phones), the section menu beside it, the rail below.
+ *
+ * Variables: mcroberts (_mcroberts_node_variables()): staff_view (views_embed_view()), section, pager, title,
+ * eyebrow, breadcrumb, rail, chrome.
+ */
+#}
+{% if mcroberts.page %}
+{% set mc = mcroberts %}
+{% set rest = content|without('links', 'comment')|render %}
+{{ attach_library('mcroberts/filter') }}
+{{ attach_library('mcroberts/views') }}
+{% include '@mcroberts/includes/hero.html.twig' with {c: mc.chrome, title: mc.title, eyebrow: mc.eyebrow, alias: mc.alias, compact: true, breadcrumb: mc.breadcrumb, meta: null} only %}
+<div class="page-body"><div class="wrap page-grid page-grid--rail-below"><div{{ attributes.addClass('page-content', 'staff').setAttribute('data-filter', '') }}>{{ title_prefix }}{{ title_suffix }}<!-- node staff_page: the staff view's groups as tables; js/filter.js filters rows -->
+{% if rest|striptags('<img>')|trim %}<div class="prose">{{ rest }}</div>{% endif %}{{ mc.staff_view }}{% if mc.pager %}{% include '@mcroberts/includes/section-pager.html.twig' with {p: mc.pager} only %}{% endif %}{% if mc.section %}{% include '@mcroberts/includes/section-nav.html.twig' with {sec: mc.section, mobile: true} only %}{% endif %}</div>{% if mc.section %}{% include '@mcroberts/includes/section-nav.html.twig' with {sec: mc.section, mobile: false} only %}{% endif %}{% include '@mcroberts/includes/rail.html.twig' with {c: mc.chrome, r: mc.rail} only %}</div></div>
+{% else %}
+<article{{ attributes.addClass('node', 'node--type-staff-page') }}>{{ title_prefix }}{{ title_suffix }}{{ content }}</article>
+{% endif %}

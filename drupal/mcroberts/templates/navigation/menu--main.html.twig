@@ -1,0 +1,38 @@
+{#
+/**
+ * @file
+ * Menu main as the mega menu (design/ia.json "primary"): level 1 = top item (its hub), level 2 = columns (the
+ * first is the most-requested column; a column titled in [brackets] has no visible heading), level 3 = links.
+ * W3C APG disclosure navigation with top-level links: each label links to its hub, the button beside it opens the
+ * panel. A short panel gets live content in its free space: School Calendar the next events, News the latest
+ * Striker Weekly, About Us the address, Extra-Curricular and Library two of their pages as image tiles.
+ *
+ * Variables: mcroberts_panels (Site::megaPanels(), decorated for the current page), mcroberts (Site::chrome()).
+ * The tree comes from the whole menu, so every panel is complete whatever the block's expand settings.
+ */
+#}
+{% import '@mcroberts/includes/macros.html.twig' as m %}
+<ul class="menu-root" data-disclosure-nav>
+{%- for p in mcroberts_panels -%}
+<li class="has-mega"><a class="menu-top{{ p.trail ? ' is-active-trail' : '' }}" href="{{ p.url }}"{% if p.current %} aria-current="page"{% endif %}>{{ p.label }}</a><button type="button" class="menu-toggle" aria-expanded="false" aria-controls="{{ p.mid }}">{{ m.icon('chev', 'chev') }}<span class="vh">{{ p.label }}</span></button>
+<div class="mega" id="{{ p.mid }}" hidden><div class="wrap mega-grid" style="--cols:{{ p.n_cols }}"><div class="mega-lead"><a class="mega-title" href="{{ p.url }}"{% if p.current %} aria-current="page"{% endif %}><span>{{ p.label }}</span>{{ m.icon('arrow') }}</a><ul class="mega-featured">{% for l in p.featured %}<li>{{ m.menu_link(l, '', true) }}{% if loop.length == 1 and p.lone_desc %}<p class="mega-featured-desc">{{ p.lone_desc }}</p>{% endif %}</li>{% endfor %}</ul></div>
+{%- for col in p.cols -%}
+<div class="mega-col{{ col.label ? '' : ' is-plain' }}">{{ m.group_title(col, 'p', 'mega-col-title', col.gid) }}<ul class="mega-links"{% if col.label %} aria-labelledby="{{ col.gid }}"{% endif %}>{% for l in col.links %}<li>{{ m.menu_link(l, '', true) }}</li>{% endfor %}</ul></div>
+{%- endfor -%}
+{%- set f = p.feature -%}
+{%- if f -%}
+<div class="mega-col mega-col--feature">
+{%- if f.kind == 'events' -%}
+<div class="mega-feature mega-feature--events" data-mega-events data-built="{{ f.built }}" data-index="{{ mcroberts_empty_index }}" data-root="" data-noschool="No School"><p class="mega-card-title">Upcoming Events</p><ol class="mega-events">{% for e in f.events %}<li><a href="{{ e.url }}"{% if e.noschool %} class="is-noschool"{% endif %}>{{ m.chip(e.chip) }}<span class="t">{{ e.title }}{% if e.noschool and 'school' not in e.title|lower %} <span class="tag-noschool">No School</span>{% endif %}</span></a></li>{% endfor %}</ol></div>
+{%- elseif f.kind == 'tiles' -%}
+<ul class="mega-tiles"{% if f.all_quiet %} aria-hidden="true"{% endif %}>{% for t in f.tiles %}<li{% if t.quiet and not f.all_quiet %} aria-hidden="true"{% endif %}><a class="mega-tile{{ t.cls }}" href="{{ t.url }}"{% if t.quiet %} tabindex="-1"{% endif %}><span class="mega-tile-img"><img src="{{ t.src }}" alt="" width="{{ t.w }}" height="{{ t.h }}" loading="lazy" decoding="async"></span><span class="mega-tile-t">{{ t.label }}</span>{{ m.icon('arrow') }}</a></li>{% endfor %}</ul>
+{%- elseif f.kind == 'weekly' -%}
+<a class="mega-feature mega-feature--link" href="{{ f.url }}"><span class="mega-card-title">Striker Weekly</span><span class="mega-feature-sub">Week at a Glance for Parents</span><span class="big-num">{{ f.range }}</span>{{ m.icon('arrow', 'icon mega-feature-go') }}</a>
+{%- elseif f.kind == 'contact' -%}
+<div class="mega-feature"><p class="mega-card-title" id="mega-contact-t">Contact Us</p><p>{{ f.contact.address_line1 }}<br>{{ f.contact.line2 }} <span class="nowrap">{{ f.contact.postal_code }}</span></p><a class="big-num" href="{{ f.contact.tel }}" aria-describedby="mega-contact-t">{{ f.contact.phone_dots }}</a><a class="feature-mail" href="mailto:{{ f.contact.email }}">{{ f.contact.email }}</a></div>
+{%- endif -%}
+</div>
+{%- endif -%}
+</div></div></li>
+{%- endfor -%}
+</ul>

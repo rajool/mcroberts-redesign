@@ -1,0 +1,12 @@
+{#
+/**
+ * @file
+ * Region featured_top → view news_alerts (block_1): a full-width band, printed only when the view has rows (the
+ * live site prints an empty wrapper). data-alert names the alerts shown, so Close hides them for this browser
+ * session and a new or edited alert shows again (js/nav.js; the <head> script hides a closed one before paint).
+ */
+#}
+{% if content|striptags('<img>')|trim is not empty %}
+<!-- region featured_top → view news_alerts (block_1). Rendered only when the view has rows; row classes .news-alert.standard-alert / .urgent-alert from the view config. -->
+<div class="featured-top" data-alert="{{ alert_key }}"><div{{ attributes.addClass('region', 'region-featured-top') }}>{{ content }}</div></div>
+{% endif %}

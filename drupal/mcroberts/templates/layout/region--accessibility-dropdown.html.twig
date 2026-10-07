@@ -1,0 +1,9 @@
+{#
+/**
+ * @file
+ * Region accessibility_dropdown: the a11y block, inside the Accessibility Settings dialog of every page.
+ */
+#}
+{% if content %}
+<div{{ attributes.addClass('region', 'region-accessibility-dropdown') }}>{{ content }}</div>
+{% endif %}

@@ -1,0 +1,10 @@
+{#
+/**
+ * @file
+ * The Accessibility Settings controls (a11y module contract kept: .a11y-control.a11y-*-control, data-a11y-action,
+ * active state .is-active). js/a11y.js applies them (tokens, not page filters, so the crest is never filtered)
+ * and remembers the choice from page to page.
+ */
+#}
+{% import '@mcroberts/includes/macros.html.twig' as m %}
+<div class="a11y-grid"><button type="button" class="a11y-control a11y-dyslexic-control" data-a11y-action="dyslexic" aria-pressed="false">{{ m.icon('dys') }}Dyslexic</button><button type="button" class="a11y-control a11y-contrast-control" data-a11y-action="contrast" aria-pressed="false">{{ m.icon('contrast') }}Contrast</button><button type="button" class="a11y-control a11y-invert-control" data-a11y-action="invert" aria-pressed="false">{{ m.icon('invert') }}Invert</button><button type="button" class="a11y-control a11y-textsize-decrease" data-a11y-action="text-decrease">{{ m.icon('tminus') }}Text decrease</button><button type="button" class="a11y-control a11y-textsize-reset" data-a11y-action="text-reset">{{ m.icon('treset') }}Text reset</button><button type="button" class="a11y-control a11y-textsize-increase" data-a11y-action="text-increase">{{ m.icon('tplus') }}Text increase</button></div>

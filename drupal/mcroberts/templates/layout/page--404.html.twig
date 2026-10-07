@@ -1,0 +1,17 @@
+{#
+/**
+ * @file
+ * McRoberts: the 404 page (core suggestion page--404): Page not found, the search box, the three top tasks as the
+ * front page's Helpful Links tiles, and the top-level pages as cards.
+ */
+#}
+{% extends '@mcroberts/layout/page.html.twig' %}
+{% block main %}
+{% import '@mcroberts/includes/macros.html.twig' as m %}
+{% set c = mcroberts %}
+{% set nf = mcroberts_404 %}
+{{ attach_library('mcroberts/views') }}
+<!-- system 404 page (Page not found) in the theme -->
+<header class="page-hero page-hero--404 on-dark" id="header-img-area"><div class="wrap nf-wrap"><div><nav class="breadcrumb" aria-label="breadcrumb"><ol><li><a href="{{ c.home }}">Home</a></li></ol></nav><h1>Page not found</h1><p class="nf-lead">The requested page could not be found.</p></div><p class="nf-num" aria-hidden="true"><span>4</span><span class="nf-arch">0</span><span>4</span></p></div></header>
+<div class="page-body"><div class="wrap"><div class="nf-search">{% include '@mcroberts/includes/search-form.html.twig' with {action: c.search_action, uid: '404'} only %}</div><ul class="task-grid nf-tasks"><li><div class="task task--absent on-dark"><span class="ring" aria-hidden="true">{{ m.icon('phone') }}</span><a class="absent-title" href="{{ c.absent.url }}"><span>{{ c.absent.label }}</span>{{ m.icon('arrow') }}</a><a class="absent-num" href="{{ c.contact.tel_ext }}">{{ c.contact.phone }} <span class="absent-ext">(Ext. 1)</span></a></div></li><li><a class="task" href="{{ c.paths.bell }}"><span class="task-ico">{{ m.icon('clock') }}</span><span class="task-label"><strong>Bell Schedule</strong><span class="sub">{{ nf.bell_title }}</span></span>{{ m.icon('arrow', 'icon task-go') }}</a></li><li><a class="task" href="{{ c.paths.calendar }}"><span class="task-ico">{{ m.icon('calendar') }}</span><span class="task-label"><strong>School Calendar</strong><span class="sub">Upcoming Events</span></span>{{ m.icon('arrow', 'icon task-go') }}</a></li></ul>{% include '@mcroberts/includes/hub-cards.html.twig' with {cards: nf.tops, tag: 'h2', cls: ''} only %}</div></div>
+{% endblock %}

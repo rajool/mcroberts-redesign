@@ -1,0 +1,12 @@
+{#
+/**
+ * @file
+ * One staff group (view staff_page_list, grouped table): the group heading before the table (the live view prints
+ * an <h2> inside <table>), scope headers, row cards on phones (data-label), e-mail addresses that break only at
+ * their @. The id matches the group chip.
+ *
+ * Variables beyond core: mcroberts_gid, mcroberts_labels, mcroberts_classes; each column's mcroberts_html and
+ * mcroberts_empty (mcroberts_preprocess_views_view_table()).
+ */
+#}
+<section class="staff-group" id="{{ mcroberts_gid }}" aria-labelledby="{{ mcroberts_gid }}-t" data-filter-group="{{ mcroberts_gid }}"><h2 class="staff-title" id="{{ mcroberts_gid }}-t"><span>{{ title }}</span> <span class="n" data-filter-group-n="{{ mcroberts_gid }}">{{ rows|length }}</span></h2><div class="table-wrap"><table class="staff-table data-cards cols-{{ header|length }}"><thead><tr>{% for key, h in header %}<th scope="col" class="{{ mcroberts_classes[key] }}">{{ h.content }}</th>{% endfor %}</tr></thead><tbody>{% for row in rows %}<tr data-filter-row>{% for key, col in row.columns %}{% if loop.first %}<th scope="row" data-label="{{ mcroberts_labels[key] }}">{{ col.mcroberts_html }}</th>{% else %}<td data-label="{{ mcroberts_labels[key] }}" class="{{ mcroberts_classes[key] }}"{% if col.mcroberts_empty %} data-empty{% endif %}>{{ col.mcroberts_html }}</td>{% endif %}{% endfor %}</tr>{% endfor %}</tbody></table></div></section>

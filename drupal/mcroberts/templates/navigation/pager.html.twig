@@ -1,0 +1,17 @@
+{#
+/**
+ * @file
+ * The full pager (core pager, Views full pager): the preview's pager markup (views.css .pager), Drupal's links and
+ * its own words ("Pagination", "Go to previous page" …). The js-pager__items class keeps Views AJAX working.
+ */
+#}
+{% import '@mcroberts/includes/macros.html.twig' as m %}
+{% if items %}
+<nav class="pager" role="navigation" aria-labelledby="{{ heading_id }}"><h4 id="{{ heading_id }}" class="vh">{{ 'Pagination'|t }}</h4><ul class="js-pager__items">
+{%- if items.previous -%}<li class="pager-prev"><a href="{{ items.previous.href }}" rel="prev"{{ items.previous.attributes|without('href', 'title', 'rel') }}>{{ m.icon('arrow') }}<span class="vh">{{ 'Go to previous page'|t }}</span></a></li>{%- endif -%}
+{%- if ellipses.previous -%}<li class="pager-gap" aria-hidden="true">…</li>{%- endif -%}
+{%- for key, item in items.pages -%}<li><a href="{{ item.href }}"{% if current == key %} aria-current="page"{% endif %}{{ item.attributes|without('href', 'title') }}><span class="vh">{{ current == key ? 'Current page'|t : 'Page'|t }}</span> {{ key }}</a></li>{%- endfor -%}
+{%- if ellipses.next -%}<li class="pager-gap" aria-hidden="true">…</li>{%- endif -%}
+{%- if items.next -%}<li class="pager-next"><a href="{{ items.next.href }}" rel="next"{{ items.next.attributes|without('href', 'title', 'rel') }}><span class="vh">{{ 'Go to next page'|t }}</span>{{ m.icon('arrow') }}</a></li>{%- endif -%}
+</ul></nav>
+{% endif %}

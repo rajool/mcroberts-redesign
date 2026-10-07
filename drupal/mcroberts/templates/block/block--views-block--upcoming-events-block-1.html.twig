@@ -1,0 +1,11 @@
+{#
+/**
+ * @file
+ * sidebar_first → view upcoming_events (block_1), the front page's events band: the next real events (rotation
+ * codes ABCD, BADC, PLT Rot n, COLLAB excluded), Subscribe to our calendar and the School Calendar link.
+ */
+#}
+{% import '@mcroberts/includes/macros.html.twig' as m %}
+{% set band_attributes = attributes|without('role') %}
+<!-- sidebar_first → view upcoming_events (block_1): the next real events, rotation codes (ABCD, BADC, PLT Rot n, COLLAB) excluded -->
+<section{{ band_attributes.addClass('events', 'on-dark', 'region', 'region-sidebar-first').setAttribute('aria-labelledby', 'events-title') }}><div class="wrap"><div class="section-head"><div><p class="eyebrow">School Calendar</p><h2 id="events-title">Upcoming Events</h2></div><div class="events-actions"><a class="btn btn-ghost" href="{{ mcroberts.webcal }}">{{ m.icon('cal-plus', 'icon icon-sm') }}Subscribe to our calendar</a><a class="arrow-link" href="{{ mcroberts.paths.calendar }}"><span>School Calendar</span>{{ m.icon('arrow') }}</a></div></div>{{ title_prefix }}{{ title_suffix }}{{ content }}</div></section>

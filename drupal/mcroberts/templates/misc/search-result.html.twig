@@ -1,0 +1,9 @@
+{#
+/**
+ * @file
+ * One search result: the section it belongs to and its date, the title (the one link), the snippet with the
+ * keywords marked by core. Variables beyond core: mcroberts_result (mcroberts_preprocess_search_result()).
+ */
+#}
+{% set r = mcroberts_result %}
+<li class="result"><p class="result-meta">{% if r.section %}<span class="result-sec">{{ r.section }}</span>{% endif %}{% if r.date %}<time datetime="{{ r.date.iso }}">{{ r.date.m }} {{ r.date.n }}, {{ r.date.y }}</time>{% endif %}</p><h3><a href="{{ url }}">{{ title }}</a></h3>{% if snippet %}<p class="result-snip">{{ snippet }}</p>{% endif %}</li>

@@ -1,0 +1,21 @@
+{#
+/**
+ * @file
+ * menu footer (system_menu_block:footer): three short columns (Get in Touch, Helpful Links, Important information
+ * for parents). Get in Touch folds in the address_block: Student Absent? with its number as one pill, the e-mail,
+ * the address with its map link, and the school's main line.
+ *
+ * Variables: c (Site::chrome()), cols (Site::footerColumns()).
+ */
+#}
+{% import '@mcroberts/includes/macros.html.twig' as m %}
+{% for col in cols %}<nav class="region {{ col.region }}" aria-labelledby="{{ col.id }}"><h2 id="{{ col.id }}">{{ col.label }}</h2><ul class="foot-list{{ col.contact ? ' contact-lines' : '' }}">
+{%- for it in col.items -%}
+{%- if it.kind == 'absent' -%}<li class="foot-absent">{% include '@mcroberts/includes/absent-pill.html.twig' with {c: c, cls: 'absent-pill'} only %}</li>
+{%- elseif it.kind == 'mail' -%}<li>{{ m.icon('mail') }}<a href="{{ it.url }}">{{ it.label }}</a></li>
+{%- elseif it.kind == 'address' -%}<li>{{ m.icon('pin') }}<address><a href="{{ it.url }}">{{ it.label }}</a><br>{{ c.contact.line2 }} <span class="nowrap">{{ c.contact.postal_code }}</span></address></li>
+{%- else -%}<li><a href="{{ it.url }}">{{ it.label }}{% if it.http %}{{ m.icon('ext', 'icon icon-xs') }}{% endif %}</a></li>
+{%- endif -%}
+{%- endfor -%}
+{%- if col.contact -%}<li>{{ m.icon('phone') }}<span><span class="lbl">Telephone:</span> <a href="{{ c.contact.tel }}">{{ c.contact.phone_dots }}</a></span></li>{%- endif -%}
+</ul></nav>{% endfor %}

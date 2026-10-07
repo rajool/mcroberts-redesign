@@ -1,0 +1,11 @@
+{#
+/**
+ * @file
+ * field_legacy_attachments: the field label ("Attachments"), then one card per file with its size (the live table's
+ * Attachment and Size columns). Variables: mcroberts_cards.
+ */
+#}
+{% if mcroberts_cards %}
+{% if not label_hidden %}<h2>{{ label }}</h2>{% endif %}
+<div class="file-list">{% for f in mcroberts_cards %}{% include '@mcroberts/includes/file-card.html.twig' with {f: f} only %}{% endfor %}</div>
+{% endif %}

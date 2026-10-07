@@ -1,0 +1,13 @@
+{#
+/**
+ * @file
+ * Phone bottom bar (menu utility, phone rule): Student Absent? and its number lead, then Translate, Search and Menu.
+ * On the front page and Student Attendance the bar is built folded (has-dup): their own call button is on the
+ * first screen, and js/nav.js unfolds the bar once it scrolls away.
+ *
+ * Variables: c (Site::chrome()), dup (bool).
+ */
+#}
+{% import '@mcroberts/includes/macros.html.twig' as m %}
+<!-- Phone bottom action bar: menu utility's Student Absent? pill, then Translate, Search and Menu -->
+<div class="action-bar{{ dup ? ' has-dup' : '' }}"><span class="bar-absent" role="group" aria-labelledby="bar-absent"><a class="bar-label" href="{{ c.absent.url }}" id="bar-absent"{% if c.absent.current %} aria-current="page"{% endif %}><span>{{ c.absent.label }}</span>{{ m.icon('arrow') }}</a><a class="bar-num" href="{{ c.absent.tel }}">{{ m.icon('phone') }}<span>{{ c.absent.number }}</span></a></span>{% include '@mcroberts/includes/translate.html.twig' with {c: c, uid: 'bar', variant: 'bar'} only %}<button class="bar-btn" type="button" aria-expanded="false" aria-controls="mobile-search" data-toggle-search>{{ m.icon('search') }}<span>Search</span></button><button class="bar-btn" type="button" data-open-dialog="menu-drawer" commandfor="menu-drawer" command="show-modal" aria-haspopup="dialog" aria-expanded="false" aria-controls="menu-drawer">{{ m.icon('menu') }}<span>Menu</span></button></div>

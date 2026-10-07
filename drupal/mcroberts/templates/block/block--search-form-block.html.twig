@@ -1,0 +1,7 @@
+{#
+/**
+ * @file
+ * The search form block: the theme's search box (GET /search/node?keys=, the field core search reads).
+ */
+#}
+{{ title_prefix }}{{ title_suffix }}{% include '@mcroberts/includes/search-form.html.twig' with {action: mcroberts.search_action, uid: 'block'} only %}

@@ -1,0 +1,10 @@
+{#
+/**
+ * @file
+ * View staff_page_list (block_2, on the staff_page node): the filter (js/filter.js) and one chip per staff group,
+ * then the groups (views-view-table--staff-page-list.html.twig).
+ *
+ * Variables: mcroberts_filter_bar, mcroberts_groups, mcroberts_title.
+ */
+#}
+<div class="staff-tools">{{ mcroberts_filter_bar }}<nav class="group-chips" aria-label="{{ mcroberts_title }}"><ul>{% for g in mcroberts_groups %}<li><a href="#{{ g.id }}"><span>{{ g.label }}</span> <span class="n" data-filter-group-n="{{ g.id }}">{{ g.n }}</span></a></li>{% endfor %}</ul></nav></div>{{ rows }}{{ pager }}

@@ -1,0 +1,1005 @@
+<?php
+
+/**
+ * @file
+ * McRoberts theme: preprocess hooks and template suggestions.
+ *
+ * The markup mirrors the static preview (build.py), whose comments name the Drupal source of every component. Data
+ * comes from the live configuration: menus main, utility, footer and hub-links (config-changes/), the views and
+ * blocks already on the site, calendar_event nodes, and the theme's own data/ files (the bell schedule transcribed
+ * from its image, the words of informative images, the tile pictures). Nothing here changes stored content.
+ *
+ * The heavy lifting is in src/: Site (menus, sections, contact), Teaser (card lines, news items), Calendar
+ * (events, bell schedule, today) and BodyFilter (rich text presented at render time).
+ */
+
+use Drupal\Component\Utility\Html;
+use Drupal\Core\Asset\AttachedAssetsInterface;
+use Drupal\Core\Entity\EntityChangedInterface;
+use Drupal\Core\Render\Element;
+use Drupal\Core\Render\Markup;
+use Drupal\Core\StringTranslation\ByteSizeMarkup;
+use Drupal\Core\Url;
+use Drupal\mcroberts\BodyFilter;
+use Drupal\mcroberts\Calendar;
+use Drupal\mcroberts\Site;
+use Drupal\mcroberts\Teaser;
+use Drupal\node\NodeInterface;
+use Drupal\views\Views;
+
+/**
+ * Node bundles whose page this theme composes (hero, section menu, rail) in its node templates.
+ */
+const MCROBERTS_PAGE_BUNDLES = ['page', 'article', 'calendar_event', 'calendar_page', 'staff_page'];
+
+/**
+ * Text fields presented by BodyFilter: the node body and the text fields of the live paragraph types.
+ */
+const MCROBERTS_TEXT_FIELDS = ['body', 'bp_text', 'bp_unrestricted', 'field_section_content'];
+
+/**
+ * Helpful Links tiles from the district quick links and home page buttons (icon, sub-line), by link text.
+ */
+const MCROBERTS_TASKS = [
+  'MyEducation BC' => ['icon' => 'cap', 'sub' => ['Parents', 'Students']],
+  'School Cash Online' => ['icon' => 'wallet', 'sub' => ['Parents']],
+  'Office 365' => ['icon' => 'apps', 'sub' => ['Students']],
+];
+
+/**
+ * Implements hook_theme().
+ */
+function mcroberts_theme($existing, $type, $theme, $path) {
+  return [
+    'mcroberts_bell_schedule' => [
+      'variables' => ['bell' => [], 'original' => NULL],
+      'template' => 'misc/mcroberts-bell-schedule',
+    ],
+  ];
+}
+
+/**
+ * The node of the current route (full page), or NULL.
+ */
+function _mcroberts_route_node(): ?NodeInterface {
+  $route = \Drupal::routeMatch();
+  if ($route->getRouteName() !== 'entity.node.canonical') {
+    return NULL;
+  }
+  $node = $route->getParameter('node');
+  return $node instanceof NodeInterface ? $node : NULL;
+}
+
+/**
+ * The bundle of the current route's node ('' when the page is not a node).
+ */
+function _mcroberts_route_bundle(): string {
+  $node = _mcroberts_route_node();
+  return $node ? $node->bundle() : '';
+}
+
+/**
+ * The title of the current page: the node's own (event titles in title case), else the route title.
+ */
+function _mcroberts_page_title(): string {
+  $node = _mcroberts_route_node();
+  if ($node) {
+    $title = Site::clean($node->label());
+    return $node->bundle() === 'calendar_event' ? Calendar::smartCase($title) : $title;
+  }
+  $route = \Drupal::routeMatch()->getRouteName();
+  if ($route === 'search.view_node_search' || str_starts_with((string) $route, 'search.view_')) {
+    return 'Search';
+  }
+  $request = \Drupal::request();
+  $route_object = \Drupal::routeMatch()->getRouteObject();
+  $title = $route_object ? \Drupal::service('title_resolver')->getTitle($request, $route_object) : '';
+  if (is_array($title)) {
+    $title = \Drupal::service('renderer')->renderInIsolation($title);
+  }
+  return Site::clean(strip_tags((string) $title));
+}
+
+/**
+ * The news_alerts rows (featured_top) as alert data, and their key: a new or edited alert shows again after Close.
+ */
+function _mcroberts_alerts(): array {
+  static $alerts = NULL;
+  if ($alerts !== NULL) {
+    return $alerts;
+  }
+  $alerts = ['key' => '', 'rows' => []];
+  $view = Views::getView('news_alerts');
+  if (!$view || !$view->access('block_1')) {
+    return $alerts;
+  }
+  $view->setDisplay('block_1');
+  $view->execute();
+  $parts = [];
+  foreach ($view->result as $i => $row) {
+    $entity = $row->_entity ?? NULL;
+    if (!$entity) {
+      continue;
+    }
+    $parts[] = $entity->id() . ':' . ($entity instanceof EntityChangedInterface ? $entity->getChangedTime() : '');
+    $alerts['rows'][] = _mcroberts_alert_row($entity, $i);
+  }
+  $alerts['key'] = $parts ? substr(sha1(implode('|', $parts)), 0, 10) : '';
+  return $alerts;
+}
+
+/**
+ * One alert: title, text, link, urgent flag (from a field whose value says "urgent").
+ */
+function _mcroberts_alert_row($entity, int $i): array {
+  $text = '';
+  if ($entity instanceof NodeInterface) {
+    $text = Teaser::summary($entity, 240);
+  }
+  elseif ($entity->hasField('body') && !$entity->get('body')->isEmpty()) {
+    $text = Site::clean(strip_tags((string) $entity->get('body')->value));
+  }
+  $url = '';
+  foreach (['field_link', 'field_alert_link', 'field_url'] as $f) {
+    if ($entity->hasField($f) && !$entity->get($f)->isEmpty()) {
+      $item = $entity->get($f)->first();
+      try {
+        $url = method_exists($item, 'getUrl') ? $item->getUrl()->toString() : (string) $item->value;
+      }
+      catch (\Throwable $e) {
+        $url = '';
+      }
+      break;
+    }
+  }
+  if ($url === '' && $entity->hasLinkTemplate('canonical')) {
+    $url = $entity->toUrl()->toString();
+  }
+  $urgent = FALSE;
+  foreach (['field_urgent', 'field_alert_type', 'field_alert_level', 'field_type', 'field_priority'] as $f) {
+    if ($entity->hasField($f) && !$entity->get($f)->isEmpty()) {
+      $v = $entity->get($f)->value;
+      $urgent = $v === '1' || $v === 1 || $v === TRUE || str_contains(mb_strtolower((string) $v), 'urgent');
+      break;
+    }
+  }
+  return [
+    'id' => $i ? 'alert-title-' . ($i + 1) : 'alert-title',
+    'more' => $i ? 'alert-more-' . ($i + 1) : 'alert-more',
+    'title' => Site::clean($entity->label()),
+    'text' => $text,
+    'url' => $url,
+    'urgent' => $urgent,
+  ];
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for html.html.twig.
+ */
+function mcroberts_preprocess_html(&$variables) {
+  $chrome = Site::chrome();
+  $variables['mcroberts_icons'] = ['icon32' => $chrome['icon32'], 'icon180' => $chrome['icon180']];
+  $variables['mcroberts_concept'] = (bool) Site::setting('mcroberts_concept_banner', FALSE);
+  $variables['alert_key'] = _mcroberts_alerts()['key'];
+  $variables['#attached']['html_head'][] = [
+    ['#tag' => 'meta', '#attributes' => ['name' => 'theme-color', 'content' => '#10291a']],
+    'mcroberts_theme_color',
+  ];
+  if ($variables['mcroberts_concept']) {
+    $variables['#attached']['html_head'][] = [
+      ['#tag' => 'meta', '#attributes' => ['name' => 'robots', 'content' => 'noindex,nofollow']],
+      'mcroberts_robots',
+    ];
+  }
+  $variables['#cache']['tags'][] = 'node_list';
+  $variables['#cache']['tags'][] = 'config:mcroberts.settings';
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for page.html.twig (and page--front, page--404).
+ */
+function mcroberts_preprocess_page(&$variables) {
+  $cur = Site::current();
+  $node = _mcroberts_route_node();
+  $bundle = $node ? $node->bundle() : NULL;
+  $chrome = Site::chrome();
+  $variables['mcroberts'] = $chrome + [
+    'cur' => $cur,
+    'drawer' => Site::primaryFor($cur, $bundle),
+    'footer_cols' => Site::footerColumns(),
+    'action_dup' => $cur === '/' || $cur === Site::pathOf('attendance'),
+  ];
+  $variables['#cache']['contexts'][] = 'url.path';
+  foreach (['main', 'utility', 'footer', 'hub-links'] as $menu) {
+    $variables['#cache']['tags'][] = 'config:system.menu.' . $menu;
+  }
+  $variables['#cache']['tags'][] = 'node_list';
+
+  // A node page this theme composes itself (node templates); every other page gets the generic hero and grid.
+  $owned = $node && in_array($bundle, MCROBERTS_PAGE_BUNDLES, TRUE);
+  $variables['mcroberts_owned'] = $owned;
+  if (!$owned && $cur !== '/') {
+    $sec = Site::sectionOf($cur);
+    $hub = Site::hubSpec($cur) ? Site::hubSections($cur) : [];
+    $search = str_starts_with((string) \Drupal::routeMatch()->getRouteName(), 'search.view');
+    $variables['mcroberts_page'] = [
+      'title' => _mcroberts_page_title(),
+      // a view page that is a section hub (News Archive at /news) keeps its section as the eyebrow
+      'eyebrow' => $sec ? $sec['label'] : '',
+      'hub' => $hub,
+      'search' => $search,
+      'rail' => _mcroberts_rail($cur),
+      // the search page offers the top-level pages as cards (Helpful Links)
+      'tops' => $search ? _mcroberts_top_cards() : [],
+    ];
+  }
+
+  // The front page bands (page--front.html.twig).
+  if ($cur === '/') {
+    $front = Calendar::front();
+    $weeklies = Teaser::weeklies(3);
+    $signin_tasks = [];
+    foreach ($chrome['signin'] as $n) {
+      if (isset(MCROBERTS_TASKS[$n['label']])) {
+        $signin_tasks[] = ['label' => $n['label'], 'url' => $n['url']] + MCROBERTS_TASKS[$n['label']];
+      }
+    }
+    $variables['mcroberts_front'] = $front + [
+      'hub_band' => _mcroberts_home_band(),
+      'weekly' => $weeklies[0] ?? NULL,
+      'bell_title' => Site::title(Site::pathOf('bell')),
+      'signin_tasks' => $signin_tasks,
+      'building' => ['src' => Site::themeFile('images/de1fed0d163f.jpg'), 'w' => 480, 'h' => 281],
+      'strikers' => ['src' => Site::themeFile('images/9f4ea14a6ad5-480.png'), 'w' => 480, 'h' => 474],
+      'about' => [
+        'about' => Site::url(Site::pathOf('about')),
+        'staff' => Site::url(Site::pathOf('staff')),
+        'catchment' => Site::url(Site::pathOf('catchment')),
+        'mission' => Site::url(Site::pathOf('mission')),
+        'strikers' => Site::url(Site::pathOf('strikers')),
+        'clubs' => Site::url(Site::pathOf('clubs')),
+      ],
+    ];
+    $variables['#cache']['max-age'] = Calendar::secondsToMidnight();
+  }
+
+  // 404 (page--404.html.twig): the three top tasks and the top-level pages.
+  if (\Drupal::request()->attributes->get('exception') || \Drupal::routeMatch()->getRouteName() === 'system.404') {
+    $variables['mcroberts_404'] = [
+      'tops' => _mcroberts_top_cards(),
+      'bell_title' => Site::title(Site::pathOf('bell')),
+    ];
+  }
+}
+
+/**
+ * The top-level pages of menu main as cards (search page, 404).
+ */
+function _mcroberts_top_cards(): array {
+  return array_map(fn($m) => Teaser::card(['url' => $m['url'], 'path' => $m['path'], 'fragment' => '', 'label' => $m['label']], $m['label']), Site::primary());
+}
+
+/**
+ * The home task band (menu hub-links, the <front> entry): Parents and Students.
+ */
+function _mcroberts_home_band(): array {
+  $out = [];
+  foreach (Site::hubSpec('/') ?? [] as $i => $sec) {
+    if (!$sec['heading']) {
+      continue;
+    }
+    $out[] = [
+      'id' => 'hub-' . Site::slug($sec['heading']),
+      'icon' => $i === 0 ? 'family' : 'cap',
+      'heading' => $sec['heading'],
+      'url' => $sec['href']['url'] ?? '',
+      'links' => $sec['links'],
+      'rows' => intdiv(count($sec['links']) + 1, 2),
+    ];
+  }
+  return $out;
+}
+
+/**
+ * The rail (build.py rail()): Student Absent?, Bell Schedule, School Calendar, the address card. A page never
+ * repeats itself there.
+ */
+function _mcroberts_rail(string $cur, array $after = []): array {
+  $chrome = Site::chrome();
+  return [
+    'absent' => $cur !== Site::pathOf('attendance'),
+    'bell' => $cur !== Site::pathOf('bell'),
+    'calendar' => $cur !== Site::pathOf('calendar'),
+    'contact' => $cur !== Site::pathOf('contact'),
+    'after' => $after,
+    'c' => $chrome['contact'],
+  ];
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for node.html.twig.
+ */
+function mcroberts_preprocess_node(&$variables) {
+  _mcroberts_node_variables($variables, $variables['node'], $variables['view_mode']);
+}
+
+/**
+ * Implements hook_theme_suggestions_HOOK_alter() for ds_entity_view.
+ *
+ * A node display with a Display Suite layout renders through ds_entity_view, not node.html.twig. For the bundles
+ * this theme composes, the DS output is routed to the same node templates (templates/content/ds-entity-view--*),
+ * so the theme works with the live DS layouts left as they are.
+ */
+function mcroberts_theme_suggestions_ds_entity_view_alter(array &$suggestions, array $variables) {
+  $entity = $variables['content']['#entity'] ?? NULL;
+  if ($entity instanceof NodeInterface && in_array($entity->bundle(), MCROBERTS_PAGE_BUNDLES, TRUE)) {
+    $suggestions[] = 'ds_entity_view__mcroberts_node_' . $entity->bundle();
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for ds_entity_view (a DS-rendered node of a composed bundle).
+ */
+function mcroberts_preprocess_ds_entity_view(&$variables) {
+  $entity = $variables['content']['#entity'] ?? NULL;
+  if (!$entity instanceof NodeInterface || !in_array($entity->bundle(), MCROBERTS_PAGE_BUNDLES, TRUE)) {
+    return;
+  }
+  $fields = [];
+  foreach (Element::children($variables['content']) as $key) {
+    $child = $variables['content'][$key];
+    if (is_array($child) && ($child['#theme'] ?? NULL) === 'field' && ($child['#field_type'] ?? '') !== 'ds') {
+      $fields[$key] = $child;
+    }
+  }
+  $view_mode = $variables['content']['#view_mode'] ?? 'full';
+  $variables['node'] = $entity;
+  $variables['view_mode'] = $view_mode;
+  $variables['label'] = $entity->label();
+  $variables['url'] = $entity->toUrl()->toString();
+  $variables['page'] = $view_mode === 'full' && node_is_page($entity);
+  $variables['content'] = $fields;
+  _mcroberts_node_variables($variables, $entity, $view_mode);
+}
+
+/**
+ * Everything the node templates print around the fields (build.py render_page/article/event/calendar/staff).
+ */
+function _mcroberts_node_variables(array &$variables, NodeInterface $node, string $view_mode) {
+  $bundle = $node->bundle();
+  $teasers = ['teaser', 'vertical_teaser', 'search_result', 'search_index', 'rss', 'token'];
+  $is_page = in_array($bundle, MCROBERTS_PAGE_BUNDLES, TRUE) && !in_array($view_mode, $teasers, TRUE) && node_is_page($node);
+  $title = Site::clean($node->label());
+  $variables['mcroberts'] = ['page' => $is_page, 'title' => $title];
+  if (!$is_page) {
+    if ($bundle === 'article') {
+      $variables['mcroberts']['item'] = Teaser::newsItem($node);
+    }
+    return;
+  }
+  $cur = Site::current();
+  $sec = Site::sectionOf($cur, $bundle);
+  $is_top = (bool) Site::top($cur);
+  $hub_spec = Site::hubSpec($cur);
+  $url = $node->toUrl()->toString();
+  $m = [
+    'page' => TRUE,
+    'title' => $bundle === 'calendar_event' ? Calendar::smartCase($title) : $title,
+    'cur' => $cur,
+    'url' => $url,
+    'eyebrow' => ($sec && $sec['path'] !== $cur) ? $sec['label'] : '',
+    'alias' => '',
+    'compact' => !$hub_spec && !$is_top,
+    'meta' => NULL,
+    'breadcrumb' => \Drupal::service('breadcrumb')->build(\Drupal::routeMatch())->toRenderable(),
+    'section' => NULL,
+    'pager' => Site::pager($cur, $bundle),
+    'rail' => _mcroberts_rail($cur),
+    'hub' => [],
+    'chrome' => Site::chrome(),
+  ];
+  // the menu names the page differently (Bell Schedule → Timetable Structure 2026-2027): the label is the eyebrow
+  $label = Site::menuLabel($cur);
+  if ($label && !$is_top && mb_strtolower(Site::clean($label)) !== mb_strtolower($m['title']) && !str_contains(mb_strtolower($m['title']), mb_strtolower(Site::clean($label)))) {
+    $m['alias'] = $label;
+  }
+  // section menu (desktop aside + phone disclosure) on every page but a section hub
+  if ($sec && !$is_top) {
+    foreach (Site::primaryFor($cur, $bundle) as $top) {
+      if ($top['path'] === $sec['path']) {
+        $m['section'] = $top;
+      }
+    }
+  }
+  $variables['#cache']['contexts'][] = 'url.path';
+  $variables['#cache']['tags'][] = 'config:system.menu.main';
+  $variables['#cache']['tags'][] = 'config:system.menu.hub-links';
+
+  switch ($bundle) {
+    case 'page':
+      if ($hub_spec) {
+        $skip = BodyFilter::tiledUrls(Site::body($cur), $cur, $title);
+        if ($cur === Site::pathOf('calendar')) {
+          $skip[] = (string) Site::setting('mcroberts_webcal', '');
+        }
+        $m['hub'] = Site::hubSections($cur, $skip);
+      }
+      $m['bell'] = $cur === Site::pathOf('bell');
+      if ($m['bell']) {
+        $variables['#cache']['max-age'] = Calendar::secondsToMidnight();
+      }
+      break;
+
+    case 'article':
+      $iso = Calendar::isoOf((int) $node->getChangedTime());
+      $created = Calendar::isoOf((int) $node->getCreatedTime());
+      $m['meta'] = Calendar::parts($iso);
+      $m['chip'] = Calendar::parts($created);
+      $m['compact'] = TRUE;
+      $news = str_starts_with($cur, Site::pathOf('news') . '/');
+      $m['back'] = $news
+        ? [['url' => Site::url(Site::pathOf('news')), 'label' => Site::title(Site::pathOf('news')) ?: 'News Archive'],
+          ['url' => Site::url(Site::pathOf('newsletters')), 'label' => 'Newsletters'],
+        ]
+        : [['url' => Site::url(Site::pathOf('story')), 'label' => 'School Learning Story']];
+      $m['collection'] = $news ? (Site::title(Site::pathOf('news')) ?: 'News Archive') : 'School Learning Story';
+      $m['neighbours'] = Teaser::neighbours($node);
+      $m['rail'] = _mcroberts_rail($cur, Teaser::latest(5, (int) $node->id()));
+      $variables['#cache']['tags'][] = 'node_list';
+      break;
+
+    case 'calendar_event':
+      $iso = NULL;
+      foreach ($node->getFieldDefinitions() as $name => $def) {
+        if (in_array($def->getType(), ['smartdate', 'datetime', 'daterange', 'timestamp'], TRUE) && !$node->get($name)->isEmpty()) {
+          $v = $node->get($name)->value;
+          $iso = is_numeric($v) ? Calendar::isoOf((int) $v) : substr((string) $v, 0, 10);
+          break;
+        }
+      }
+      $iso = $iso ?: Calendar::today();
+      $m['eyebrow'] = 'School Calendar';
+      $m['compact'] = TRUE;
+      $m['event'] = Calendar::eventPage($iso, $url) + ['when' => Calendar::parts($iso)['long']];
+      $m['noschool'] = Calendar::isNoSchool($title);
+      $m['noschool_tag'] = Calendar::noSchoolTag($title);
+      $m['section'] = NULL;
+      $variables['#cache']['tags'][] = 'node_list';
+      break;
+
+    case 'calendar_page':
+      $m['compact'] = TRUE;
+      $m['section'] = NULL;
+      $m['calendar'] = Calendar::page($url) + _mcroberts_calendar_body(Site::body($cur));
+      $m['hub'] = Site::hubSections($cur, [(string) Site::setting('mcroberts_webcal', '')]);
+      $variables['#cache']['max-age'] = Calendar::secondsToMidnight();
+      $variables['#cache']['tags'][] = 'node_list';
+      break;
+
+    case 'staff_page':
+      $m['compact'] = TRUE;
+      $m['staff_view'] = views_embed_view('staff_page_list', 'block_2');
+      break;
+  }
+  $variables['mcroberts'] = $m;
+}
+
+/**
+ * The School Calendar body's parts (build.py render_calendar()): the Notes list, the printable-calendar sentence
+ * and its PDF.
+ */
+function _mcroberts_calendar_body(string $html): array {
+  $out = ['notes' => [], 'print' => '', 'pdf' => NULL];
+  if (trim($html) === '') {
+    return $out;
+  }
+  $xpath = new \DOMXPath(Html::load($html));
+  $uls = iterator_to_array($xpath->query('//body//ul'), FALSE);
+  if ($uls) {
+    foreach ($xpath->query('.//li', $uls[0]) as $li) {
+      $out['notes'][] = Site::clean($li->textContent);
+    }
+  }
+  foreach ($xpath->query('//body//p') as $p) {
+    if (str_contains($p->textContent, 'printable')) {
+      $out['print'] = Site::clean($p->textContent);
+      break;
+    }
+  }
+  if (isset($uls[1])) {
+    $a = $xpath->query('.//a', $uls[1])->item(0);
+    if ($a) {
+      $out['pdf'] = _mcroberts_file_card($a->getAttribute('href'), Site::clean($a->textContent));
+    }
+  }
+  return $out;
+}
+
+/**
+ * A document card: badge (the type in words for documents, the paper icon otherwise), name, size.
+ */
+function _mcroberts_file_card(string $url, string $name, string $size = ''): array {
+  $ext = '';
+  if (preg_match('/\.([a-z0-9]{2,5})(?:$|[?#])/i', $url, $m)) {
+    $ext = strtolower($m[1]);
+  }
+  return [
+    'url' => $url,
+    'name' => $name,
+    'ext' => $ext,
+    'doc' => in_array($ext, ['pdf', 'doc', 'docx', 'ppt', 'pptx', 'xls', 'xlsx'], TRUE),
+    'size' => $size,
+  ];
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for breadcrumb.html.twig: the hub crumb the menu gives, and the page title.
+ */
+function mcroberts_preprocess_breadcrumb(&$variables) {
+  $cur = Site::current();
+  $urls = [];
+  foreach ($variables['breadcrumb'] ?? [] as $item) {
+    $urls[] = (string) ($item['url'] ?? '');
+  }
+  $hub = Site::hubCrumb($cur, _mcroberts_route_bundle() ?: NULL, $urls);
+  if ($hub && $variables['breadcrumb']) {
+    array_splice($variables['breadcrumb'], 1, 0, [['text' => $hub[0], 'url' => $hub[1]]]);
+  }
+  $variables['current_title'] = $cur === '/' ? '' : _mcroberts_page_title();
+  $variables['#cache']['contexts'][] = 'url.path';
+  $variables['#cache']['tags'][] = 'config:system.menu.main';
+}
+
+/**
+ * Implements hook_theme_suggestions_HOOK_alter() for block: block--{region}--{base plugin} (research §11.4).
+ */
+function mcroberts_theme_suggestions_block_alter(array &$suggestions, array $variables) {
+  $id = $variables['elements']['#id'] ?? NULL;
+  if (!$id) {
+    return;
+  }
+  $block = \Drupal::entityTypeManager()->getStorage('block')->load($id);
+  if ($block) {
+    $base = $variables['elements']['#base_plugin_id'] ?? '';
+    $suggestions[] = 'block__' . $block->getRegion() . '__' . $base;
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for block.html.twig.
+ */
+function mcroberts_preprocess_block(&$variables) {
+  $plugin = $variables['plugin_id'] ?? '';
+  $variables['mcroberts'] = Site::chrome();
+  $block = !empty($variables['elements']['#id']) ? \Drupal::entityTypeManager()->getStorage('block')->load($variables['elements']['#id']) : NULL;
+  $variables['mcroberts_region'] = $block ? $block->getRegion() : '';
+  if ($plugin === 'system_menu_block:main') {
+    // the sticky Student Absent? pill is aria-current on Student Attendance itself
+    $variables['#cache']['contexts'][] = 'url.path';
+    // a copy of menu main outside the header (the live footer block mainnavigation_2) is a flat list
+    if ($block && $block->getRegion() !== 'primary_menu' && isset($variables['content']['#theme'])) {
+      $variables['content']['#theme'] = 'menu__main__flat';
+    }
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for menu.html.twig.
+ */
+function mcroberts_preprocess_menu(&$variables) {
+  $menu = $variables['menu_name'] ?? '';
+  $cur = Site::current();
+  if ($menu === 'main' && ($variables['theme_hook_original'] ?? '') !== 'menu__main__flat') {
+    $variables['mcroberts_panels'] = Site::megaPanels(Site::primaryFor($cur, _mcroberts_route_bundle() ?: NULL));
+    $variables['mcroberts'] = Site::chrome();
+    // the School Calendar panel's events are rendered per day; nav.js would re-read them from a JSON index on a
+    // later day, and Drupal has none, so it reads an empty list and keeps the rendered events
+    $variables['mcroberts_empty_index'] = Site::themeFile('data/empty.json');
+    $variables['#cache']['contexts'][] = 'url.path';
+    $variables['#cache']['tags'][] = 'node_list';
+    $variables['#cache']['max-age'] = Calendar::secondsToMidnight();
+  }
+  elseif ($menu === 'utility') {
+    $variables['mcroberts'] = Site::chrome();
+    $variables['#cache']['contexts'][] = 'url.path';
+  }
+  elseif ($menu === 'footer') {
+    $variables['mcroberts'] = Site::chrome();
+    $variables['mcroberts_columns'] = Site::footerColumns();
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for region.html.twig.
+ */
+function mcroberts_preprocess_region(&$variables) {
+  $region = $variables['region'] ?? '';
+  if ($region === 'featured_top') {
+    $variables['alert_key'] = _mcroberts_alerts()['key'];
+  }
+  if ($region === 'sidebar_second' && \Drupal::service('path.matcher')->isFrontPage()) {
+    // Helpful Links: the Student Absent? note leads, then School Calendar, Bell Schedule and Striker Weekly (live
+    // sub-lines), then the district quick links and home page buttons, in the preview's order.
+    $lead = [];
+    $rest = [];
+    foreach (Element::children($variables['elements'], TRUE) as $key) {
+      $child = $variables['elements'][$key];
+      $markup = $child['#markup'] ?? '';
+      if (($child['#plugin_id'] ?? '') === 'views_block:sidebar_notes-block_2') {
+        $lead[] = $markup;
+      }
+      else {
+        $rest[] = $markup;
+      }
+    }
+    $front = Calendar::front();
+    $weekly = Teaser::weeklies(1)[0] ?? NULL;
+    $variables['mcroberts_tasks'] = [
+      'lead' => $lead,
+      'rest' => $rest,
+      'day' => $front['day'],
+      'first' => $front['first'],
+      'weekly' => $weekly,
+      'bell_title' => Site::title(Site::pathOf('bell')),
+      'chrome' => Site::chrome(),
+    ];
+    $variables['#cache']['max-age'] = Calendar::secondsToMidnight();
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for field.html.twig.
+ */
+function mcroberts_preprocess_field(&$variables) {
+  $element = $variables['element'];
+  $name = $element['#field_name'] ?? '';
+  $entity = $element['#object'] ?? NULL;
+  $view_mode = $element['#view_mode'] ?? '';
+
+  // event titles carry U+FEFF byte-order marks on the live site
+  if (in_array($name, ['title', 'node_title'], TRUE)) {
+    foreach ($variables['items'] as $delta => $item) {
+      if (isset($item['content']['#context']['value']) && is_string($item['content']['#context']['value'])) {
+        $variables['items'][$delta]['content']['#context']['value'] = str_replace("\u{FEFF}", '', $item['content']['#context']['value']);
+      }
+      if (isset($item['content']['#markup']) && is_string($item['content']['#markup'])) {
+        $variables['items'][$delta]['content']['#markup'] = str_replace("\u{FEFF}", '', $item['content']['#markup']);
+      }
+    }
+  }
+
+  // rich text presented at render time (BodyFilter)
+  if (in_array($name, MCROBERTS_TEXT_FIELDS, TRUE) && in_array($element['#formatter'] ?? '', ['text_default', 'basic_string'], TRUE)
+    && !in_array($view_mode, ['teaser', 'vertical_teaser', 'search_result', 'search_index', 'rss'], TRUE)) {
+    $cur = Site::current();
+    $route_node = _mcroberts_route_node();
+    $node_body = $name === 'body' && $route_node && $entity && $entity->getEntityTypeId() === 'node' && (int) $entity->id() === (int) $route_node->id();
+    $bell = '';
+    if ($node_body && $cur === Site::pathOf('bell')) {
+      $build = ['#theme' => 'mcroberts_bell_schedule', '#bell' => Calendar::bellSchedule()];
+      $bell = (string) \Drupal::service('renderer')->render($build);
+      $variables['#cache']['max-age'] = Calendar::secondsToMidnight();
+      $variables['#attached']['library'][] = 'mcroberts/bell';
+    }
+    $context = [
+      'path' => $cur,
+      'title' => _mcroberts_page_title(),
+      'node_body' => $node_body,
+      'bell' => $bell,
+      'scope' => $cur,
+    ];
+    foreach (Element::children($variables['items']) as $delta) {
+      if (isset($variables['items'][$delta]['content']) && is_array($variables['items'][$delta]['content'])) {
+        $variables['items'][$delta]['content']['#post_render'][] = [BodyFilter::class, 'postRender'];
+        $variables['items'][$delta]['content']['#mcroberts'] = $context;
+        if ($bell !== '') {
+          $variables['items'][$delta]['content']['#cache']['max-age'] = Calendar::secondsToMidnight();
+        }
+      }
+    }
+    $variables['#attached']['library'][] = 'mcroberts/gallery';
+    $variables['#attached']['library'][] = 'mcroberts/filter';
+    $variables['#cache']['contexts'][] = 'url.path';
+  }
+
+  // documents as file cards (media file, legacy attachments)
+  if (in_array($name, ['field_media_file', 'field_legacy_attachments'], TRUE)) {
+    $cards = [];
+    foreach ($element['#items'] ?? [] as $item) {
+      $file = $item->entity ?? NULL;
+      if (!$file) {
+        continue;
+      }
+      $url = \Drupal::service('file_url_generator')->generateString($file->getFileUri());
+      $label = Site::clean((string) ($item->description ?? '')) ?: $file->getFilename();
+      $size = '';
+      if ($name === 'field_legacy_attachments') {
+        $size = class_exists(ByteSizeMarkup::class) ? ByteSizeMarkup::create((int) $file->getSize()) : format_size((int) $file->getSize());
+      }
+      $cards[] = _mcroberts_file_card($url, $label, (string) $size);
+    }
+    $variables['mcroberts_cards'] = $cards;
+  }
+
+  // a media reference that holds documents: one file list
+  if (($element['#field_type'] ?? '') === 'entity_reference' && ($element['#items'] ?? NULL)) {
+    $target = $element['#items']->getFieldDefinition()->getSetting('target_type');
+    $variables['mcroberts_file_list'] = FALSE;
+    if ($target === 'media') {
+      foreach ($element['#items'] as $item) {
+        if ($item->entity && $item->entity->bundle() === 'file') {
+          $variables['mcroberts_file_list'] = TRUE;
+          break;
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for views-view-field.html.twig: no byte-order marks in titles.
+ */
+function mcroberts_preprocess_views_view_field(&$variables) {
+  $output = (string) $variables['output'];
+  if (str_contains($output, "\u{FEFF}")) {
+    $variables['output'] = Markup::create(str_replace("\u{FEFF}", '', $output));
+  }
+}
+
+/**
+ * Implements hook_js_settings_alter(): no byte-order marks in the FullCalendar event titles either.
+ */
+function mcroberts_js_settings_alter(array &$settings, AttachedAssetsInterface $assets) {
+  foreach ($settings['fullCalendarView'] ?? [] as $i => $view) {
+    if (isset($view['calendar_options']) && is_string($view['calendar_options'])) {
+      $settings['fullCalendarView'][$i]['calendar_options'] = str_replace(['﻿', '﻿', "\u{FEFF}"], '', $view['calendar_options']);
+    }
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for views-view.html.twig: the data of the views this theme presents.
+ */
+function mcroberts_preprocess_views_view(&$variables) {
+  $view = $variables['view'];
+  $id = $view->id();
+  $entities = [];
+  foreach ($view->result as $row) {
+    if (isset($row->_entity)) {
+      $entities[] = $row->_entity;
+    }
+  }
+  $nodes = array_values(array_filter($entities, fn($e) => $e instanceof NodeInterface));
+  switch ($id) {
+    case 'frontpage':
+      // Latest News (build.py render_home): the lead story, two cards, four rows; Striker Weekly beside them
+      $items = array_values(array_filter(array_map([Teaser::class, 'newsItem'], $nodes), fn($it) => !$it['weekly']));
+      usort($items, fn($a, $b) => $b['date']['iso'] <=> $a['date']['iso']);
+      $variables['mcroberts_news'] = [
+        'lead' => $items[0] ?? NULL,
+        'cards' => array_slice($items, 1, 2),
+        'rows' => array_slice($items, 3, 4),
+        'weeklies' => Teaser::weeklies(3),
+        'archive' => Site::url(Site::pathOf('news')),
+        'newsletters' => Site::url(Site::pathOf('newsletters')),
+      ];
+      $variables['#cache']['tags'][] = 'node_list';
+      break;
+
+    case 'upcoming_events':
+      // the next real events (rotation codes excluded), from the same calendar_event nodes as the Today card
+      $variables['mcroberts_events'] = array_map([Calendar::class, 'eventItem'], array_slice(Calendar::realEvents(Calendar::today()), 0, 8));
+      $variables['mcroberts'] = Site::chrome();
+      $variables['#cache']['max-age'] = Calendar::secondsToMidnight();
+      $variables['#cache']['tags'][] = 'node_list';
+      break;
+
+    case 'news_alerts':
+      $variables['mcroberts_alerts'] = _mcroberts_alerts()['rows'];
+      break;
+
+    case 'site_header_content_block':
+      $variables['mcroberts'] = Site::chrome();
+      break;
+
+    case 'district_quick_links':
+      // the rich text holds image links whose names live in their title attribute
+      $tiles = [];
+      foreach ($entities as $e) {
+        foreach (['field_content_area', 'body'] as $f) {
+          if (!$e->hasField($f) || $e->get($f)->isEmpty()) {
+            continue;
+          }
+          $xpath = new \DOMXPath(Html::load((string) $e->get($f)->value));
+          foreach ($xpath->query('//a[@href]') as $a) {
+            $name = Site::clean($a->getAttribute('title') ?: $a->textContent);
+            if (isset(MCROBERTS_TASKS[$name])) {
+              $tiles[] = ['label' => $name, 'url' => $a->getAttribute('href')] + MCROBERTS_TASKS[$name];
+            }
+          }
+        }
+      }
+      $variables['mcroberts_tiles'] = $tiles;
+      break;
+
+    case 'home_page_buttons':
+      $tiles = [];
+      foreach ($nodes as $n) {
+        $name = Site::clean($n->label());
+        if (!isset(MCROBERTS_TASKS[$name]) || !$n->hasField('field_link') || $n->get('field_link')->isEmpty()) {
+          continue;
+        }
+        $link = $n->get('field_link')->first();
+        if (method_exists($link, 'getUrl')) {
+          $tiles[] = ['label' => $name, 'url' => $link->getUrl()->toString()] + MCROBERTS_TASKS[$name];
+        }
+      }
+      $variables['mcroberts_tiles'] = $tiles;
+      break;
+
+    case 'staff_page_list':
+      // the group chips: one per staff group, with its count
+      $groups = [];
+      $style = $view->style_plugin;
+      if ($style && !empty($style->options['grouping'])) {
+        $sets = $style->renderGrouping($view->result, $style->options['grouping'], TRUE);
+        foreach ($sets as $set) {
+          $label = Site::clean(strip_tags((string) ($set['group'] ?? '')));
+          if ($label === '') {
+            continue;
+          }
+          $groups[] = ['label' => $label, 'id' => 'staff-' . Site::slug($label), 'n' => count($set['rows'] ?? [])];
+        }
+      }
+      $variables['mcroberts_groups'] = $groups;
+      $variables['mcroberts_title'] = _mcroberts_page_title();
+      $variables['mcroberts_total'] = count($view->result);
+      $variables['mcroberts_filter_bar'] = Markup::create(BodyFilter::filterBar('staff', count($view->result)));
+      break;
+
+    case 'news_archive_page':
+    case 'article_feed':
+      $items = array_map([Teaser::class, 'newsItem'], $nodes);
+      $variables['mcroberts_months'] = Teaser::byMonth($items);
+      $variables['mcroberts_items'] = $items;
+      break;
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for views-view-table.html.twig: the staff tables (labels, empty cells,
+ * e-mail addresses that break only at their @, the external mark on class websites).
+ */
+function mcroberts_preprocess_views_view_table(&$variables) {
+  if ($variables['view']->id() !== 'staff_page_list') {
+    return;
+  }
+  $labels = [];
+  foreach ($variables['header'] ?? [] as $key => $h) {
+    $content = $h['content'] ?? '';
+    if (is_array($content)) {
+      $content = \Drupal::service('renderer')->renderInIsolation($content);
+    }
+    $labels[$key] = Site::clean(strip_tags((string) $content));
+  }
+  $title = $variables['title'] ?? '';
+  if (is_array($title)) {
+    $title = \Drupal::service('renderer')->renderInIsolation($title);
+  }
+  $variables['mcroberts_gid'] = 'staff-' . Site::slug(strip_tags((string) $title));
+  $variables['mcroberts_labels'] = $labels;
+  $variables['mcroberts_classes'] = array_map(fn($l) => 'c-' . (Site::slug($l) ?: 'col'), $labels);
+  $ext = '<svg class="icon ext-mark" aria-hidden="true" focusable="false"><use href="#i-ext"/></svg>';
+  $host = \Drupal::request()->getHost();
+  foreach ($variables['rows'] ?? [] as $r => $row) {
+    foreach ($row['columns'] ?? [] as $key => $column) {
+      $html = '';
+      foreach ($column['content'] ?? [] as $content) {
+        $html .= (string) ($content['separator'] ?? '') . (string) ($content['field_output'] ?? '');
+      }
+      $html = preg_replace('~(<a\b[^>]*href="mailto:[^"]*"[^>]*>)([^<@]+)@([^<]+)</a>~u', '$1$2<wbr>@$3</a>', $html);
+      $html = preg_replace_callback('~(<a\b[^>]*href="https?://([^/"]+)[^"]*"[^>]*>)(.*?)</a>~u', fn($m) => $m[2] === $host ? $m[0] : $m[1] . $m[3] . $ext . '</a>', $html);
+      $variables['rows'][$r]['columns'][$key]['mcroberts_html'] = Markup::create(trim($html));
+      $variables['rows'][$r]['columns'][$key]['mcroberts_empty'] = Site::clean(strip_tags($html)) === '';
+    }
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for paragraph--bp-accordion.html.twig: one <details> per section.
+ */
+function mcroberts_preprocess_paragraph__bp_accordion(&$variables) {
+  $paragraph = $variables['paragraph'];
+  $sections = [];
+  if ($paragraph->hasField('bp_accordion_section')) {
+    foreach ($paragraph->get('bp_accordion_section')->referencedEntities() as $section) {
+      $sections[] = [
+        'title' => $section->hasField('bp_accordion_section_title') ? Site::clean((string) $section->get('bp_accordion_section_title')->value) : '',
+        'body' => $section->hasField('bp_accordion_section_body') ? $section->get('bp_accordion_section_body')->view(['label' => 'hidden']) : [],
+      ];
+    }
+  }
+  $variables['mcroberts_sections'] = $sections;
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for search-result.html.twig: the section a result belongs to, its date.
+ */
+function mcroberts_preprocess_search_result(&$variables) {
+  $result = $variables['result'];
+  $node = $result['node'] ?? NULL;
+  $section = '';
+  $date = NULL;
+  if ($node instanceof NodeInterface) {
+    $path = Site::norm(\Drupal::service('path_alias.manager')->getAliasByPath('/node/' . $node->id()));
+    if ($path === Site::pathOf('news') || str_starts_with($path, Site::pathOf('news') . '/')) {
+      $section = 'News';
+    }
+    elseif (str_starts_with($path, Site::pathOf('story'))) {
+      $section = 'School Learning Story';
+    }
+    else {
+      $sec = Site::sectionOf($path, $node->bundle());
+      $section = $sec ? $sec['label'] : '';
+    }
+    if ($node->bundle() === 'article') {
+      $date = Calendar::parts(Calendar::isoOf((int) $node->getCreatedTime()));
+    }
+  }
+  $variables['mcroberts_result'] = ['section' => $section, 'date' => $date];
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for form.html.twig: the search page keeps the keywords it was given.
+ */
+function mcroberts_preprocess_form(&$variables) {
+  if (($variables['element']['#form_id'] ?? '') === 'search_form') {
+    $variables['mcroberts_keys'] = (string) \Drupal::request()->query->get('keys', '');
+    $variables['mcroberts_action'] = Site::chrome()['search_action'];
+    $variables['#cache']['contexts'][] = 'url.query_args:keys';
+  }
+}
+
+/**
+ * Implements hook_theme_suggestions_HOOK_alter() for form: form--search-form.
+ */
+function mcroberts_theme_suggestions_form_alter(array &$suggestions, array $variables) {
+  $id = $variables['element']['#form_id'] ?? '';
+  if ($id) {
+    $suggestions[] = 'form__' . str_replace('-', '_', $id);
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for image.html.twig.
+ */
+function mcroberts_preprocess_image(&$variables) {
+  $variables['attributes']['decoding'] = 'async';
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for social-media-links-platforms.html.twig: same links, our icons and names.
+ */
+function mcroberts_preprocess_social_media_links_platforms(&$variables) {
+  $known = ['instagram' => ['insta', 'Instagram'], 'twitter' => ['x', 'Twitter'], 'x' => ['x', 'Twitter'], 'email' => ['mail', 'Email']];
+  $order = ['instagram' => 0, 'twitter' => 1, 'x' => 1, 'email' => 2];
+  $links = [];
+  foreach ($variables['platforms'] ?? [] as $id => $platform) {
+    $url = $platform['url'] ?? '';
+    if ($url instanceof Url) {
+      $url = $url->toString();
+    }
+    $url = is_string($url) ? $url : '';
+    if ($url === '') {
+      continue;
+    }
+    $links[] = [
+      'url' => $url,
+      'icon' => $known[$id][0] ?? 'ext',
+      'name' => $known[$id][1] ?? Site::clean((string) ($platform['name'] ?? $id)),
+      'order' => $order[$id] ?? 9,
+    ];
+  }
+  usort($links, fn($a, $b) => $a['order'] <=> $b['order']);
+  $variables['mcroberts_social'] = $links;
+}

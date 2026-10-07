@@ -1,0 +1,25 @@
+/* ==========================================================================
+   Print (media="print"): content only, on white.
+   ========================================================================== */
+@media print {
+  .skip-link, .utility, .primary, .mast-tools, .mobile-actions, .mobile-search, .action-bar,
+  .hero-media, .featured-top, dialog, .page-sidebar, .section-nav-mobile, .page-rail, .signoff, .site-footer,
+  .strikers-word, .banners, .weekly-past, .events-actions, .article-nav { display: none !important; }
+  body { background: #fff; color: #000; font-size: 11pt; }
+  .site-header { position: static; box-shadow: none; }
+  .page-hero, .hero, .events, .strikers { background: #fff !important; color: #000 !important; }
+  .page-hero-img, .page-hero .wrap::after, .events::before { display: none; }
+  .page-hero h1, .events .section-head h2, .event a, .strikers h2 { color: #000 !important; }
+  .page-grid, .page-grid.no-sidebar { display: block; }
+  .prose { max-width: none; }
+  .prose a[href^="http"]::after { content: " (" attr(href) ")"; font-size: .85em; color: #444; word-break: break-all; }
+  details.accordion > :not(summary) { display: block !important; }
+  /* closed <details> keep their content in ::details-content (content-visibility: hidden): show it on paper */
+  details::details-content { content-visibility: visible; display: block; }
+  /* BRIEF §4: a printed page still says it is a design concept, with the official address written out */
+  .concept-banner { display: block !important; background: none !important; color: #000 !important; border-bottom: 1pt solid #000; padding: 0 0 4pt; margin-bottom: 8pt; text-align: left; }
+  .concept-banner a { color: #000 !important; }
+  .concept-banner a::after { content: " (" attr(href) ")"; }
+  .concept-banner .concept-about { display: none; }   /* the link to the proposal page means nothing on paper */
+  .task, .story-card, .weekly, .hub, .hub-card, .news-card, .today { box-shadow: none; break-inside: avoid; }
+}

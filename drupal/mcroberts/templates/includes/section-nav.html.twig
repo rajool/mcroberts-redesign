@@ -1,0 +1,19 @@
+{#
+/**
+ * @file
+ * Section menu (menu block: the main-menu subtree of the page's section): the hub, the most-requested links, then
+ * each column under its own heading. The page is aria-current; a page the menu does not list marks its nearest
+ * listed ancestor as the active trail.
+ *
+ * Variables: sec (the decorated top item of Site::primaryFor()), mobile (true: the phone disclosure version).
+ */
+#}
+{% import '@mcroberts/includes/macros.html.twig' as m %}
+{% set tag = mobile ? 'p' : 'h3' %}
+{% set hub_link %}<a{% if mobile %} class="nav-hub-link"{% endif %} href="{{ sec.url }}"{% if sec.current %} aria-current="page"{% endif %}><span>{{ sec.label }}</span>{{ m.icon('arrow') }}</a>{% endset %}
+{% set groups %}{% for g in sec.groups %}<div class="nav-group{{ loop.first ? ' is-featured' : '' }}">{{ m.group_title(g, tag, 'nav-group-title', null, true) }}<ul>{% for l in g.children %}<li>{{ m.menu_link(l, '', false) }}</li>{% endfor %}</ul></div>{% endfor %}{% endset %}
+{% if mobile %}
+<details class="section-nav-mobile"><summary><span>{{ sec.label }}</span>{{ m.icon('chev', 'chev') }}</summary><div class="section-nav-mobile-body">{{ hub_link }}{{ groups }}</div></details>
+{%- else -%}
+<aside class="page-sidebar region region-sidebar-first"><!-- menu block: main, the {{ sec.label }} subtree --><nav class="section-nav" aria-labelledby="section-nav-title"><h2 id="section-nav-title">{{ hub_link }}</h2>{{ groups }}</nav></aside>
+{%- endif %}

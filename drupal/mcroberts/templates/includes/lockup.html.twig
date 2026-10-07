@@ -1,0 +1,10 @@
+{#
+/**
+ * @file
+ * The lockup: the crest (unchanged, scaled) with the school's name in three lines (view site_header_content_block).
+ *
+ * Variables: c (Site::chrome()), cls (default "lockup"), post (default true: "Secondary School" line),
+ * eager (default true: the masthead copy is fetched first).
+ */
+#}
+<a class="{{ cls|default('lockup') }}" href="{{ c.home }}"><img src="{{ c.crest.src }}" alt="" width="{{ c.crest.w }}" height="{{ c.crest.h }}"{% if eager is not defined or eager %} fetchpriority="high"{% endif %}><span class="lockup-text">{% if c.name_main %}<span class="lockup-pre">{{ c.name_pre }}</span><span class="lockup-name">{{ c.name_main }}</span>{% if post is not defined or post %}<span class="lockup-post">{{ c.name_post }}</span>{% endif %}{% else %}<span class="lockup-name">{{ c.name }}</span>{% endif %}</span><span class="vh">Home</span></a>

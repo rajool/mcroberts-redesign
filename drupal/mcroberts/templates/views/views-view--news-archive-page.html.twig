@@ -1,0 +1,13 @@
+{#
+/**
+ * @file
+ * View news_archive_page (page_1, /news): the page's rows grouped by month, newest first, each a date chip, title
+ * and teaser; Drupal's pager below. The page header (hero, title) comes from page.html.twig.
+ *
+ * Variables: mcroberts_months (Teaser::byMonth()).
+ */
+#}
+{% import '@mcroberts/includes/macros.html.twig' as m %}
+{{ attach_library('mcroberts/views') }}
+<!-- view news_archive_page (vertical_teaser rows, full pager) -->
+<div class="paged">{% for g in mcroberts_months %}<section class="month" aria-labelledby="{{ g.id }}"><h2 class="month-title" id="{{ g.id }}">{{ g.label }}</h2><ul class="rows">{% for x in g.items %}<li class="row{{ x.weekly ? ' row--weekly' : '' }}" data-kind="{{ x.newsletter ? 'newsletter' : 'news' }}">{{ m.chip(x.date) }}<div><h3><a href="{{ x.url }}">{{ x.title }}</a></h3>{% if x.teaser %}<p>{{ x.teaser }}</p>{% endif %}</div></li>{% endfor %}</ul></section>{% endfor %}{{ pager }}</div>

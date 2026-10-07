@@ -1,0 +1,187 @@
+[
+ {
+  "title": "Home",
+  "href": "/",
+  "children": []
+ },
+ {
+  "title": "News",
+  "href": "/news",
+  "children": [
+   {
+    "title": "Newsletters",
+    "href": "/news/newsletters"
+   }
+  ]
+ },
+ {
+  "title": "Information",
+  "href": "/information-0",
+  "children": [
+   {
+    "title": "Contact Us",
+    "href": "/information/contact-us"
+   },
+   {
+    "title": "About Us",
+    "href": "/information/about-us"
+   },
+   {
+    "title": "Our Staff",
+    "href": "/information/our-staff"
+   },
+   {
+    "title": "Bell Schedule",
+    "href": "/information/bell-schedule"
+   },
+   {
+    "title": "Snow and Extreme Weather Protocols",
+    "href": "/information/snow-and-extreme-weather-protocols"
+   },
+   {
+    "title": "Personal Learning Time (PLT)",
+    "href": "/information/personal-learning-time-plt"
+   },
+   {
+    "title": "Catchment",
+    "href": "/information/catchment"
+   },
+   {
+    "title": "Donations",
+    "href": "/information/donations"
+   },
+   {
+    "title": "District Concussion Protocol",
+    "href": "/information/district-concussion-protocol"
+   }
+  ]
+ },
+ {
+  "title": "Parents",
+  "href": "/parents",
+  "children": [
+   {
+    "title": "Student Attendance",
+    "href": "/parents/student-attendance"
+   },
+   {
+    "title": "School Cash Online",
+    "href": "/parents/school-cash-online"
+   },
+   {
+    "title": "Learning Updates",
+    "href": "/parents/learning-updates"
+   },
+   {
+    "title": "MyEd Parent Portal: Request Assistance",
+    "href": "/parents/myed-parent-portal-request-assistance"
+   },
+   {
+    "title": "Parent Advisory Committee (PAC)",
+    "href": "/parents/parent-advisory-committee-pac"
+   },
+   {
+    "title": "Helpful Links",
+    "href": "/parents/helpful-links"
+   },
+   {
+    "title": "Presentations for Parents",
+    "href": "/parents/presentations-parents"
+   },
+   {
+    "title": "Responsible Use of Technology Info",
+    "href": "/parents/responsible-use-technology-info"
+   },
+   {
+    "title": "Student Accident Insurance",
+    "href": "/parents/student-accident-insurance"
+   },
+   {
+    "title": "Athletics Info for Parents",
+    "href": "/parents/athletics-info-parents"
+   },
+   {
+    "title": "Universal Hot Lunch @ McRoberts",
+    "href": "/parents/universal-hot-lunch-mcroberts"
+   },
+   {
+    "title": "Violence Threat Risk Assessment (VTRA) Protocol and Fair Notice",
+    "href": "/parents/violence-threat-risk-assessment-vtra-protocol-and-fair-notice"
+   }
+  ]
+ },
+ {
+  "title": "Students",
+  "href": "/students-0",
+  "children": [
+   {
+    "title": "MyEd Student Portal: Request Assistance",
+    "href": "/students/myed-student-portal-request-assistance"
+   },
+   {
+    "title": "Career Centre Information",
+    "href": "/students/career-centre-information"
+   },
+   {
+    "title": "Career Education & Volunteer Hours",
+    "href": "/students/career-education-volunteer-hours"
+   },
+   {
+    "title": "Counselling Centre",
+    "href": "/students/counselling-centre"
+   },
+   {
+    "title": "Program Planning",
+    "href": "/students/program-planning"
+   },
+   {
+    "title": "Grad 2026",
+    "href": "/students/grad-2026"
+   },
+   {
+    "title": "Provincial Graduation Assessments",
+    "href": "/students/provincial-graduation-assessments"
+   },
+   {
+    "title": "Core Competencies",
+    "href": "/students/core-competencies"
+   },
+   {
+    "title": "Student Login",
+    "href": "/students/student-login"
+   },
+   {
+    "title": "Updating Student Contact Information",
+    "href": "/students/updating-student-contact-information"
+   },
+   {
+    "title": "Online Learning with Richmond Virtual School (RVS)",
+    "href": "/students/online-learning-richmond-virtual-school-rvs"
+   },
+   {
+    "title": "Reference Letters",
+    "href": "/students/reference-letters"
+   }
+  ]
+ },
+ {
+  "title": "School Calendar",
+  "href": "/school-calendar",
+  "children": []
+ },
+ {
+  "title": "Library",
+  "href": "/library",
+  "children": []
+ },
+ {
+  "title": "Extra-Curricular",
+  "href": "/extra-curricular",
+  "children": []
+ },
+ {
+  "title": "School Learning Story",
+  "href": "/school-learning-story",
+  "children": []
+ }
+]

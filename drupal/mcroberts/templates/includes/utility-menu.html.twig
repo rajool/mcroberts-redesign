@@ -1,0 +1,9 @@
+{#
+/**
+ * @file
+ * menu utility (system_menu_block:utility): Student Absent? and its number as one pill, the three sign-ins
+ * (straight to the services) and Contact Us. Variables: c (Site::chrome()).
+ */
+#}
+{% import '@mcroberts/includes/macros.html.twig' as m %}
+<ul class="signin utility-menu"><li class="utility-absent">{% include '@mcroberts/includes/absent-pill.html.twig' with {c: c} only %}</li>{% for n in c.signin %}<li><a href="{{ n.url }}">{{ n.label }}{% if n.http %}{{ m.icon('ext', 'icon icon-xs') }}{% endif %}</a></li>{% endfor %}</ul>

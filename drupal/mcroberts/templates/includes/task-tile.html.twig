@@ -1,0 +1,10 @@
+{#
+/**
+ * @file
+ * A Helpful Links tile (front page): icon, name, sub-line, arrow or external mark.
+ * Variables: url, icon, label, sub (string, or a list joined with " · "), live (data-t key of a live sub-line),
+ * ext (true: the external mark).
+ */
+#}
+{% import '@mcroberts/includes/macros.html.twig' as m %}
+<li><a class="task" href="{{ url }}"><span class="task-ico">{{ m.icon(icon) }}</span><span class="task-label"><strong>{{ label }}</strong>{% if live %}<span class="live" data-t="{{ live }}">{{ sub }}</span>{% else %}<span class="sub">{% if sub is iterable and sub|length > 1 %}{% for s in sub %}{{ loop.first ? '' : ' · ' }}<span>{{ s }}</span>{% endfor %}{% elseif sub is iterable %}{{ sub|first }}{% else %}{{ sub }}{% endif %}</span>{% endif %}</span>{{ m.icon(ext ? 'ext' : 'arrow', 'icon task-go') }}</a></li>

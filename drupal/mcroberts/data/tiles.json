@@ -1,0 +1,54 @@
+{
+ "/extra-curricular/club-directory": {
+  "file": "images/a2df4487b35d.png",
+  "h": 404,
+  "icon_art": true,
+  "logo": false,
+  "w": 540
+ },
+ "/extra-curricular/strikers-athletics": {
+  "file": "images/9f4ea14a6ad5-480.png",
+  "h": 1579,
+  "icon_art": false,
+  "logo": true,
+  "w": 1600
+ },
+ "/library/biblio-bites": {
+  "file": "images/c112f9fb0d63.png",
+  "h": 512,
+  "icon_art": true,
+  "logo": false,
+  "w": 512
+ },
+ "/library/digital-resources": {
+  "file": "images/b93c6e97fd12.png",
+  "h": 220,
+  "icon_art": true,
+  "logo": false,
+  "w": 220
+ },
+ "/library/library-catalogue": {
+  "file": "images/97dfc6e88637.png",
+  "h": 220,
+  "icon_art": true,
+  "logo": false,
+  "w": 220
+ },
+ "/library/make-play": {
+  "file": "images/4bb1780f36b9.jpg",
+  "h": 480,
+  "icon_art": false,
+  "logo": false,
+  "w": 480
+ },
+ "/library/q-and-a": {
+  "icon": "help"
+ },
+ "/library/read-listen": {
+  "file": "images/290e06914158.jpg",
+  "h": 480,
+  "icon_art": false,
+  "logo": false,
+  "w": 480
+ }
+}

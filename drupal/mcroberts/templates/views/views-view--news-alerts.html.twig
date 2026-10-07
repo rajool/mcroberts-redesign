@@ -1,0 +1,12 @@
+{#
+/**
+ * @file
+ * View news_alerts (block_1): one band per alert, nothing at all when there are none. Row classes as the view
+ * config gives them (.news-alert.standard-alert / .urgent-alert); the title is not a heading (it comes before the
+ * h1) and has no role=alert, so it is not announced again on every page. Close hides it for the session.
+ *
+ * Variables: mcroberts_alerts (_mcroberts_alerts() rows).
+ */
+#}
+{% import '@mcroberts/includes/macros.html.twig' as m %}
+{% for a in mcroberts_alerts %}<section class="news-alert {{ a.urgent ? 'urgent-alert' : 'standard-alert' }}" aria-labelledby="{{ a.id }}"><div class="wrap"><span class="alert-icon" aria-hidden="true">{{ m.icon('alert') }}</span><div class="alert-body"><p class="alert-title" id="{{ a.id }}">{{ a.title }}</p>{% if a.text %}<p>{{ a.text }}</p>{% endif %}{% if a.url %}<a class="more-link" href="{{ a.url }}"><span id="{{ a.more }}">Read more</span><span class="vh">: {{ a.title }}</span></a>{% endif %}</div><button class="alert-close" type="button" data-alert-close>{{ m.icon('close', 'icon icon-xs') }}<span class="label">Close</span></button></div></section>{% endfor %}
