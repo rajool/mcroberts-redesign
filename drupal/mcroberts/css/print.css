@@ -4,7 +4,7 @@
 @media print {
   .skip-link, .utility, .primary, .mast-tools, .mobile-actions, .mobile-search, .action-bar,
   .hero-media, .featured-top, dialog, .page-sidebar, .section-nav-mobile, .page-rail, .signoff, .site-footer,
-  .strikers-word, .banners, .weekly-past, .events-actions, .article-nav { display: none !important; }
+  .strikers-word, .banners, .weekly-past, .events-actions, .article-nav, .page-content > .rail-news { display: none !important; }
   body { background: #fff; color: #000; font-size: 11pt; }
   .site-header { position: static; box-shadow: none; }
   .page-hero, .hero, .events, .strikers { background: #fff !important; color: #000 !important; }

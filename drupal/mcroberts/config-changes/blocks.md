@@ -17,7 +17,7 @@ not by id) and logs them for `--rollback`; by hand they are on *Structure → Bl
 | `mainnavigation_2` | `system_menu_block:main` | footer_third, all pages | **disable** | the footer has no copy of the main menu (design/ia.md) |
 | `useraccountmenu` | `system_menu_block:account` | footer_fourth, all pages | **disable** | "Log in" stays off the public pages; editors use `/user/login` |
 | `ecolesecondairehughmcrobertssecondaryschooladdressblock` | `block_content:…` (address_block) | footer_fourth, all pages | **disable** | the theme reads the same block content for the footer's Get in Touch column, the rail and the front page; nothing is retyped |
-| `gtranslate` | `gtranslate_block` | sidebar_second, `<front>` | **disable** | Translate is in the header, the phone bar and the phone menu of every page (the theme's control, the block's languages) |
+| `gtranslate` | `gtranslate_block` | sidebar_second, `<front>` | **disable** | Translate is not shown in this version; `templates/includes/translate.html.twig` stays ready if it comes back |
 | `searchform` | `search_form_block` | sidebar_first, `<front>` | **disable** | the search box is in the header and the phone menu of every page (same `/search/node?keys=`) |
 | `views_block__sidebar_notes_block_1` | `views_block:sidebar_notes-block_1` | sidebar_first, `<front>` | **disable** | empty note |
 | `views_block__sidebar_notes_block_3` | `views_block:sidebar_notes-block_3` | content, `<front>` | **disable** | empty note |

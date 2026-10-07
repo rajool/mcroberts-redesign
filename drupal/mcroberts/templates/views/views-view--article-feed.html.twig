@@ -4,9 +4,10 @@
  * View article_feed (EVA entity_view_1, on Newsletters and School Learning Story): cards grouped by month with the
  * live "Posted:" date; the Striker Weekly cards show their week. Drupal's pager below.
  *
- * Variables: mcroberts_months (Teaser::byMonth()).
+ * Variables: mcroberts_months (Teaser::byMonth()); attributes and dom_id as core prints them, so an AJAX pager
+ * finds its view (js-view-dom-id-*).
  */
 #}
 {{ attach_library('mcroberts/views') }}
 <!-- view article_feed (EVA) / listing -->
-<div class="paged">{% for g in mcroberts_months %}<section class="month" aria-labelledby="{{ g.id }}"><h2 class="month-title" id="{{ g.id }}">{{ g.label }}</h2><ul class="card-grid">{% for x in g.items %}<li class="news-card{{ x.weekly ? ' news-card--weekly' : '' }}"><p class="meta"><span>Posted:</span> <time datetime="{{ x.date.iso }}">{{ x.date.short }}</time></p><h3><a href="{{ x.url }}">{{ x.title }}</a></h3>{% if x.teaser and not x.weekly %}<p>{{ x.teaser }}</p>{% endif %}</li>{% endfor %}</ul></section>{% endfor %}{{ pager }}</div>
+<div{{ attributes.addClass('paged', dom_id ? 'js-view-dom-id-' ~ dom_id : 'paged') }}>{% for g in mcroberts_months %}<section class="month" aria-labelledby="{{ g.id }}"><h2 class="month-title" id="{{ g.id }}">{{ g.label }}</h2><ul class="card-grid">{% for x in g.items %}<li class="news-card{{ x.weekly ? ' news-card--weekly' : '' }}"><p class="meta"><span>Posted:</span> <time datetime="{{ x.date.iso }}">{{ x.date.short }}</time></p><h3><a href="{{ x.url }}">{{ x.title }}</a></h3>{% if x.teaser and not x.weekly %}<p>{{ x.teaser }}</p>{% endif %}</li>{% endfor %}</ul></section>{% endfor %}{{ pager }}</div>

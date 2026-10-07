@@ -13,7 +13,7 @@
 {% if mcroberts.page %}
 {% set mc = mcroberts %}
 {% set body = content|without('links', 'comment')|render %}
-{% include '@mcroberts/includes/hero.html.twig' with {c: mc.chrome, title: mc.title, eyebrow: mc.eyebrow, alias: mc.alias, compact: mc.compact, breadcrumb: mc.breadcrumb, meta: null} only %}
+{% include '@mcroberts/includes/hero.html.twig' with {c: mc.chrome, title: mc.title, title_html: mc.title_html, eyebrow: mc.eyebrow, alias: mc.alias, compact: mc.compact, breadcrumb: mc.breadcrumb, meta: null} only %}
 <div class="page-body"><div class="wrap {{ mc.section ? 'page-grid' : 'page-grid no-sidebar' }}"><article{{ attributes.addClass('page-content', mc.hub ? 'is-hub' : '') }}>{{ title_prefix }}{{ title_suffix }}{% if body|striptags('<img><iframe>')|trim %}<!-- field body (+ paragraphs) -->
 <div class="prose">{{ body }}</div>{% endif %}{% if mc.hub %}{% include '@mcroberts/includes/hub-sections.html.twig' with {hub: mc.hub} only %}{% endif %}{% if mc.pager %}{% include '@mcroberts/includes/section-pager.html.twig' with {p: mc.pager} only %}{% endif %}{% if mc.section %}{% include '@mcroberts/includes/section-nav.html.twig' with {sec: mc.section, mobile: true} only %}{% endif %}</article>{% if mc.section %}{% include '@mcroberts/includes/section-nav.html.twig' with {sec: mc.section, mobile: false} only %}{% endif %}{% include '@mcroberts/includes/rail.html.twig' with {c: mc.chrome, r: mc.rail} only %}</div></div>
 {% else %}

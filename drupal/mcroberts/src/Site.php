@@ -2,7 +2,9 @@
 
 namespace Drupal\mcroberts;
 
+use Drupal\Component\Utility\Html;
 use Drupal\Core\Menu\MenuTreeParameters;
+use Drupal\Core\Render\Markup;
 
 /**
  * Site structure for the McRoberts theme.
@@ -15,6 +17,13 @@ use Drupal\Core\Menu\MenuTreeParameters;
  * ("/parents/student-attendance"), the same keys design/ia.json uses.
  */
 final class Site {
+
+  /**
+   * A title as HTML in which a typed number range ("Incoming 9 - 12") never breaks inside (build.py nowrap_ranges()).
+   */
+  public static function nowrapRanges(string $title): Markup {
+    return Markup::create(preg_replace('/(\d+) - (\d+)/', '<span class="nowrap">$1 - $2</span>', Html::escape($title)));
+  }
 
   /**
    * An in-site page the main menu reaches only through its external target: on that page the item is its trail.

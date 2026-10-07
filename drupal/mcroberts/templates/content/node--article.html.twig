@@ -2,22 +2,23 @@
 /**
  * @file
  * Article, full: the date ("Updated:", and the large date chip), the breadcrumb, body and attachments, previous /
- * next by date, News Archive and Newsletters (or School Learning Story) beside it, Latest News in the rail. In a
+ * next by date, then Latest News, News Archive and Newsletters (or School Learning Story) beside it. In a
  * list (teaser, vertical_teaser) the article is a news card.
  *
  * Variables: mcroberts (_mcroberts_node_variables()): page, title, eyebrow, meta (Updated: date), back,
- * collection, neighbours, rail (with Latest News), breadcrumb, chrome; item (a teaser's news item).
+ * collection, neighbours, latest (Latest News), rail, breadcrumb, chrome; item (a teaser's news item).
  */
 #}
 {% import '@mcroberts/includes/macros.html.twig' as m %}
 {% if mcroberts.page %}
 {% set mc = mcroberts %}
-{% include '@mcroberts/includes/hero.html.twig' with {c: mc.chrome, title: mc.title, eyebrow: mc.eyebrow, alias: '', compact: true, breadcrumb: mc.breadcrumb, meta: mc.meta} only %}
+{% include '@mcroberts/includes/hero.html.twig' with {c: mc.chrome, title: mc.title, title_html: mc.title_html, eyebrow: mc.eyebrow, alias: '', compact: true, breadcrumb: mc.breadcrumb, meta: mc.meta} only %}
 <div class="page-body"><div class="wrap page-grid"><article{{ attributes.addClass('page-content') }}>{{ title_prefix }}{{ title_suffix }}<!-- field body + field attachments (media file) -->
 <div class="prose">{{ content|without('links', 'comment') }}</div>
 {%- if mc.neighbours.prev or mc.neighbours.next -%}
-<nav class="article-nav" aria-labelledby="pager-title"><h2 class="vh" id="pager-title">{{ mc.collection }}</h2>{% for key, x in mc.neighbours %}{% if x %}<a class="{{ key }}" href="{{ x.url }}" rel="{{ key }}"><span class="dir">{{ m.icon('arrow') }}{{ key == 'prev' ? 'Previous' : 'Next' }}</span><span class="t">{{ x.title }}</span><time datetime="{{ x.date.iso }}">{{ x.date.long }}</time></a>{% endif %}{% endfor %}</nav>
+<nav class="article-nav" aria-labelledby="pager-title"><h2 class="vh" id="pager-title">{{ mc.collection }}</h2>{% for key, x in mc.neighbours %}{% if x %}<a class="{{ key }}" href="{{ x.url }}" rel="{{ key }}"><span class="dir">{{ m.icon('arrow') }}{{ key == 'prev' ? 'Previous'|t : 'Next'|t }}</span><span class="t">{{ x.title }}</span><time datetime="{{ x.date.iso }}">{{ x.date.long }}</time></a>{% endif %}{% endfor %}</nav>
 {%- endif -%}
+{%- if mc.latest -%}<!-- Latest News under the article, not in the rail: a short story leaves no empty band under it --><section class="rail-news" aria-labelledby="rail-news-title"><h2 id="rail-news-title">Latest News</h2><ul>{% for x in mc.latest %}<li><a href="{{ x.url }}"><time datetime="{{ x.date.iso }}">{{ x.date.short }}</time><span>{{ x.title }}</span></a></li>{% endfor %}</ul></section>{%- endif -%}
 </article><aside class="page-sidebar article-meta region region-sidebar-first">{% if mc.meta %}{{ m.chip_lg(mc.meta) }}{% endif %}<ul class="article-back">{% for b in mc.back %}<li><a class="arrow-link" href="{{ b.url }}"><span>{{ b.label }}</span>{{ m.icon('arrow') }}</a></li>{% endfor %}</ul></aside>{% include '@mcroberts/includes/rail.html.twig' with {c: mc.chrome, r: mc.rail} only %}</div></div>
 {% else %}
 {% include '@mcroberts/content/node--article--teaser.html.twig' %}

@@ -77,7 +77,16 @@
       if (table && (info.col === weekdayCol || info.col === 'Collaboration Days')) {
         var th = table.querySelector('th[data-col="' + info.col + '"]');
         var td = table.querySelector('td[data-col="' + info.col + '"]');
-        if (th) { th.classList.add('is-today'); th.insertAdjacentHTML('afterbegin', '<span class="tag-today">' + esc(data.labels.today) + '</span>'); }
+        if (th) {
+          th.classList.add('is-today');
+          th.insertAdjacentHTML('afterbegin', '<span class="tag-today">' + esc(data.labels.today) + '</span>');
+          /* a frame narrower than its table (phones) opens on today's column, once; the visitor's own scroll stays */
+          var w = th.closest('.rot-wrap');
+          if (w && !w.hasAttribute('data-at-today') && w.scrollWidth > w.clientWidth + 1) {
+            w.setAttribute('data-at-today', '');
+            w.scrollLeft += th.getBoundingClientRect().left - w.getBoundingClientRect().left - 8;
+          }
+        }
         if (td) {
           td.classList.add('is-today');
           var lis = td.querySelectorAll('.blk');

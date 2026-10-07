@@ -203,7 +203,7 @@
 .mega-tiles > li:only-child { grid-column: 1 / -1; }
 .mega-tile { position: relative; display: grid; grid-template-rows: auto 1fr; height: 100%; border-radius: var(--radius); overflow: hidden; background: var(--card); border: 1px solid var(--rule-soft); box-shadow: var(--shadow-1); text-decoration: none; color: var(--ink); }
 .mega-tile:hover { border-color: var(--forest); }
-.mega-tile-img { display: grid; place-items: center; aspect-ratio: 4 / 3; overflow: hidden; background: var(--forest); border-radius: 0 0 50% 50% / 0 0 1.2rem 1.2rem; }
+.mega-tile-img { display: grid; grid-template: minmax(0, 1fr) / minmax(0, 1fr); place-items: center; aspect-ratio: 4 / 3; overflow: hidden; background: var(--forest); border-radius: 0 0 50% 50% / 0 0 1.2rem 1.2rem; }
 .mega-tile-img img { width: 100%; height: 100%; object-fit: cover; }
 .mega-tile.is-icon .mega-tile-img img { width: auto; height: 70%; object-fit: contain; }
 /* logo art (Strikers Athletics) is shown whole on forest, never cropped */
@@ -585,6 +585,10 @@ dialog { --scroll-top: 0px; --scroll-bottom: 0px; scroll-padding: .5rem 0; }
 }
 
 @container page (width < 43.9375rem) {
+  /* the current page's crumb repeats the h1 right under it: kept for screen readers only, so deep pages start sooner */
+  /* and only Home and the parent show (the section is the eyebrow): one line on deep pages */
+  .breadcrumb li:has([aria-current="page"]),
+  .breadcrumb li:not(:first-child):not(:has(+ li > [aria-current="page"])) { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; }
   /* room under the footer for the bottom bar (the --scroll-bottom allowance keeps it off the focused element, WCAG 2.4.11) */
   .page { padding-bottom: calc(5rem + env(safe-area-inset-bottom)); }
   /* phones: the header scrolls away (Search and Menu live in the bottom bar), the district strip folds away (its
@@ -631,10 +635,10 @@ dialog { --scroll-top: 0px; --scroll-bottom: 0px; scroll-padding: .5rem 0; }
   body:has(input:focus, textarea:focus) .action-bar { transform: translateY(110%); }
 
   /* Bottom bar (menu utility on phones): the Student Absent? pill leads (label → Student Attendance, number → dial,
-     44 px), then Translate, Search and Menu */
+     44 px), then Search and Menu */
   .action-bar {
     transition: transform .2s var(--ease);
-    display: grid; grid-template-columns: minmax(0, 1fr) repeat(3, 3.5rem); align-items: stretch; gap: .25rem;
+    display: grid; grid-template-columns: minmax(0, 1fr) repeat(2, 3.5rem); align-items: stretch; gap: .25rem;
     position: fixed; left: 0; right: 0; bottom: 0; z-index: 50;
     padding: .3rem .5rem calc(.3rem + env(safe-area-inset-bottom));
     background: rgba(16, 41, 26, .97); backdrop-filter: blur(8px);
@@ -658,7 +662,7 @@ dialog { --scroll-top: 0px; --scroll-bottom: 0px; scroll-padding: .5rem 0; }
   .bar-btn[aria-expanded="true"] { background: rgba(247, 243, 234, .12); }
   .action-bar :focus-visible, .action-bar .translate:focus-within .tool-btn { outline: 3px solid #fff; outline-offset: -3px; box-shadow: inset 0 0 0 6px var(--gold); }
   /* the Today card's call button is on screen (js/today.js): the pill folds to its call icon, the number stays its name */
-  html.js .action-bar.has-dup { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  html.js .action-bar.has-dup { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   html.js .action-bar.has-dup .bar-absent { padding: 0; background: transparent; border-color: transparent; }
   html.js .action-bar.has-dup .bar-label { display: none; }
   html.js .action-bar.has-dup .bar-num { justify-content: center; min-height: 3.25rem; border-radius: .6rem; }
@@ -667,7 +671,7 @@ dialog { --scroll-top: 0px; --scroll-bottom: 0px; scroll-padding: .5rem 0; }
 }
 
 @container page (max-width: 23.75rem) {
-  .action-bar { grid-template-columns: minmax(0, 1fr) repeat(3, 3.1rem); }
+  .action-bar { grid-template-columns: minmax(0, 1fr) repeat(2, 3.1rem); }
   .bar-num { font-size: .8125rem; gap: .3rem; }
   .bar-num .icon { width: .95rem; height: .95rem; }
   .lockup-name, .path-frontpage .masthead .lockup-name { font-size: 1.15rem; }

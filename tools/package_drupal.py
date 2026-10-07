@@ -6,6 +6,7 @@
 
 What it does (Python 3.9+ standard library only):
   1. css/ and js/: byte-for-byte copies of theme/css and theme/js, so the theme ships the preview's front-end code
+     (less the preview's stand-ins for core search and the views pager, js/search.js and js/pager.js)
      unchanged (stale files are removed). bridge/ holds the only Drupal-specific CSS/JS and is not touched here.
   2. logo.png: the crest assets/content/39ef9ae7e316.png, byte for byte. images/: the scaled crest copies, the
      district logo, the header photo, the front-page pictures and the menu/hub tile pictures the preview uses.
@@ -33,6 +34,9 @@ ZIP_OUT = ROOT / "docs" / "downloads" / "mcroberts-drupal-theme.zip"
 CREST = "39ef9ae7e316.png"
 ZIP_DATE = (2026, 1, 1, 0, 0, 0)
 SKIP_NAMES = {".DS_Store"}
+# the static preview's stand-ins for what Drupal does on the server: core search (search.js) and the views pager
+# (pager.js); the theme does not ship them
+PREVIEW_ONLY = {"js": {"pager.js", "search.js"}}
 
 
 def same(a, b):
@@ -53,10 +57,10 @@ def write(path, text):
 
 
 def mirror(sub):
-    """theme/<sub> → drupal/mcroberts/<sub>, exact; files that left theme/ leave the copy too."""
+    """theme/<sub> → drupal/mcroberts/<sub>, exact (less the preview-only files); files that left theme/ leave the copy too."""
     src, dst = THEME_SRC / sub, DRUPAL / sub
     dst.mkdir(parents=True, exist_ok=True)
-    names = {f.name for f in src.iterdir() if f.is_file() and f.name not in SKIP_NAMES}
+    names = {f.name for f in src.iterdir() if f.is_file() and f.name not in SKIP_NAMES | PREVIEW_ONLY.get(sub, set())}
     for name in sorted(names):
         copy(src / name, dst / name)
     for f in dst.iterdir():
@@ -69,7 +73,7 @@ def check_mirror():
     bad = []
     for sub in ("css", "js"):
         src, dst = THEME_SRC / sub, DRUPAL / sub
-        a = {f.name for f in src.iterdir() if f.is_file() and f.name not in SKIP_NAMES}
+        a = {f.name for f in src.iterdir() if f.is_file() and f.name not in SKIP_NAMES | PREVIEW_ONLY.get(sub, set())}
         b = {f.name for f in dst.iterdir() if f.is_file() and f.name not in SKIP_NAMES} if dst.exists() else set()
         bad += ["{}/{} missing".format(sub, n) for n in sorted(a - b)]
         bad += ["{}/{} extra".format(sub, n) for n in sorted(b - a)]

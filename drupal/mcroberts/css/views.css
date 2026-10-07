@@ -86,7 +86,7 @@
 .aday.is-today .date-chip .m, .aday.is-today .date-chip .d { color: var(--gold); }
 
 /* ---------- School Calendar ---------- */
-.cal-intro { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 1rem; align-items: start; margin: 2.5rem 0 0; }
+.cal-intro { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1rem; margin: 2.5rem 0 0; }   /* the Notes accordion above the printable pages, no hole beside a closed accordion */
 .cal-intro .cal-notes { margin: 0; }
 .cal-intro .cal-notes ul { padding-left: 1.2rem; font-size: .9375rem; color: var(--ink-2); }
 .cal-sub { position: relative; overflow: hidden; padding: 1.6rem 1.6rem 1.4rem; border-radius: var(--radius); background: var(--forest); color: #fff; isolation: isolate; }
@@ -101,6 +101,11 @@
 .cal-legend { display: inline-flex; align-items: center; gap: .5rem; margin: 0; font-size: .875rem; font-weight: 650; color: var(--ink-2); }
 .cal-legend .tag-noschool { vertical-align: 0; }
 .cal-subscribe { margin-left: auto; min-height: 2.9rem; font-size: .9375rem; }
+@container page (width < 78.9375rem) {
+  /* a narrower toolbar: Subscribe follows the other controls from the left, never alone at the far right of a row */
+  .cal-toolbar { column-gap: 1rem; }
+  .cal-subscribe { margin-left: 0; }
+}
 .cal-legend .sw { width: 1.05rem; height: 1.25rem; border-radius: var(--arch); background: var(--gold); }
 .cal-months { margin: 0 0 1.5rem; }
 .cal-months ul { list-style: none; display: flex; gap: .4rem; margin: 0; padding: .25rem .1rem .5rem; overflow-x: auto; scrollbar-width: thin; }
@@ -218,6 +223,8 @@
 /* the frame scrolls sideways on phones, so it takes focus (tabindex=0: keyboard scrolling, WCAG 2.1.1) and shows the
    theme's focus ring */
 .rot-wrap { padding: .9rem .6rem .7rem; border-radius: var(--radius); border: 2px dashed color-mix(in srgb, var(--forest) 45%, transparent); background: var(--paper-3); }
+/* a table frame wider than its table fades at the clipped edge until scrolled to the end (js/behaviors.js has-more) */
+.table-wrap.has-more, .rot-wrap.has-more { -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 2.5rem), transparent); mask-image: linear-gradient(to right, #000 calc(100% - 2.5rem), transparent); }
 .prose .rot-table { table-layout: fixed; width: 100%; border-collapse: separate; border-spacing: .35rem 0; }
 .prose .rot-table th { position: relative; padding: 1.2rem .1rem .45rem; background: none; border: 0; text-align: center; font-size: .75rem; font-weight: 800; letter-spacing: .12em; color: var(--ink); line-height: 1.2; }
 .prose .rot-table th[data-col="Collaboration Days"] { font-size: .625rem; letter-spacing: 0; font-style: italic; font-weight: 700; -webkit-hyphens: auto; hyphens: auto; }
@@ -335,7 +342,7 @@
 .result h3 a:hover { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: .15em; color: var(--forest); }
 .result h3 .ext-mark { color: var(--ink-3); }
 .result-snip { margin: .4rem 0 0; color: var(--ink-2); font-size: .9375rem; line-height: 1.55; }
-.results mark { background: var(--gold-soft); color: inherit; padding: 0 .1em; border-radius: .2em; }
+.results mark { background: var(--gold-soft); color: inherit; padding: 0; border-radius: .2em; box-shadow: 0 0 0 .08em var(--gold-soft); }
 .search-browse { margin-top: 3.5rem; }
 
 /* ---------- 404 ---------- */
@@ -374,7 +381,8 @@
   .mg-table td { height: 3.4rem; }
   .mday { align-items: center; padding: .35rem .15rem; gap: .2rem; border-radius: .55rem; }
   .mday-n { font-size: 1.05rem; }
-  .mday-code, .mday .tag-today { display: none; }
+  .mday .tag-today { display: none; }
+  .mday-code { display: block; min-height: 0; padding: 0; border: 0; background: none; font-size: .5625rem; line-height: 1.1; letter-spacing: 0; white-space: normal; text-align: center; overflow-wrap: anywhere; }
   .mday-evs { display: flex; flex-wrap: wrap; justify-content: center; gap: .15rem; }
   .mev { width: .45rem; height: .45rem; padding: 0; border-radius: 50%; font-size: 0; background: var(--forest); }
   .mev--ns { background: var(--gold); }
@@ -382,6 +390,7 @@
   .mday[aria-pressed="true"] { background: var(--forest-900) !important; border-color: var(--forest-900); color: #fff; box-shadow: none; }
   .mg-table td .mday[aria-pressed="true"] .mday-n { color: var(--gold); }
   .mday[aria-pressed="true"] .mev { background: var(--gold); }
+  .mday[aria-pressed="true"] .mday-code { color: var(--gold-soft); }
   .mg-table th.is-weekend { width: auto; }
   .mg-table td.is-today .mday-n { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: .2em; }
   .event-when { gap: 1rem; padding: 1.1rem; }
@@ -468,8 +477,9 @@ html.js .cal-mblock.is-folded { display: none; }   /* scripts off: every month s
 .cal-more .icon { width: 1.1rem; height: 1.1rem; }
 @container page (max-width: 30rem) {
   /* the rotation tables keep readable times: they scroll sideways inside their frame */
-  .rot-wrap { overflow-x: auto; }
-  .prose .rot-table { min-width: 30rem; }
+  .rot-wrap { overflow-x: auto; scroll-snap-type: x proximity; scroll-padding-inline: .25rem; }
+  .prose .rot-table { min-width: 27rem; }   /* at 360px FRI shows in part, so the frame reads as scrollable */
+  .rot-table th { scroll-snap-align: start; }
 }
 @container page (width < 43.9375rem) {
   .result-snip { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }

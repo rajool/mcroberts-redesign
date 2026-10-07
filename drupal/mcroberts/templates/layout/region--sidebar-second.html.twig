@@ -11,7 +11,7 @@
 {% if mcroberts_tasks %}
 {% set t = mcroberts_tasks %}
 <!-- Front page sidebar_second: sidebar_notes:block_2 (Student Absent?), district_quick_links, home_page_buttons -->
-<section class="tasks region region-sidebar-second" aria-labelledby="tasks-title"><h2 class="eyebrow tasks-title" id="tasks-title">Helpful Links</h2><ul class="task-grid">{% for b in t.lead %}{{ b }}{% endfor %}{% include '@mcroberts/includes/day-tiles.html.twig' with {c: t.chrome, day: t.day, first: t.first, weekly: t.weekly, bell_title: t.bell_title} only %}{% for b in t.rest %}{{ b }}{% endfor %}</ul></section>
+<section class="tasks region region-sidebar-second" aria-labelledby="tasks-title"><h2 class="eyebrow tasks-title" id="tasks-title">{{ 'Helpful Links'|t }}</h2><ul class="task-grid">{% for b in t.lead %}{{ b }}{% endfor %}{% include '@mcroberts/includes/day-tiles.html.twig' with {c: t.chrome, day: t.day, first: t.first, weekly: t.weekly, bell_title: t.bell_title} only %}{% for b in t.rest %}{{ b }}{% endfor %}</ul></section>
 {% elseif content %}
 <div{{ attributes.addClass('region', 'region-sidebar-second') }}>{{ content }}</div>
 {% endif %}

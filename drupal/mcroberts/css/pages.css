@@ -11,6 +11,8 @@
 .prose h4, .prose h5 { font-family: var(--sans); font-size: 1rem; font-weight: 700; letter-spacing: .01em; margin: 1.8rem 0 .5rem; }
 .prose p, .prose ul, .prose ol, .prose table, .prose figure, .prose blockquote { margin: 0 0 1.15em; }
 .prose ul, .prose ol { padding-left: 1.35rem; }
+/* the short first line of a typed list ("1. Chair" over its duties) leads the list it was typed above */
+.prose p.list-lead { margin-bottom: .35rem; font-weight: 650; }
 .prose li { margin: .3rem 0; padding-left: .25rem; }
 .prose ul li::marker { color: var(--forest); }
 .prose ol li::marker { color: var(--brass); font-weight: 700; font-variant-numeric: tabular-nums; }
@@ -140,6 +142,12 @@ details.accordion > summary:hover { color: var(--forest); }
 .hub-cards > li:first-child:nth-last-child(2), .hub-cards > li:first-child:nth-last-child(3n+2) ~ li:nth-last-child(-n+2) { grid-column: span 3; }
 .hub-cards > li:first-child:nth-last-child(3n+4):nth-last-child(-n+4),
 .hub-cards > li:first-child:nth-last-child(3n+4) ~ li:nth-last-child(-n+4) { grid-column: span 3; }
+/* beside a section menu (and the rail) the content column is about 43rem: two cards across, an odd last card takes the row */
+@container page (width >= 62.9375rem) {
+  .page-grid:not(.no-sidebar):not(.page-grid--rail-below) .hub-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .page-grid:not(.no-sidebar):not(.page-grid--rail-below) .hub-cards > li:nth-child(n) { grid-column: auto; }
+  .page-grid:not(.no-sidebar):not(.page-grid--rail-below) .hub-cards > li:last-child:nth-child(odd) { grid-column: 1 / -1; }
+}
 .hub-card {
   position: relative; display: grid; grid-template-rows: auto 1fr auto; gap: .5rem; height: 100%;
   padding: 1.4rem 1.4rem 1.2rem; border-radius: var(--radius); background: var(--card); border: 1px solid var(--rule-soft); box-shadow: var(--shadow-1);
@@ -153,7 +161,7 @@ details.accordion > summary:hover { color: var(--forest); }
 .hub-card .go { grid-row: -2; }                      /* the last row, with or without a card line */
 .hub-card--bare .go { grid-row: auto; }
 .hub-card .num { font-family: var(--serif); font-style: italic; font-size: 1rem; color: var(--brass); font-variant-numeric: lining-nums; }
-.hub-card h2, .hub-card h3 { position: relative; font-family: var(--serif); font-size: 1.45rem; line-height: 1.15; letter-spacing: -.01em; padding-right: 1rem; }
+.hub-card h2, .hub-card h3 { position: relative; font-family: var(--serif); font-size: 1.45rem; line-height: 1.15; letter-spacing: -.01em; padding-right: 3.25rem; }   /* clears the corner ring */
 /* a card with nothing to say beyond its title: title and arrow on one row, centred in its cell */
 .hub-card--bare { grid-template-columns: minmax(0, 1fr) auto; grid-template-rows: auto; align-items: center; align-content: center; gap: .75rem; min-height: 5rem; }
 .hub-card--bare h2, .hub-card--bare h3 { padding-right: 0; }
@@ -220,20 +228,23 @@ details.accordion > summary:hover { color: var(--forest); }
 .rail-news a { display: grid; gap: .15rem; padding: .7rem 0; text-decoration: none; font-size: .9375rem; line-height: 1.3; font-weight: 600; }
 .rail-news a:hover { color: var(--forest); }
 .rail-news time { font-size: .75rem; font-weight: 650; letter-spacing: .06em; text-transform: uppercase; color: var(--brass); }
+/* under an article (after Previous / Next): the same card, its stories in two columns where there is room */
+.page-content > .rail-news { margin-top: 2.5rem; }
+.page-content > .rail-news ul { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 17rem), 1fr)); column-gap: 1.5rem; }
 
 /* ---------- Listings: News Archive, Newsletters, School Learning Story ---------- */
 .month { margin: 0 0 2.75rem; }
 .month-title { position: sticky; top: var(--nav-h); z-index: 2; display: flex; align-items: center; gap: .9rem; margin: 0 0 .5rem; padding: .85rem 0 .5rem; background: var(--paper); font-family: var(--serif); font-size: 1.6rem; line-height: 1.1; }
 .month-title::after { content: ""; flex: 1; height: 1px; background: var(--rule); }
 .rows { list-style: none; }
-.row { display: grid; grid-template-columns: 4.25rem 1fr; gap: 1.1rem; padding: 1.1rem 0; border-bottom: 1px solid var(--rule-soft); }
-.row .date-chip { width: 4.25rem; padding: .65rem 0 .55rem; background: var(--paper-2); }
-.row .date-chip .n { font-size: 1.75rem; }
-.row h3 { font-family: var(--serif); font-size: 1.3rem; line-height: 1.2; letter-spacing: -.005em; }
-.row h3 a { text-decoration: none; background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat; transition: background-size .35s var(--ease); }
-.row h3 a:hover { background-size: 100% 1px; }
-.row p { max-width: 68ch; margin: .35rem 0 0; color: var(--ink-2); font-size: .9375rem; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-.row .ext-mark { display: inline-block; color: var(--ink-3); }
+.rows > .row { display: grid; grid-template-columns: 4.25rem 1fr; gap: 1.1rem; padding: 1.1rem 0; border-bottom: 1px solid var(--rule-soft); }
+.rows > .row .date-chip { width: 4.25rem; padding: .65rem 0 .55rem; background: var(--paper-2); align-self: start; }
+.rows > .row .date-chip .n { font-size: 1.75rem; }
+.rows > .row h3 { font-family: var(--serif); font-size: 1.3rem; line-height: 1.2; letter-spacing: -.005em; }
+.rows > .row h3 a { text-decoration: none; background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat; transition: background-size .35s var(--ease); }
+.rows > .row h3 a:hover { background-size: 100% 1px; }
+.rows > .row p { max-width: 68ch; margin: .35rem 0 0; color: var(--ink-2); font-size: .9375rem; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.rows > .row .ext-mark { display: inline-block; color: var(--ink-3); }
 
 .card-grid { list-style: none; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 17rem), 1fr)); gap: 1rem; }
 .news-card {
@@ -256,7 +267,7 @@ details.accordion > summary:hover { color: var(--forest); }
 /* ---------- Responsive ---------- */
 @container page (width < 43.9375rem) {
   /* phones: the teaser shows whole (the build already ends a cut one with "…" on a word), never cut mid-word */
-  .row p { display: block; -webkit-line-clamp: none; overflow: visible; }
+  .rows > .row p { display: block; -webkit-line-clamp: none; overflow: visible; }
   .prose { font-size: 1.0313rem; }
   .prose .lead { margin-top: 2rem; }
   .callout { grid-template-columns: 1fr; padding: 1.4rem; gap: 1rem; }
@@ -266,8 +277,8 @@ details.accordion > summary:hover { color: var(--forest); }
   .embed-map { aspect-ratio: 3 / 4; }
   .article-nav { grid-template-columns: 1fr; }
   .article-nav .next { grid-column: auto; }
-  .row { grid-template-columns: 3.5rem 1fr; gap: .9rem; }
-  .row .date-chip { width: 3.5rem; }
+  .rows > .row { grid-template-columns: 3.5rem 1fr; gap: .9rem; }
+  .rows > .row .date-chip { width: 3.5rem; }
   .month-title { font-size: 1.35rem; top: 0; }
   /* article: the post (and its files) first; the date is already in the hero */
   .article-meta .date-chip--lg { display: none; }
@@ -296,6 +307,12 @@ details.accordion > summary:hover { color: var(--forest); }
   .hub-group--featured .hub-card .num, .hub-group--featured .hub-card p, .hub-group--featured .hub-card::after { display: none; }
   .hub-group--featured .hub-card :is(h2, h3) { font-size: 1.2rem; padding-right: 0; }
   .hub-group--featured .hub-card .go { margin: 0; }
+  /* one row: the title in the wide column, the arrow in the narrow one (the base rule's definite grid-row for .go
+     would otherwise place the arrow first, in the title's column) */
+  /* a narrow table keeps its words whole and fits the frame at 360px (PLT: two columns of long words) */
+  .prose .table-wrap:not(.is-wide) :is(th, td) { padding-inline: .55rem; }
+  .hub-group .hub-card :is(h2, h3) { grid-column: 1; grid-row: 1; padding-right: 0; }   /* no corner ring here */
+  .hub-group .hub-card .go { grid-column: 2; grid-row: 1; align-self: center; }
   .hub-group-title { margin-bottom: .75rem; }
 }
 @container page (width >= 43.9375rem) and (width < 62.9375rem) {
@@ -419,12 +436,16 @@ a:hover > .tile-go { transform: translateX(3px); }
 .prose .col-list ul { padding-left: 1.1rem; margin: 0; font-size: .9375rem; }
 .prose .col-list li { margin: .2rem 0; }
 
+/* a heading the source typed inside a table cell keeps the cell's size, not a section heading's rule and space */
+.prose :is(td, th) > :is(h2, h3, h4):first-child { margin: 0; padding: 0; border: 0; font-size: 1.125rem; line-height: 1.25; overflow-wrap: anywhere; }
+.prose :is(td, th) > :is(h2, h3, h4):first-child::before { content: none; }
+
 /* ---------- Photo tiles (a section's pages, each with its own first image) ---------- */
 .photo-tiles { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 12.5rem), 1fr)); gap: 1rem; }
 .photo-tiles li { margin: 0; }
 a.photo-tile { position: relative; display: grid; grid-template-rows: auto 1fr; height: 100%; border-radius: var(--radius); overflow: hidden; background: var(--card); border: 1px solid var(--rule-soft); box-shadow: var(--shadow-1); text-decoration: none; color: var(--ink); transition: transform .25s var(--ease), box-shadow .25s var(--ease), border-color .25s var(--ease); }
 a.photo-tile:hover { transform: translateY(-3px); box-shadow: var(--shadow-2); border-color: var(--forest); }
-.photo-tile-img { display: grid; place-items: center; aspect-ratio: 4 / 3; overflow: hidden; background: var(--paper-2); border-radius: 0 0 50% 50% / 0 0 1.4rem 1.4rem; }
+.photo-tile-img { display: grid; grid-template: minmax(0, 1fr) / minmax(0, 1fr); place-items: center; aspect-ratio: 4 / 3; overflow: hidden; background: var(--paper-2); border-radius: 0 0 50% 50% / 0 0 1.4rem 1.4rem; }
 .photo-tile-img img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s var(--ease); }
 a.photo-tile:hover .photo-tile-img img { transform: scale(1.05); }
 .photo-tile.is-icon .photo-tile-img img { width: auto; height: 62%; object-fit: contain; }

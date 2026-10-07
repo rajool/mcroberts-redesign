@@ -224,6 +224,7 @@ function mcroberts_preprocess_page(&$variables) {
     $search = str_starts_with((string) \Drupal::routeMatch()->getRouteName(), 'search.view');
     $variables['mcroberts_page'] = [
       'title' => _mcroberts_page_title(),
+      'title_html' => Site::nowrapRanges(_mcroberts_page_title()),
       // a view page that is a section hub (News Archive at /news) keeps its section as the eyebrow
       'eyebrow' => $sec ? $sec['label'] : '',
       'hub' => $hub,
@@ -385,6 +386,7 @@ function _mcroberts_node_variables(array &$variables, NodeInterface $node, strin
   $m = [
     'page' => TRUE,
     'title' => $bundle === 'calendar_event' ? Calendar::smartCase($title) : $title,
+    'title_html' => Site::nowrapRanges($bundle === 'calendar_event' ? Calendar::smartCase($title) : $title),
     'cur' => $cur,
     'url' => $url,
     'eyebrow' => ($sec && $sec['path'] !== $cur) ? $sec['label'] : '',
@@ -444,7 +446,9 @@ function _mcroberts_node_variables(array &$variables, NodeInterface $node, strin
         : [['url' => Site::url(Site::pathOf('story')), 'label' => 'School Learning Story']];
       $m['collection'] = $news ? (Site::title(Site::pathOf('news')) ?: 'News Archive') : 'School Learning Story';
       $m['neighbours'] = Teaser::neighbours($node);
-      $m['rail'] = _mcroberts_rail($cur, Teaser::latest(5, (int) $node->id()));
+      // Latest News sits under the article (after Previous / Next), not in the rail: a short story leaves no gap
+      $m['latest'] = Teaser::latest(5, (int) $node->id());
+      $m['rail'] = _mcroberts_rail($cur);
       $variables['#cache']['tags'][] = 'node_list';
       break;
 
@@ -566,6 +570,34 @@ function mcroberts_theme_suggestions_block_alter(array &$suggestions, array $var
 }
 
 /**
+ * Implements hook_theme_suggestions_HOOK_alter() for region.
+ *
+ * Bootstrap Barrio appends region__nowrap (and region__full_width) after region__<name> whenever its own region
+ * settings are unset, which they are for this sub-theme; the last suggestion wins, so Barrio's bare
+ * region--nowrap.html.twig would replace this theme's region templates (Helpful Links, the status messages frame).
+ * This alter runs after Barrio's and takes both out.
+ */
+function mcroberts_theme_suggestions_region_alter(array &$suggestions, array $variables) {
+  $suggestions = array_values(array_diff($suggestions, ['region__nowrap', 'region__full_width']));
+}
+
+/**
+ * Implements hook_theme_suggestions_HOOK_alter() for container.
+ *
+ * Core suggests nothing for the container a views block is wrapped in; this adds container__view__<view> and
+ * container__view__<view>__<display>, so templates/views/container--view--*.html.twig drop that extra <div>.
+ */
+function mcroberts_theme_suggestions_container_alter(array &$suggestions, array $variables) {
+  $e = $variables['element'] ?? [];
+  if (($e['#type'] ?? '') === 'view' && !empty($e['#name'])) {
+    $suggestions[] = 'container__view__' . $e['#name'];
+    if (!empty($e['#display_id'])) {
+      $suggestions[] = 'container__view__' . $e['#name'] . '__' . $e['#display_id'];
+    }
+  }
+}
+
+/**
  * Implements hook_preprocess_HOOK() for block.html.twig.
  */
 function mcroberts_preprocess_block(&$variables) {
@@ -614,6 +646,8 @@ function mcroberts_preprocess_menu(&$variables) {
  */
 function mcroberts_preprocess_region(&$variables) {
   $region = $variables['region'] ?? '';
+  // Barrio adds Bootstrap's "row" to every region it does not list as unwrapped; this theme's regions are not grids
+  $variables['attributes']['class'] = array_values(array_diff((array) ($variables['attributes']['class'] ?? []), ['row']));
   if ($region === 'featured_top') {
     $variables['alert_key'] = _mcroberts_alerts()['key'];
   }
@@ -622,10 +656,13 @@ function mcroberts_preprocess_region(&$variables) {
     // sub-lines), then the district quick links and home page buttons, in the preview's order.
     $lead = [];
     $rest = [];
+    $blocks = \Drupal::entityTypeManager()->getStorage('block');
     foreach (Element::children($variables['elements'], TRUE) as $key) {
       $child = $variables['elements'][$key];
       $markup = $child['#markup'] ?? '';
-      if (($child['#plugin_id'] ?? '') === 'views_block:sidebar_notes-block_2') {
+      // the region's keys are block config ids: a render-cache hit keeps only #markup, not #plugin_id
+      $block = $blocks->load($key);
+      if ($block && $block->getPluginId() === 'views_block:sidebar_notes-block_2') {
         $lead[] = $markup;
       }
       else {

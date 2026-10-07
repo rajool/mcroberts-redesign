@@ -14,7 +14,7 @@
 {% set mc = mcroberts %}
 {% set ev = mc.event %}
 {{ attach_library('mcroberts/views') }}
-{% include '@mcroberts/includes/hero.html.twig' with {c: mc.chrome, title: mc.title, eyebrow: mc.eyebrow, alias: '', compact: true, breadcrumb: mc.breadcrumb, meta: null} only %}
+{% include '@mcroberts/includes/hero.html.twig' with {c: mc.chrome, title: mc.title, title_html: mc.title_html, eyebrow: mc.eyebrow, alias: '', compact: true, breadcrumb: mc.breadcrumb, meta: null} only %}
 <div class="page-body"><div class="wrap page-grid no-sidebar"><article{{ attributes.addClass('page-content', 'event-page') }}>{{ title_prefix }}{{ title_suffix }}<!-- node calendar_event: field_event_date; the day from view calendar; timetable from the bell schedule block -->
 <div class="event-when{{ mc.noschool ? ' is-noschool' : '' }}">{{ m.chip_lg(ev.chip) }}<div><h2>Event Date</h2><p><time datetime="{{ ev.chip.iso }}">{{ ev.when }}</time>{% if mc.noschool_tag %} <span class="tag-noschool">No School</span>{% endif %}</p><ul class="chips">{% if ev.rot %}<li class="chip">{{ ev.rot }}</li>{% endif %}{% if ev.code %}<li class="chip chip--forest">{{ ev.code }}</li>{% endif %}</ul></div></div>
 {%- if ev.blocks -%}<section class="event-bell" aria-labelledby="ev-bell"><h2 id="ev-bell"><a href="{{ mc.chrome.paths.bell }}">Bell Schedule</a></h2><ol class="blocks">{% for b in ev.blocks %}<li style="--m:{{ b.m }}"{% if b.cls %} class="{{ b.cls }}"{% endif %}{% if b.blk %} data-blk="{{ b.blk }}"{% endif %}><b>{{ b.label }}</b><time>{{ b.range }}</time></li>{% endfor %}</ol></section>{%- endif -%}

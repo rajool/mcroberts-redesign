@@ -93,6 +93,7 @@ final class BodyFilter implements TrustedCallbackInterface {
     self::widenGenericLinks($dom, $body);
     self::emptyParagraphs($body);
     self::typedBullets($dom, $body);
+    self::dashLines($dom, $body);
     self::nbspRuns($body);
     self::linkLists($dom, $body);
     self::datesList($dom, $body);
@@ -469,6 +470,85 @@ final class BodyFilter implements TrustedCallbackInterface {
         }
         $run = [];
       }
+    }
+  }
+
+  /**
+   * A typed "- " at the start of a line.
+   */
+  private const DASH_LINE = '/^[\s\x{00A0}]*[\-\x{2013}][\s\x{00A0}]+/u';
+
+  /**
+   * A paragraph whose lines after the first each start with a typed "- " (the PAC roles, the Career Centre links)
+   * → that first line, then a real list of the rest; a short first line ("1. Chair") is the list's lead
+   * (build.py dash_lines()).
+   */
+  private static function dashLines(\DOMDocument $dom, \DOMElement $root): void {
+    foreach (self::els($root, 'p') as $p) {
+      $kids = self::kids($p);
+      $wrap = (count($kids) === 1 && in_array(self::tag($kids[0]), ['em', 'strong', 'i', 'b', 'span'], TRUE)) ? $kids[0] : NULL;
+      $lines = [[]];
+      foreach (self::children($wrap ?: $p) as $c) {
+        if (self::tag($c) === 'br') {
+          $lines[] = [];
+          continue;
+        }
+        $lines[count($lines) - 1][] = $c;
+      }
+      $lines = array_values(array_filter($lines, function (array $l): bool {
+        foreach ($l as $x) {
+          if ($x instanceof \DOMElement || ($x instanceof \DOMText && trim($x->nodeValue, " \t\n\r\0\x0B\u{00A0}") !== '')) {
+            return TRUE;
+          }
+        }
+        return FALSE;
+      }));
+      if (count($lines) < 2) {
+        continue;
+      }
+      $lead = function (array $l): ?\DOMText {
+        foreach ($l as $x) {
+          if (self::blank($x)) {
+            continue;
+          }
+          return ($x instanceof \DOMText && preg_match(self::DASH_LINE, $x->nodeValue)) ? $x : NULL;
+        }
+        return NULL;
+      };
+      if ($lead($lines[0]) !== NULL) {
+        continue;
+      }
+      $rest = array_slice($lines, 1);
+      foreach ($rest as $l) {
+        if ($lead($l) === NULL) {
+          continue 2;
+        }
+      }
+      foreach ($rest as $l) {
+        $t = $lead($l);
+        $t->nodeValue = preg_replace(self::DASH_LINE, '', $t->nodeValue, 1);
+      }
+      $box = function (string $tag, array $l) use ($dom, $wrap): \DOMElement {
+        $el = self::el($dom, $tag);
+        $target = $el;
+        if ($wrap) {
+          $target = $el->appendChild($wrap->cloneNode(FALSE));
+        }
+        self::adopt($target, $l);
+        return $el;
+      };
+      $head = $box('p', $lines[0]);
+      foreach (iterator_to_array($p->attributes) as $a) {
+        $head->setAttribute($a->name, $a->value);
+      }
+      if (mb_strlen(self::text($head)) <= 40 && !self::els($head, 'a')) {
+        self::addClass($head, 'list-lead');
+      }
+      $ul = self::el($dom, 'ul');
+      foreach ($rest as $l) {
+        $ul->appendChild($box('li', $l));
+      }
+      self::replace($p, [$head, $ul]);
     }
   }
 
@@ -1038,7 +1118,8 @@ final class BodyFilter implements TrustedCallbackInterface {
       foreach ($rows as $r) {
         $cols = max($cols, count(self::elementChildren($r)));
       }
-      $wrap = self::el($dom, 'div', ['class' => 'table-wrap' . ($cols >= 5 ? ' is-wide' : ''), 'tabindex' => '0']);
+      // no static tab stop: js/behaviors.js (scrollFrames) adds one, with a region name, only when the table scrolls
+      $wrap = self::el($dom, 'div', ['class' => 'table-wrap' . ($cols >= 5 ? ' is-wide' : '')]);
       $t->parentNode->replaceChild($wrap, $t);
       $wrap->appendChild($t);
       if (self::els($t, 'th') && count($rows) >= 20) {

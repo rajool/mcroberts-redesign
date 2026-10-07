@@ -152,6 +152,51 @@
     }
   };
 
+  /* Table frames (.table-wrap, .rot-wrap): a tab stop only while the table is wider than its frame, so the keyboard
+     can scroll it, and then a region named by the nearest heading before it (or the table's caption); a fade marks
+     the clipped edge until the frame is scrolled to the end. Re-checked on resize. No words of its own. */
+  var frameId = 0;
+  var frameName = function (w) {
+    var cap = w.querySelector('caption');
+    var h = cap;
+    for (var n = w; !h && n && n !== document.body; n = n.parentElement) {
+      for (var p = n.previousElementSibling; p && !h; p = p.previousElementSibling) {
+        if (/^H[1-6]$/.test(p.tagName)) h = p;
+        else { var hs = p.querySelectorAll('h1, h2, h3, h4, h5, h6'); if (hs.length) h = hs[hs.length - 1]; }
+      }
+    }
+    h = h || document.getElementById('page-title');
+    if (!h) return '';
+    if (!h.id) h.id = 'mcr-frame-' + (++frameId);
+    return h.id;
+  };
+  McR.behaviors.scrollFrames = {
+    attach: function (context) {
+      McR.once('mcr-frame', '.table-wrap, .rot-wrap', context).forEach(function (w) {
+        var own = !w.hasAttribute('role');            /* .rot-wrap is a named region already */
+        var check = function () {
+          var more = w.scrollWidth > w.clientWidth + 1;
+          if (more) {
+            w.setAttribute('tabindex', '0');
+            if (own) {
+              var id = frameName(w);
+              w.setAttribute('role', 'region');
+              if (id) w.setAttribute('aria-labelledby', id);
+            }
+          } else {
+            w.removeAttribute('tabindex');
+            if (own) { w.removeAttribute('role'); w.removeAttribute('aria-labelledby'); }
+          }
+          w.classList.toggle('has-more', more && w.scrollLeft + w.clientWidth < w.scrollWidth - 2);
+        };
+        check();
+        w.addEventListener('scroll', check, { passive: true });
+        if (window.ResizeObserver) new ResizeObserver(check).observe(w);
+        else window.addEventListener('resize', check);
+      });
+    }
+  };
+
   McR.attachBehaviors = function (context) {
     Object.keys(McR.behaviors).forEach(function (name) {
       try { McR.behaviors[name].attach(context || document); } catch (e) { if (window.console) console.error(name, e); }

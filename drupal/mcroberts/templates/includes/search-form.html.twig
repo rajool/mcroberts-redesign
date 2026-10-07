@@ -6,4 +6,4 @@
  */
 #}
 {% import '@mcroberts/includes/macros.html.twig' as m %}
-<form class="search-form" role="search" action="{{ action }}" method="get"><label class="vh" for="search-{{ uid }}">Search</label><input id="search-{{ uid }}" type="search" name="keys" placeholder="Search" autocomplete="off"><button type="submit">{{ m.icon('search') }}<span class="vh">Search</span></button></form>
+<form class="search-form" role="search" action="{{ action }}" method="get"><label class="vh" for="search-{{ uid }}">Search</label><input id="search-{{ uid }}" type="search" name="keys" placeholder="Search" autocomplete="off"><button type="submit">{{ m.icon('search') }}<span class="vh">{{ 'Search'|t }}</span></button></form>

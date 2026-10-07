@@ -72,7 +72,10 @@ h3 { font-size: 1.2rem; line-height: 1.2; margin: 0; }
 .ask p { margin: 0 0 .9rem; font-size: 1rem; line-height: 1.55; }
 .ask a { color: var(--gold); font-weight: 650; }
 .ask .ask-link { margin: 0; }
-.ask .url { display: block; font-size: .85rem; color: #d8dccf; word-break: break-all; }
+.ask .url { display: block; font-size: .78rem; color: #d8dccf; }
+/* a written-out address breaks only after a slash (<wbr>), or anywhere as a last resort, never mid-word by default */
+.url { word-break: normal; overflow-wrap: anywhere; }
+.steps .url { color: var(--ink-2); font-size: .92em; }
 
 /* cover picture: the home page today, and redesigned on a computer and a phone */
 .hero-shot {
@@ -225,13 +228,16 @@ tfoot th, tfoot td { border-top: 2px solid var(--ink); border-bottom: 0; font-we
   h2 { font-size: 2.15rem; }
   .lead { margin-bottom: 1.1rem; }
   .sec { padding-top: 1.7rem; }
-  .cover { padding: 1.4rem 0 1.1rem; }
-  .cover h1 { font-size: 3.6rem; max-width: none; }
-  .dek { margin-bottom: 1.1rem; }
-  .intro { padding: 1.3rem 0 1.5rem; gap: 1.6rem; }
-  .letter p { font-size: 1.16rem; }
-  .ask { padding: 1.2rem 1.2rem 1rem; }
-  .hero-stage { padding-bottom: 1.4rem; }
+  /* page 1 is filled by the cover, the letter and the home-page picture, nothing else */
+  .cover { padding: 1.8rem 0 1.4rem; }
+  .cover h1 { font-size: 3.9rem; max-width: none; }
+  .dek { margin-bottom: 1.4rem; }
+  .intro { padding: 1.7rem 0 1.9rem; gap: 1.8rem; }
+  .letter p { font-size: 1.3rem; }
+  .ask { padding: 1.4rem 1.3rem 1.2rem; }
+  .ask p { font-size: 1.06rem; }
+  .hero-stage { padding-bottom: 3rem; }
+  .hero-stage .hero-phone { width: 27%; }
   .hero-shot { column-gap: 1.3rem; }
   /* five pages: 1 cover, letter and the redesign; 2 what stays the same and the structure; 3 the phone views;
      4 the computer views and the numbers; 5 the comparison, adoption and sign-off */
@@ -239,8 +245,15 @@ tfoot th, tfoot td { border-top: 2px solid var(--ink); border-bottom: 0; font-we
   .sec--same, .sec--pairs, .sec--compare { padding-top: 0; }
   .pairs--desktop { margin-top: 0; }
   .same-grid { gap: .7rem; }
-  .same-grid li { padding: .9rem .9rem 1rem; }
-  .same-grid h3 { margin-top: .6rem; }
+  /* on paper the icon sits beside the title, so the four cards and the structure share page 2 */
+  .same-grid li { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; align-content: start; gap: .5rem .6rem; padding: .75rem .8rem .8rem; }
+  .same-grid .well { width: 2.1rem; height: 2.4rem; }
+  .same-grid h3 { margin: 0; font-size: 1.08rem; line-height: 1.2; }
+  .same-grid p { grid-column: 1 / -1; font-size: .85rem; line-height: 1.42; }
+  .sec--ia { padding-top: 1.2rem; }
+  .sec--ia .lead { margin-bottom: .8rem; }
+  .ia-cell { padding: .85rem 1rem .9rem; }
+  .ia-cell ul li { padding: .26rem 0; }
   .pairs { gap: .75rem; }
   .pair { padding: .75rem .8rem .8rem; }
   .pair h3 { margin-bottom: .6rem; }
