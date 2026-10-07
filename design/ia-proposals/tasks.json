@@ -1,0 +1,727 @@
+{
+ "primary": [
+  {
+   "label": "Parents",
+   "href": "/parents",
+   "groups": [
+    {
+     "label": null,
+     "href": null,
+     "children": [
+      {
+       "label": "Student Attendance",
+       "href": "/parents/student-attendance"
+      },
+      {
+       "label": "School Cash Online",
+       "href": "/parents/school-cash-online"
+      },
+      {
+       "label": "MyEd Parent Portal: Request Assistance",
+       "href": "/parents/myed-parent-portal-request-assistance"
+      },
+      {
+       "label": "Learning Updates",
+       "href": "/parents/learning-updates"
+      },
+      {
+       "label": "Universal Hot Lunch @ McRoberts",
+       "href": "/parents/universal-hot-lunch-mcroberts"
+      }
+     ]
+    },
+    {
+     "label": "Welcome to McRoberts",
+     "href": null,
+     "children": [
+      {
+       "label": "Grade 7 (Incoming 8) Program Planning",
+       "href": "/students/program-planning/grade-7-incoming-8-program-planning"
+      },
+      {
+       "label": "Catchment",
+       "href": "/about-us/catchment"
+      },
+      {
+       "label": "Presentations for Parents",
+       "href": "/parents/presentations-parents"
+      }
+     ]
+    },
+    {
+     "label": "Resources for Parents",
+     "href": null,
+     "children": [
+      {
+       "label": "Updating Student Contact Information",
+       "href": "/parents/updating-student-contact-information"
+      },
+      {
+       "label": "Student Accident Insurance",
+       "href": "/parents/student-accident-insurance"
+      },
+      {
+       "label": "Athletics Info for Parents",
+       "href": "/parents/athletics-info-parents"
+      },
+      {
+       "label": "Donations",
+       "href": "/parents/donations"
+      },
+      {
+       "label": "Helpful Links",
+       "href": "/parents/helpful-links"
+      }
+     ]
+    },
+    {
+     "label": "Important information for parents",
+     "href": null,
+     "children": [
+      {
+       "label": "Responsible Use of Technology Info",
+       "href": "/parents/responsible-use-technology-info"
+      },
+      {
+       "label": "Violence Threat Risk Assessment (VTRA) Protocol and Fair Notice",
+       "href": "/parents/violence-threat-risk-assessment-vtra-protocol-and-fair-notice"
+      },
+      {
+       "label": "District Concussion Protocol",
+       "href": "/parents/district-concussion-protocol"
+      },
+      {
+       "label": "Snow and Extreme Weather Protocols",
+       "href": "/school-calendar/snow-and-extreme-weather-protocols"
+      }
+     ]
+    },
+    {
+     "label": "Parent Advisory Committee (PAC)",
+     "href": "/parents/parent-advisory-committee-pac",
+     "children": [
+      {
+       "label": "PAC Meeting Agendas",
+       "href": "/parents/parent-advisory-committee-pac/pac-meeting-agendas"
+      },
+      {
+       "label": "PAC Meeting Minutes",
+       "href": "/parents/parent-advisory-committee-pac/pac-meeting-minutes"
+      }
+     ]
+    }
+   ],
+   "featured": [
+    "/parents/student-attendance",
+    "/parents/school-cash-online",
+    "/parents/myed-parent-portal-request-assistance",
+    "/parents/learning-updates",
+    "/parents/universal-hot-lunch-mcroberts"
+   ]
+  },
+  {
+   "label": "Students",
+   "href": "/students",
+   "groups": [
+    {
+     "label": null,
+     "href": null,
+     "children": [
+      {
+       "label": "Student Login",
+       "href": "/students/student-login"
+      },
+      {
+       "label": "MyEd Student Portal: Request Assistance",
+       "href": "/students/myed-student-portal-request-assistance"
+      },
+      {
+       "label": "Counselling Centre",
+       "href": "/students/counselling-centre"
+      },
+      {
+       "label": "Career Centre Information",
+       "href": "/students/career-centre-information"
+      },
+      {
+       "label": "Grad 2027",
+       "href": "/students/grad-2027"
+      }
+     ]
+    },
+    {
+     "label": "Academic Support",
+     "href": null,
+     "children": [
+      {
+       "label": "Program Planning",
+       "href": "/students/program-planning"
+      },
+      {
+       "label": "Grade 7 (Incoming 8) Program Planning",
+       "href": "/students/program-planning/grade-7-incoming-8-program-planning"
+      },
+      {
+       "label": "Grade 8 - 11 (Incoming 9 - 12) Program Planning",
+       "href": "/students/program-planning/grade-8-11-incoming-9-12-program-planning"
+      },
+      {
+       "label": "Online Learning with Richmond Virtual School (RVS)",
+       "href": "/students/online-learning-richmond-virtual-school-rvs"
+      },
+      {
+       "label": "Core Competencies",
+       "href": "/students/core-competencies"
+      },
+      {
+       "label": "Personal Learning Time (PLT)",
+       "href": "/school-calendar/personal-learning-time-plt"
+      }
+     ]
+    },
+    {
+     "label": "Required for Graduation",
+     "href": null,
+     "children": [
+      {
+       "label": "Provincial Graduation Assessments",
+       "href": "/students/provincial-graduation-assessments"
+      },
+      {
+       "label": "Capstone/Career-Life Connections (CLC)",
+       "href": "/students/career-education-volunteer-hours/capstonecareer-life-connections-clc"
+      },
+      {
+       "label": "Career Education Volunteer Hours",
+       "href": "/students/career-education-volunteer-hours/career-education-volunteer-hour-requirements"
+      }
+     ]
+    },
+    {
+     "label": "Career Exploration",
+     "href": null,
+     "children": [
+      {
+       "label": "Career Education",
+       "href": "/students/career-education-volunteer-hours"
+      },
+      {
+       "label": "Career Education 8 & 9",
+       "href": "/students/career-education-volunteer-hours/career-education-8-9"
+      },
+      {
+       "label": "Reference Letters",
+       "href": "/students/reference-letters"
+      }
+     ]
+    }
+   ],
+   "featured": [
+    "/students/student-login",
+    "/students/myed-student-portal-request-assistance",
+    "/students/counselling-centre",
+    "/students/career-centre-information",
+    "/students/grad-2027"
+   ]
+  },
+  {
+   "label": "School Calendar",
+   "href": "/school-calendar",
+   "groups": [
+    {
+     "label": null,
+     "href": null,
+     "children": [
+      {
+       "label": "Bell Schedule",
+       "href": "/school-calendar/bell-schedule"
+      },
+      {
+       "label": "Personal Learning Time (PLT)",
+       "href": "/school-calendar/personal-learning-time-plt"
+      },
+      {
+       "label": "Snow and Extreme Weather Protocols",
+       "href": "/school-calendar/snow-and-extreme-weather-protocols"
+      },
+      {
+       "label": "Subscribe to our calendar",
+       "href": "webcal://mcroberts.sd38.bc.ca/calendar-feed.ics"
+      }
+     ]
+    }
+   ],
+   "featured": [
+    "/school-calendar/bell-schedule"
+   ]
+  },
+  {
+   "label": "News",
+   "href": "/news",
+   "groups": [
+    {
+     "label": null,
+     "href": null,
+     "children": [
+      {
+       "label": "Newsletters",
+       "href": "/news/newsletters"
+      },
+      {
+       "label": "School Learning Story",
+       "href": "/school-learning-story"
+      }
+     ]
+    }
+   ],
+   "featured": [
+    "/news/newsletters"
+   ]
+  },
+  {
+   "label": "Extra-Curricular",
+   "href": "/extra-curricular",
+   "groups": [
+    {
+     "label": null,
+     "href": null,
+     "children": [
+      {
+       "label": "Strikers Athletics",
+       "href": "/extra-curricular/strikers-athletics"
+      },
+      {
+       "label": "Club Directory",
+       "href": "/extra-curricular/club-directory"
+      }
+     ]
+    },
+    {
+     "label": "Resources for Parents",
+     "href": null,
+     "children": [
+      {
+       "label": "Athletics Info for Parents",
+       "href": "/parents/athletics-info-parents"
+      },
+      {
+       "label": "District Concussion Protocol",
+       "href": "/parents/district-concussion-protocol"
+      }
+     ]
+    }
+   ],
+   "featured": [
+    "/extra-curricular/strikers-athletics",
+    "/extra-curricular/club-directory"
+   ]
+  },
+  {
+   "label": "Library",
+   "href": "/library",
+   "groups": [
+    {
+     "label": null,
+     "href": null,
+     "children": [
+      {
+       "label": "Library Catalogue",
+       "href": "/library/library-catalogue"
+      },
+      {
+       "label": "Digital Resources",
+       "href": "/library/digital-resources"
+      },
+      {
+       "label": "Read & Listen",
+       "href": "/library/read-listen"
+      },
+      {
+       "label": "Make & Play",
+       "href": "/library/make-play"
+      },
+      {
+       "label": "Q & A",
+       "href": "/library/q-and-a"
+      },
+      {
+       "label": "Biblio Bites: A Monthly Library Newsletter",
+       "href": "/library/biblio-bites"
+      }
+     ]
+    }
+   ],
+   "featured": [
+    "/library/library-catalogue",
+    "/library/digital-resources"
+   ]
+  },
+  {
+   "label": "About Us",
+   "href": "/about-us",
+   "groups": [
+    {
+     "label": null,
+     "href": null,
+     "children": [
+      {
+       "label": "Contact Us",
+       "href": "/contact-us"
+      },
+      {
+       "label": "Our Staff",
+       "href": "/about-us/our-staff"
+      },
+      {
+       "label": "Mission Statement",
+       "href": "/about-us/mission-statement"
+      },
+      {
+       "label": "Catchment",
+       "href": "/about-us/catchment"
+      }
+     ]
+    }
+   ],
+   "featured": [
+    "/contact-us",
+    "/about-us/our-staff"
+   ]
+  }
+ ],
+ "utility": [
+  {
+   "label": "Student Absent?",
+   "href": "tel:+16046686600,1"
+  },
+  {
+   "label": "MyEducation BC",
+   "href": "https://myeducation.gov.bc.ca/aspen/logon.do"
+  },
+  {
+   "label": "School Cash Online",
+   "href": "https://schoolcashonline.com/"
+  },
+  {
+   "label": "Office 365",
+   "href": "https://portal.office.com"
+  },
+  {
+   "label": "Contact Us",
+   "href": "/contact-us"
+  }
+ ],
+ "footer": [
+  {
+   "label": "Get in Touch",
+   "href": null,
+   "children": [
+    {
+     "label": "Contact Us",
+     "href": "/contact-us"
+    },
+    {
+     "label": "Our Staff",
+     "href": "/about-us/our-staff"
+    },
+    {
+     "label": "Student Absent?",
+     "href": "tel:+16046686600,1"
+    },
+    {
+     "label": "mcroberts@sd38.bc.ca",
+     "href": "mailto:mcroberts@sd38.bc.ca"
+    },
+    {
+     "label": "8980 Williams Road",
+     "href": "https://maps.apple.com/?q=8980%20Williams%20Road%20Richmond%20BC%20V7A%201G6%20CA"
+    }
+   ]
+  },
+  {
+   "label": "Helpful Links",
+   "href": null,
+   "children": [
+    {
+     "label": "MyEducation BC",
+     "href": "https://myeducation.gov.bc.ca/aspen/logon.do"
+    },
+    {
+     "label": "School Cash Online",
+     "href": "https://schoolcashonline.com/"
+    },
+    {
+     "label": "Office 365",
+     "href": "https://portal.office.com"
+    },
+    {
+     "label": "Subscribe to our calendar",
+     "href": "webcal://mcroberts.sd38.bc.ca/calendar-feed.ics"
+    },
+    {
+     "label": "School District No. 38 (Richmond)",
+     "href": "https://www.sd38.bc.ca"
+    }
+   ]
+  },
+  {
+   "label": "Important information for parents",
+   "href": null,
+   "children": [
+    {
+     "label": "Snow and Extreme Weather Protocols",
+     "href": "/school-calendar/snow-and-extreme-weather-protocols"
+    },
+    {
+     "label": "District Concussion Protocol",
+     "href": "/parents/district-concussion-protocol"
+    },
+    {
+     "label": "Violence Threat Risk Assessment (VTRA) Protocol and Fair Notice",
+     "href": "/parents/violence-threat-risk-assessment-vtra-protocol-and-fair-notice"
+    },
+    {
+     "label": "Responsible Use of Technology Info",
+     "href": "/parents/responsible-use-technology-info"
+    },
+    {
+     "label": "ERASE",
+     "href": "https://www2.gov.bc.ca/gov/content/erase"
+    }
+   ]
+  }
+ ],
+ "hubs": {
+  "/": {
+   "sections": [
+    {
+     "heading": "Parents",
+     "href": "/parents",
+     "links": [
+      "/parents/student-attendance",
+      "/school-calendar",
+      "/news/newsletters",
+      "/school-calendar/bell-schedule",
+      "/parents/school-cash-online",
+      "/parents/myed-parent-portal-request-assistance",
+      "/parents/universal-hot-lunch-mcroberts",
+      "/contact-us"
+     ]
+    },
+    {
+     "heading": "Students",
+     "href": "/students",
+     "links": [
+      "/students/student-login",
+      "/students/counselling-centre",
+      "/students/career-centre-information",
+      "/students/grad-2027",
+      "/students/program-planning",
+      "/school-calendar/bell-schedule",
+      "/extra-curricular/club-directory",
+      "/library"
+     ]
+    }
+   ]
+  },
+  "/parents": {
+   "sections": [
+    {
+     "heading": null,
+     "href": null,
+     "links": [
+      "/parents/student-attendance",
+      "/parents/school-cash-online",
+      "/parents/myed-parent-portal-request-assistance",
+      "/parents/learning-updates",
+      "/parents/universal-hot-lunch-mcroberts"
+     ]
+    },
+    {
+     "heading": "Welcome to McRoberts",
+     "href": null,
+     "links": [
+      "/students/program-planning/grade-7-incoming-8-program-planning",
+      "/about-us/catchment",
+      "/parents/presentations-parents"
+     ]
+    },
+    {
+     "heading": "Resources for Parents",
+     "href": null,
+     "links": [
+      "/parents/updating-student-contact-information",
+      "/parents/student-accident-insurance",
+      "/parents/athletics-info-parents",
+      "/parents/donations",
+      "/parents/helpful-links"
+     ]
+    },
+    {
+     "heading": "Important information for parents",
+     "href": null,
+     "links": [
+      "/parents/responsible-use-technology-info",
+      "/parents/violence-threat-risk-assessment-vtra-protocol-and-fair-notice",
+      "/parents/district-concussion-protocol",
+      "/school-calendar/snow-and-extreme-weather-protocols"
+     ]
+    },
+    {
+     "heading": "Parent Advisory Committee (PAC)",
+     "href": "/parents/parent-advisory-committee-pac",
+     "links": [
+      "/parents/parent-advisory-committee-pac/pac-meeting-agendas",
+      "/parents/parent-advisory-committee-pac/pac-meeting-minutes"
+     ]
+    }
+   ]
+  },
+  "/students": {
+   "sections": [
+    {
+     "heading": null,
+     "href": null,
+     "links": [
+      "/students/student-login",
+      "/students/myed-student-portal-request-assistance",
+      "/students/counselling-centre",
+      "/students/career-centre-information",
+      "/students/grad-2027"
+     ]
+    },
+    {
+     "heading": "Academic Support",
+     "href": null,
+     "links": [
+      "/students/program-planning",
+      "/students/program-planning/grade-7-incoming-8-program-planning",
+      "/students/program-planning/grade-8-11-incoming-9-12-program-planning",
+      "/students/online-learning-richmond-virtual-school-rvs",
+      "/students/core-competencies",
+      "/school-calendar/personal-learning-time-plt"
+     ]
+    },
+    {
+     "heading": "Required for Graduation",
+     "href": null,
+     "links": [
+      "/students/provincial-graduation-assessments",
+      "/students/career-education-volunteer-hours/capstonecareer-life-connections-clc",
+      "/students/career-education-volunteer-hours/career-education-volunteer-hour-requirements"
+     ]
+    },
+    {
+     "heading": "Career Exploration",
+     "href": null,
+     "links": [
+      "/students/career-education-volunteer-hours",
+      "/students/career-education-volunteer-hours/career-education-8-9",
+      "/students/reference-letters"
+     ]
+    }
+   ]
+  },
+  "/school-calendar": {
+   "sections": [
+    {
+     "heading": null,
+     "href": null,
+     "links": [
+      "/school-calendar/bell-schedule",
+      "/school-calendar/personal-learning-time-plt",
+      "/school-calendar/snow-and-extreme-weather-protocols"
+     ]
+    }
+   ]
+  },
+  "/news": {
+   "sections": [
+    {
+     "heading": null,
+     "href": null,
+     "links": [
+      "/news/newsletters",
+      "/school-learning-story"
+     ]
+    }
+   ]
+  },
+  "/extra-curricular": {
+   "sections": [
+    {
+     "heading": null,
+     "href": null,
+     "links": [
+      "/extra-curricular/strikers-athletics",
+      "/extra-curricular/club-directory"
+     ]
+    },
+    {
+     "heading": "Resources for Parents",
+     "href": null,
+     "links": [
+      "/parents/athletics-info-parents",
+      "/parents/district-concussion-protocol"
+     ]
+    }
+   ]
+  },
+  "/library": {
+   "sections": [
+    {
+     "heading": null,
+     "href": null,
+     "links": [
+      "/library/library-catalogue",
+      "/library/digital-resources",
+      "/library/read-listen",
+      "/library/make-play",
+      "/library/q-and-a",
+      "/library/biblio-bites"
+     ]
+    }
+   ]
+  },
+  "/about-us": {
+   "sections": [
+    {
+     "heading": null,
+     "href": null,
+     "links": [
+      "/contact-us",
+      "/about-us/our-staff",
+      "/about-us/mission-statement",
+      "/about-us/catchment"
+     ]
+    }
+   ]
+  }
+ },
+ "paths": {
+  "/students": "/students-0",
+  "/students/grad-2027": "/students/grad-2026",
+  "/about-us": "/information/about-us",
+  "/about-us/mission-statement": "/information/about-us/mission-statement",
+  "/about-us/our-staff": "/information/our-staff",
+  "/about-us/catchment": "/information/catchment",
+  "/contact-us": "/information/contact-us",
+  "/school-calendar/bell-schedule": "/information/bell-schedule",
+  "/school-calendar/personal-learning-time-plt": "/information/personal-learning-time-plt",
+  "/school-calendar/snow-and-extreme-weather-protocols": "/information/snow-and-extreme-weather-protocols",
+  "/parents/donations": "/information/donations",
+  "/parents/district-concussion-protocol": "/information/district-concussion-protocol",
+  "/parents/updating-student-contact-information": "/students/updating-student-contact-information",
+  "/library/biblio-bites": "/node/1813",
+  "/library/q-and-a": "/library/q"
+ },
+ "retired": {
+  "/information": "/about-us",
+  "/information-0": "/about-us",
+  "/media/1069": "/parents/district-concussion-protocol",
+  "/library/research-inquiry": "/library",
+  "/parents/parent-advisory-committee-pac/pac-constitution-and-bylaws": "/parents/parent-advisory-committee-pac",
+  "/news/2026/08/back-school-schedules-and-calendars-0": "/news/2026/08/back-school-schedules-and-calendars"
+ },
+ "notes": "Top-task-first (GOV.UK / Canada.ca / BC Gov): each of the ten most frequent tasks is 0-1 taps from any page, never more than 2. Utility bar on every page: Student Absent? (tap to call, Ext. 1), the three sign-ins (MyEducation BC, School Cash Online, Office 365) and Contact Us, beside the existing Translate and Search blocks; on phones a sticky bottom bar (Student Absent?, Translate, Search, Menu). Sign-ins stay apart from the help pages about them. Primary = 7 items by use; 'Home' goes (the crest links home) and the vague 'Information' bucket is split by task: Bell Schedule, PLT and Snow and Extreme Weather Protocols to School Calendar; Contact Us, Our Staff, Mission Statement, Catchment to About Us; Donations and District Concussion Protocol to Parents. Top labels link to their hub, a separate toggle opens the panel. groups[0] (no heading) = the section's top tasks, flagged 'featured' (Drupal menu_link_attributes class) and shown first, like Canada.ca 'Most requested'; other groups use existing headings only. Hubs render the same menu subtree (core menu block), so menu and hub never drift; the home page gets an 8+8 Parents/Students task band. All 20 orphans are in the menu; a few pages are cross-listed for a second audience. Labels = page titles ('Grad 2026' -> 'Grad 2027'), except the live menu words 'Bell Schedule', 'Library' and 'Catchment'. Clean aliases replace '-0', /node/, /media/, /library/q and /information/*; Redirect keeps old URLs. Retired with redirects: /information and /information-0, /media/1069, the duplicate '...-calendars-0' post, and two pages that are empty on the live site (Research & Inquiry, PAC Constitution and Bylaws) until they get content. No body or title changes."
+}

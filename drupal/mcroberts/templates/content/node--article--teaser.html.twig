@@ -1,0 +1,10 @@
+{#
+/**
+ * @file
+ * Article teaser (also vertical_teaser): a news card. "Posted:" and the date, the title as the one link, the
+ * teaser (the body summary or its trimmed text, an ellipsis where it was cut). A Striker Weekly card shows only its
+ * week. Variables: mcroberts.item (Teaser::newsItem()).
+ */
+#}
+{% set x = mcroberts.item %}
+<article{{ attributes.addClass('news-card', x.weekly ? 'news-card--weekly' : '') }}>{{ title_prefix }}{{ title_suffix }}<p class="meta"><span>Posted:</span> <time datetime="{{ x.date.iso }}">{{ x.date.short }}</time></p><h3><a href="{{ x.url }}">{{ x.title }}</a></h3>{% if x.teaser and not x.weekly %}<p>{{ x.teaser }}</p>{% endif %}</article>

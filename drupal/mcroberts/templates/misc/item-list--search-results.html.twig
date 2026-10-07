@@ -1,0 +1,8 @@
+{#
+/**
+ * @file
+ * Search results (core search): "Search results" with the count, the list, or "Your search yielded no results."
+ */
+#}
+{{ attach_library('mcroberts/views') }}
+<section class="search-results" aria-labelledby="sr-title"><h2 id="sr-title"><span>{{ title|default('Search results'|t) }}</span> <span class="n">{{ items|length }}</span></h2>{% if items %}<ol class="results">{% for item in items %}{{ item.value }}{% endfor %}</ol>{% else %}<p class="search-empty">{{ empty }}</p>{% endif %}</section>

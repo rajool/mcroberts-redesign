@@ -1,0 +1,14 @@
+{#
+/**
+ * @file
+ * The Views mini pager (upcoming events, newsletters feed): previous / next with the preview's pager markup.
+ */
+#}
+{% import '@mcroberts/includes/macros.html.twig' as m %}
+{% if items.previous or items.next %}
+<nav class="pager" role="navigation" aria-labelledby="{{ heading_id }}"><h4 id="{{ heading_id }}" class="vh">{{ 'Pagination'|t }}</h4><ul class="js-pager__items">
+{%- if items.previous -%}<li class="pager-prev"><a href="{{ items.previous.href }}" rel="prev"{{ items.previous.attributes|without('href', 'title', 'rel') }}>{{ m.icon('arrow') }}<span class="vh">{{ 'Go to previous page'|t }}</span></a></li>{%- endif -%}
+{%- if items.current -%}<li><a aria-current="page"><span class="vh">{{ 'Current page'|t }}</span> {{ items.current }}</a></li>{%- endif -%}
+{%- if items.next -%}<li class="pager-next"><a href="{{ items.next.href }}" rel="next"{{ items.next.attributes|without('href', 'title', 'rel') }}><span class="vh">{{ 'Go to next page'|t }}</span>{{ m.icon('arrow') }}</a></li>{%- endif -%}
+</ul></nav>
+{% endif %}

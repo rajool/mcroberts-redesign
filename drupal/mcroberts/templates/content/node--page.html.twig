@@ -1,0 +1,26 @@
+{#
+/**
+ * @file
+ * Basic page, full (node page; also its DS view modes full_content_with_menu_list_, full_content_w_sidebar_menu_,
+ * full_content_includes_menu_block_): the page header, the section menu, the body and paragraphs, the hub's cards,
+ * previous/next through the section, the rail. A section hub (Parents, Students, About Us …) is its own menu: it
+ * has no section menu beside it. Any other view mode prints the node plainly.
+ *
+ * Variables: mcroberts (_mcroberts_node_variables()): page, title, eyebrow, alias, compact, breadcrumb, section,
+ * pager, rail, hub, chrome.
+ */
+#}
+{% if mcroberts.page %}
+{% set mc = mcroberts %}
+{% set body = content|without('links', 'comment')|render %}
+{% include '@mcroberts/includes/hero.html.twig' with {c: mc.chrome, title: mc.title, eyebrow: mc.eyebrow, alias: mc.alias, compact: mc.compact, breadcrumb: mc.breadcrumb, meta: null} only %}
+<div class="page-body"><div class="wrap {{ mc.section ? 'page-grid' : 'page-grid no-sidebar' }}"><article{{ attributes.addClass('page-content', mc.hub ? 'is-hub' : '') }}>{{ title_prefix }}{{ title_suffix }}{% if body|striptags('<img><iframe>')|trim %}<!-- field body (+ paragraphs) -->
+<div class="prose">{{ body }}</div>{% endif %}{% if mc.hub %}{% include '@mcroberts/includes/hub-sections.html.twig' with {hub: mc.hub} only %}{% endif %}{% if mc.pager %}{% include '@mcroberts/includes/section-pager.html.twig' with {p: mc.pager} only %}{% endif %}{% if mc.section %}{% include '@mcroberts/includes/section-nav.html.twig' with {sec: mc.section, mobile: true} only %}{% endif %}</article>{% if mc.section %}{% include '@mcroberts/includes/section-nav.html.twig' with {sec: mc.section, mobile: false} only %}{% endif %}{% include '@mcroberts/includes/rail.html.twig' with {c: mc.chrome, r: mc.rail} only %}</div></div>
+{% else %}
+<article{{ attributes.addClass('node', 'node--type-' ~ node.bundle|clean_class, view_mode ? 'node--view-mode-' ~ view_mode|clean_class : '') }}>
+  {{ title_prefix }}
+  {% if label and not page %}<h2><a href="{{ url }}" rel="bookmark">{{ label }}</a></h2>{% endif %}
+  {{ title_suffix }}
+  {{ content }}
+</article>
+{% endif %}

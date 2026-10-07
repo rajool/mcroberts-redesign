@@ -1,0 +1,87 @@
+# McRoberts libraries. css/ and js/ are byte-for-byte copies of the static preview's theme/ folder, written by
+# tools/package_drupal.py; edit theme/ and re-run it, never these copies. bridge/ holds the only Drupal-specific
+# front-end files: the Drupal.behaviors + core/once adapter and a little CSS for Drupal's own UI (messages, tabs).
+# CSS groups keep the preview's order: tokens, base, layout, components, pages, views, print.
+
+fonts:
+  version: '1.0'
+  css:
+    base:
+      'https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400..600&family=Newsreader:ital,wght@1,300..600&family=Noto+Sans:wght@400..750&display=swap': { type: external, minified: true, weight: -10 }
+
+global:
+  version: '1.0'
+  css:
+    base:
+      css/tokens.css: {}
+      css/base.css: {}
+    layout:
+      css/layout.css: {}
+    component:
+      css/components.css: {}
+      bridge/compat.css: {}
+      bridge/drupal.css: {}
+    theme:
+      css/pages.css: {}
+      css/print.css: { media: print, weight: 5 }
+  js:
+    bridge/mcroberts.pre.js: {}
+    js/behaviors.js: {}
+    bridge/mcroberts.post.js: {}
+    js/nav.js: {}
+    js/a11y.js: {}
+  dependencies:
+    - core/drupal
+    - core/once
+
+# School Calendar, calendar events, Bell Schedule, Our Staff, News Archive, Newsletters, search results, 404.
+views:
+  version: '1.0'
+  css:
+    theme:
+      css/views.css: { weight: 1 }
+  dependencies:
+    - mcroberts/global
+
+# Front page: Today card, Helpful Links sub-lines and Upcoming Events, refreshed from #today-data.
+today:
+  version: '1.0'
+  js:
+    js/today.js: {}
+  dependencies:
+    - mcroberts/global
+
+calendar:
+  version: '1.0'
+  js:
+    js/calendar.js: {}
+  dependencies:
+    - mcroberts/views
+
+bell:
+  version: '1.0'
+  js:
+    js/bell.js: {}
+  dependencies:
+    - mcroberts/views
+
+filter:
+  version: '1.0'
+  js:
+    js/filter.js: {}
+  dependencies:
+    - mcroberts/global
+
+gallery:
+  version: '1.0'
+  js:
+    js/gallery.js: {}
+  dependencies:
+    - mcroberts/global
+
+pager:
+  version: '1.0'
+  js:
+    js/pager.js: {}
+  dependencies:
+    - mcroberts/views

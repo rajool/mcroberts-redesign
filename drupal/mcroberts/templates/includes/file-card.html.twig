@@ -1,0 +1,10 @@
+{#
+/**
+ * @file
+ * A document card (media file, legacy attachments, the calendar's printable PDF): the badge names the type in words
+ * for documents (the paper icon otherwise), the file name, its size when the live page shows it, the download icon.
+ * Variables: f (_mcroberts_file_card()).
+ */
+#}
+{% import '@mcroberts/includes/macros.html.twig' as m %}
+<a class="file-card" href="{{ f.url }}"><span class="file-badge" data-ext="{{ f.ext }}" aria-hidden="true">{% if f.doc %}{{ f.ext }}{% else %}{{ m.icon('paper') }}{% endif %}</span><span class="file-name">{{ f.name }}{% if f.size %}<span class="file-size">{{ f.size }}</span>{% endif %}</span>{{ m.icon('download') }}</a>

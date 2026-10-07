@@ -1,0 +1,9 @@
+{#
+/**
+ * @file
+ * A region: the region-{name} class kept (live markup), no Bootstrap row classes.
+ */
+#}
+{% if content %}
+<div{{ attributes.addClass('region', 'region-' ~ region|clean_class) }}>{{ content }}</div>
+{% endif %}

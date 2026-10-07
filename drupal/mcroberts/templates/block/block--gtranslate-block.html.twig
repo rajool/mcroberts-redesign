@@ -1,0 +1,8 @@
+{#
+/**
+ * @file
+ * The GTranslate block: the theme's Translate control (.gtranslate_wrapper, select.gt_selector, the block's
+ * languages). The header, the phone bar and the phone menu carry the same control on every page.
+ */
+#}
+{{ title_prefix }}{{ title_suffix }}{% include '@mcroberts/includes/translate.html.twig' with {c: mcroberts, uid: 'block', variant: 'desktop'} only %}

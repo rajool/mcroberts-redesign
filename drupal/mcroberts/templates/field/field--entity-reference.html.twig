@@ -1,0 +1,36 @@
+{#
+/**
+ * @file
+ * An entity reference field. A reference to document media is one file list (the cards come from
+ * field--field-media-file.html.twig); every other reference field prints as core's field template.
+ *
+ * Variables beyond core: mcroberts_file_list (mcroberts_preprocess_field()).
+ */
+#}
+{% if mcroberts_file_list %}
+<div class="file-list">{% for item in items %}{{ item.content }}{% endfor %}</div>
+{% else %}
+{%
+  set classes = [
+    'field',
+    'field--name-' ~ field_name|clean_class,
+    'field--type-' ~ field_type|clean_class,
+    'field--label-' ~ label_display,
+  ]
+%}
+{% set title_classes = ['field__label', label_display == 'visually_hidden' ? 'vh'] %}
+{% if label_hidden %}
+  {% if multiple %}
+    <div{{ attributes.addClass(classes, 'field__items') }}>{% for item in items %}<div{{ item.attributes.addClass('field__item') }}>{{ item.content }}</div>{% endfor %}</div>
+  {% else %}
+    {% for item in items %}<div{{ attributes.addClass(classes, 'field__item') }}>{{ item.content }}</div>{% endfor %}
+  {% endif %}
+{% else %}
+  <div{{ attributes.addClass(classes) }}>
+    <div{{ title_attributes.addClass(title_classes) }}>{{ label }}</div>
+    {% if multiple %}<div class="field__items">{% endif %}
+    {% for item in items %}<div{{ item.attributes.addClass('field__item') }}>{{ item.content }}</div>{% endfor %}
+    {% if multiple %}</div>{% endif %}
+  </div>
+{% endif %}
+{% endif %}

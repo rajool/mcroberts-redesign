@@ -1,0 +1,9 @@
+{#
+/**
+ * @file
+ * Region highlighted: Drupal's status messages (the fallback element for scripted messages always stays).
+ */
+#}
+{% if content %}
+<div{{ attributes.addClass('highlighted', 'region', 'region-highlighted') }}><div class="wrap">{{ content }}</div></div>
+{% endif %}

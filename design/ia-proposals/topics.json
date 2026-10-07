@@ -1,0 +1,662 @@
+{
+ "primary": [
+  {
+   "label": "About Us",
+   "href": "/about-us",
+   "groups": [
+    {
+     "label": null,
+     "href": null,
+     "children": [
+      {
+       "label": "Mission Statement",
+       "href": "/about-us/mission-statement"
+      },
+      {
+       "label": "Our Staff",
+       "href": "/our-staff"
+      },
+      {
+       "label": "Contact Us",
+       "href": "/contact-us"
+      },
+      {
+       "label": "McRoberts Catchment",
+       "href": "/catchment"
+      },
+      {
+       "label": "Donations",
+       "href": "/donations"
+      }
+     ]
+    },
+    {
+     "label": "Parent Advisory Committee (PAC)",
+     "href": "/pac",
+     "children": [
+      {
+       "label": "PAC Meeting Agendas",
+       "href": "/pac/meeting-agendas"
+      },
+      {
+       "label": "PAC Meeting Minutes",
+       "href": "/pac/meeting-minutes"
+      },
+      {
+       "label": "PAC Constitution and Bylaws",
+       "href": "/pac/constitution-and-bylaws"
+      }
+     ]
+    },
+    {
+     "label": null,
+     "href": null,
+     "children": [
+      {
+       "label": "Snow and Extreme Weather Protocols",
+       "href": "/snow-and-extreme-weather-protocols"
+      },
+      {
+       "label": "District Concussion Protocol",
+       "href": "/district-concussion-protocol"
+      },
+      {
+       "label": "Violence Threat Risk Assessment (VTRA) Protocol and Fair Notice",
+       "href": "/vtra-protocol-and-fair-notice"
+      },
+      {
+       "label": "Responsible Use of Technology Info",
+       "href": "/responsible-use-technology-info"
+      }
+     ]
+    }
+   ],
+   "featured": [
+    "/contact-us",
+    "/our-staff"
+   ]
+  },
+  {
+   "label": "Learning",
+   "href": null,
+   "groups": [
+    {
+     "label": null,
+     "href": null,
+     "children": [
+      {
+       "label": "Bell Schedule",
+       "href": "/bell-schedule"
+      },
+      {
+       "label": "Personal Learning Time (PLT)",
+       "href": "/personal-learning-time-plt"
+      },
+      {
+       "label": "Learning Updates",
+       "href": "/learning-updates"
+      },
+      {
+       "label": "Core Competencies",
+       "href": "/core-competencies"
+      },
+      {
+       "label": "School Learning Story",
+       "href": "/school-learning-story"
+      },
+      {
+       "label": "Library Learning Commons",
+       "href": "/library"
+      }
+     ]
+    },
+    {
+     "label": "Program Planning",
+     "href": "/program-planning",
+     "children": [
+      {
+       "label": "Grade 7 (Incoming 8) Program Planning",
+       "href": "/program-planning/grade-7-incoming-8"
+      },
+      {
+       "label": "Grade 8 - 11 (Incoming 9 - 12) Program Planning",
+       "href": "/program-planning/grade-8-11-incoming-9-12"
+      },
+      {
+       "label": "Online Learning with Richmond Virtual School (RVS)",
+       "href": "/online-learning-rvs"
+      }
+     ]
+    },
+    {
+     "label": "Career Education",
+     "href": "/career-education",
+     "children": [
+      {
+       "label": "Career Education 8 & 9",
+       "href": "/career-education/career-education-8-9"
+      },
+      {
+       "label": "Capstone/Career-Life Connections (CLC)",
+       "href": "/career-education/capstone-clc"
+      },
+      {
+       "label": "Career Education Volunteer Hours",
+       "href": "/career-education/volunteer-hours"
+      }
+     ]
+    },
+    {
+     "label": "Grad 2027",
+     "href": "/grad",
+     "children": [
+      {
+       "label": "Provincial Graduation Assessments",
+       "href": "/provincial-graduation-assessments"
+      }
+     ]
+    }
+   ],
+   "featured": [
+    "/bell-schedule",
+    "/program-planning"
+   ]
+  },
+  {
+   "label": "Services",
+   "href": null,
+   "groups": [
+    {
+     "label": null,
+     "href": null,
+     "children": [
+      {
+       "label": "Student Attendance",
+       "href": "/student-attendance"
+      },
+      {
+       "label": "School Cash Online",
+       "href": "/school-cash-online"
+      },
+      {
+       "label": "Universal Hot Lunch @ McRoberts",
+       "href": "/universal-hot-lunch"
+      },
+      {
+       "label": "Student Accident Insurance",
+       "href": "/student-accident-insurance"
+      }
+     ]
+    },
+    {
+     "label": null,
+     "href": null,
+     "children": [
+      {
+       "label": "Counselling Centre",
+       "href": "/counselling-centre"
+      },
+      {
+       "label": "Career Centre Information",
+       "href": "/career-centre"
+      },
+      {
+       "label": "Reference Letters",
+       "href": "/reference-letters"
+      }
+     ]
+    },
+    {
+     "label": null,
+     "href": null,
+     "children": [
+      {
+       "label": "Student Login",
+       "href": "/student-login"
+      },
+      {
+       "label": "MyEd Student Portal: Request Assistance",
+       "href": "/myed-student-portal-request-assistance"
+      },
+      {
+       "label": "MyEd Parent Portal: Request Assistance",
+       "href": "/myed-parent-portal-request-assistance"
+      },
+      {
+       "label": "Updating Student Contact Information",
+       "href": "/updating-student-contact-information"
+      }
+     ]
+    }
+   ],
+   "featured": [
+    "/student-attendance",
+    "/counselling-centre"
+   ]
+  },
+  {
+   "label": "Extra-Curricular",
+   "href": "/extra-curricular",
+   "groups": [
+    {
+     "label": null,
+     "href": null,
+     "children": [
+      {
+       "label": "Strikers Athletics",
+       "href": "/extra-curricular/strikers-athletics"
+      },
+      {
+       "label": "Athletics Info for Parents",
+       "href": "/extra-curricular/athletics-info-parents"
+      },
+      {
+       "label": "Club Directory",
+       "href": "/extra-curricular/club-directory"
+      }
+     ]
+    }
+   ],
+   "featured": [
+    "/extra-curricular/strikers-athletics",
+    "/extra-curricular/club-directory"
+   ]
+  },
+  {
+   "label": "News",
+   "href": "/news",
+   "groups": [
+    {
+     "label": null,
+     "href": null,
+     "children": [
+      {
+       "label": "Newsletters",
+       "href": "/news/newsletters"
+      }
+     ]
+    }
+   ],
+   "featured": [
+    "/news/newsletters"
+   ]
+  },
+  {
+   "label": "School Calendar",
+   "href": "/school-calendar",
+   "groups": [],
+   "featured": []
+  }
+ ],
+ "utility": [
+  {
+   "label": "Student Absent?",
+   "href": "tel:+16046686600,1"
+  },
+  {
+   "label": "Parents",
+   "href": "/parents"
+  },
+  {
+   "label": "Students",
+   "href": "/students"
+  },
+  {
+   "label": "MyEducation BC",
+   "href": "https://myeducation.gov.bc.ca/aspen/logon.do"
+  },
+  {
+   "label": "School Cash Online",
+   "href": "https://schoolcashonline.com/"
+  },
+  {
+   "label": "Office 365",
+   "href": "https://portal.office.com"
+  }
+ ],
+ "footer": [
+  {
+   "label": "Get in Touch",
+   "href": null,
+   "children": [
+    {
+     "label": "Contact Us",
+     "href": "/contact-us"
+    },
+    {
+     "label": "604-668-6600",
+     "href": "tel:+16046686600"
+    },
+    {
+     "label": "Student Absent?",
+     "href": "tel:+16046686600,1"
+    },
+    {
+     "label": "mcroberts@sd38.bc.ca",
+     "href": "mailto:mcroberts@sd38.bc.ca"
+    },
+    {
+     "label": "Our Staff",
+     "href": "/our-staff"
+    }
+   ]
+  },
+  {
+   "label": "Helpful Links",
+   "href": "/parents/helpful-links",
+   "children": [
+    {
+     "label": "Snow and Extreme Weather Protocols",
+     "href": "/snow-and-extreme-weather-protocols"
+    },
+    {
+     "label": "School District No. 38 (Richmond)",
+     "href": "https://www.sd38.bc.ca"
+    },
+    {
+     "label": "Richmond District Parents Association (RDPA)",
+     "href": "https://dpac.sd38.bc.ca/"
+    },
+    {
+     "label": "ERASE",
+     "href": "https://www2.gov.bc.ca/gov/content/erase"
+    }
+   ]
+  },
+  {
+   "label": "Social Media",
+   "href": null,
+   "children": [
+    {
+     "label": "Instagram",
+     "href": "https://www.instagram.com/hugh_mcroberts"
+    },
+    {
+     "label": "Twitter",
+     "href": "https://x.com/hugh_mcroberts"
+    }
+   ]
+  }
+ ],
+ "hubs": {
+  "/parents": {
+   "sections": [
+    {
+     "heading": null,
+     "href": null,
+     "links": [
+      "/student-attendance",
+      "/school-calendar",
+      "/bell-schedule",
+      "/news/newsletters",
+      "/snow-and-extreme-weather-protocols"
+     ]
+    },
+    {
+     "heading": null,
+     "href": null,
+     "links": [
+      "/myed-parent-portal-request-assistance",
+      "/learning-updates",
+      "/updating-student-contact-information",
+      "/school-cash-online",
+      "/student-accident-insurance",
+      "/universal-hot-lunch",
+      "/donations"
+     ]
+    },
+    {
+     "heading": "Parent Advisory Committee (PAC)",
+     "href": "/pac",
+     "links": [
+      "/pac/meeting-agendas",
+      "/pac/meeting-minutes",
+      "/pac/constitution-and-bylaws"
+     ]
+    },
+    {
+     "heading": "Resources for Parents",
+     "href": null,
+     "links": [
+      "/parents/presentations-parents",
+      "/parents/helpful-links",
+      "/program-planning",
+      "/extra-curricular/athletics-info-parents",
+      "/counselling-centre"
+     ]
+    },
+    {
+     "heading": "Important information for parents",
+     "href": null,
+     "links": [
+      "/responsible-use-technology-info",
+      "/vtra-protocol-and-fair-notice",
+      "/district-concussion-protocol"
+     ]
+    }
+   ]
+  },
+  "/students": {
+   "sections": [
+    {
+     "heading": null,
+     "href": null,
+     "links": [
+      "/student-login",
+      "/myed-student-portal-request-assistance",
+      "/updating-student-contact-information"
+     ]
+    },
+    {
+     "heading": null,
+     "href": null,
+     "links": [
+      "/counselling-centre",
+      "/career-centre",
+      "/reference-letters",
+      "/library"
+     ]
+    },
+    {
+     "heading": "Grad 2027",
+     "href": "/grad",
+     "links": [
+      "/provincial-graduation-assessments",
+      "/career-education/capstone-clc",
+      "/career-education/volunteer-hours"
+     ]
+    },
+    {
+     "heading": "Program Planning",
+     "href": "/program-planning",
+     "links": [
+      "/program-planning/grade-8-11-incoming-9-12",
+      "/online-learning-rvs",
+      "/core-competencies",
+      "/career-education/career-education-8-9"
+     ]
+    },
+    {
+     "heading": null,
+     "href": null,
+     "links": [
+      "/bell-schedule",
+      "/personal-learning-time-plt",
+      "/school-calendar",
+      "/extra-curricular/strikers-athletics",
+      "/extra-curricular/club-directory"
+     ]
+    }
+   ]
+  },
+  "/about-us": {
+   "sections": [
+    {
+     "heading": null,
+     "href": null,
+     "links": [
+      "/about-us/mission-statement",
+      "/our-staff",
+      "/contact-us",
+      "/catchment",
+      "/donations"
+     ]
+    },
+    {
+     "heading": "Parent Advisory Committee (PAC)",
+     "href": "/pac",
+     "links": [
+      "/pac/meeting-agendas",
+      "/pac/meeting-minutes",
+      "/pac/constitution-and-bylaws"
+     ]
+    },
+    {
+     "heading": null,
+     "href": null,
+     "links": [
+      "/snow-and-extreme-weather-protocols",
+      "/district-concussion-protocol",
+      "/vtra-protocol-and-fair-notice",
+      "/responsible-use-technology-info"
+     ]
+    }
+   ]
+  },
+  "/extra-curricular": {
+   "sections": [
+    {
+     "heading": null,
+     "href": null,
+     "links": [
+      "/extra-curricular/strikers-athletics",
+      "/extra-curricular/athletics-info-parents",
+      "/extra-curricular/club-directory"
+     ]
+    }
+   ]
+  },
+  "/library": {
+   "sections": [
+    {
+     "heading": null,
+     "href": null,
+     "links": [
+      "/library/library-catalogue",
+      "/library/digital-resources",
+      "/library/research-inquiry",
+      "/library/read-listen",
+      "/library/make-play",
+      "/library/q-and-a",
+      "/library/biblio-bites"
+     ]
+    }
+   ]
+  },
+  "/program-planning": {
+   "sections": [
+    {
+     "heading": null,
+     "href": null,
+     "links": [
+      "/program-planning/grade-7-incoming-8",
+      "/program-planning/grade-8-11-incoming-9-12"
+     ]
+    }
+   ]
+  },
+  "/career-education": {
+   "sections": [
+    {
+     "heading": null,
+     "href": null,
+     "links": [
+      "/career-education/career-education-8-9",
+      "/career-education/capstone-clc",
+      "/career-education/volunteer-hours"
+     ]
+    }
+   ]
+  },
+  "/pac": {
+   "sections": [
+    {
+     "heading": null,
+     "href": null,
+     "links": [
+      "/pac/meeting-agendas",
+      "/pac/meeting-minutes",
+      "/pac/constitution-and-bylaws"
+     ]
+    }
+   ]
+  },
+  "/district-concussion-protocol": {
+   "sections": [
+    {
+     "heading": null,
+     "href": null,
+     "links": [
+      "/media/1069"
+     ]
+    }
+   ]
+  }
+ },
+ "paths": {
+  "/about-us": "/information/about-us",
+  "/about-us/mission-statement": "/information/about-us/mission-statement",
+  "/our-staff": "/information/our-staff",
+  "/contact-us": "/information/contact-us",
+  "/catchment": "/information/catchment",
+  "/donations": "/information/donations",
+  "/pac": "/parents/parent-advisory-committee-pac",
+  "/pac/meeting-agendas": "/parents/parent-advisory-committee-pac/pac-meeting-agendas",
+  "/pac/meeting-minutes": "/parents/parent-advisory-committee-pac/pac-meeting-minutes",
+  "/pac/constitution-and-bylaws": "/parents/parent-advisory-committee-pac/pac-constitution-and-bylaws",
+  "/snow-and-extreme-weather-protocols": "/information/snow-and-extreme-weather-protocols",
+  "/district-concussion-protocol": "/information/district-concussion-protocol",
+  "/vtra-protocol-and-fair-notice": "/parents/violence-threat-risk-assessment-vtra-protocol-and-fair-notice",
+  "/responsible-use-technology-info": "/parents/responsible-use-technology-info",
+  "/bell-schedule": "/information/bell-schedule",
+  "/personal-learning-time-plt": "/information/personal-learning-time-plt",
+  "/learning-updates": "/parents/learning-updates",
+  "/core-competencies": "/students/core-competencies",
+  "/program-planning": "/students/program-planning",
+  "/program-planning/grade-7-incoming-8": "/students/program-planning/grade-7-incoming-8-program-planning",
+  "/program-planning/grade-8-11-incoming-9-12": "/students/program-planning/grade-8-11-incoming-9-12-program-planning",
+  "/online-learning-rvs": "/students/online-learning-richmond-virtual-school-rvs",
+  "/career-education": "/students/career-education-volunteer-hours",
+  "/career-education/career-education-8-9": "/students/career-education-volunteer-hours/career-education-8-9",
+  "/career-education/capstone-clc": "/students/career-education-volunteer-hours/capstonecareer-life-connections-clc",
+  "/career-education/volunteer-hours": "/students/career-education-volunteer-hours/career-education-volunteer-hour-requirements",
+  "/grad": "/students/grad-2026",
+  "/provincial-graduation-assessments": "/students/provincial-graduation-assessments",
+  "/library/q-and-a": "/library/q",
+  "/library/biblio-bites": "/node/1813",
+  "/student-attendance": "/parents/student-attendance",
+  "/school-cash-online": "/parents/school-cash-online",
+  "/universal-hot-lunch": "/parents/universal-hot-lunch-mcroberts",
+  "/student-accident-insurance": "/parents/student-accident-insurance",
+  "/counselling-centre": "/students/counselling-centre",
+  "/career-centre": "/students/career-centre-information",
+  "/reference-letters": "/students/reference-letters",
+  "/student-login": "/students/student-login",
+  "/myed-student-portal-request-assistance": "/students/myed-student-portal-request-assistance",
+  "/myed-parent-portal-request-assistance": "/parents/myed-parent-portal-request-assistance",
+  "/updating-student-contact-information": "/students/updating-student-contact-information",
+  "/extra-curricular/athletics-info-parents": "/parents/athletics-info-parents",
+  "/students": "/students-0",
+  "/school-learning-story/news/2024/02/sel-survey-january-2024": "/our-school-story/news/2024/02/sel-survey-january-2024",
+  "/school-learning-story/news/2024/06/developing-community-through-awards": "/our-school-story/news/2024/06/developing-community-through-awards",
+  "/school-learning-story/news/2024/09/mcroberts-mural": "/our-school-story/news/2024/09/mcroberts-mural",
+  "/school-learning-story/news/2024/12/grade-8-student-mentor-connections": "/our-school-story/news/2024/12/grade-8-student-mentor-connections",
+  "/school-learning-story/news/2025/03/mcroberts-teacher-book-club": "/our-school-story/news/2025/03/mcroberts-teacher-book-club"
+ },
+ "retired": {
+  "/information": "/about-us",
+  "/information-0": "/about-us",
+  "/news/2026/08/back-school-schedules-and-calendars-0": "/news/2026/08/back-school-schedules-and-calendars"
+ },
+ "notes": "Topic-first hybrid. Every page has exactly one home in one of six stable topics (About Us, Learning, Services, Extra-Curricular, News, School Calendar), so a new page has an obvious place and nothing needs re-sorting by audience. Parents and Students are shortcuts, not homes: they sit in the utility bar on every page and open curated hubs that cross-link pages from all topics (only parent-only pages such as Presentations for Parents and Helpful Links live there alone). Top tasks are one tap: Student Absent? (tel, utility bar and footer), MyEducation BC, School Cash Online and Office 365 (utility), School Calendar and News (primary). Mega panel = grouped columns, group heads are the existing parent pages (Program Planning, Career Education, Grad 2027, PAC); thin third-level pages (Library) are listed on their hub, not in the panel. Phone menu = same tree as an accordion, utility links at the top of the menu dialog. Learning and Services have no landing page (none exists and none is written), so in Drupal they are route:<nolink> parents that only open their panel; every other top item is a link plus a separate disclosure button. Fixes: /information and /information-0 retired to /about-us; the duplicate Back to School post merged; \"Grad 2026\" relabelled to the page's own title \"Grad 2027\" at a year-free /grad; \"Library\" and \"Career Education & Volunteer Hours\" use the page titles; \"Bell Schedule\" kept because the timetable's own heading says BELL SCHEDULE; /students-0 becomes /students; all 20 menu orphans are placed (Library sub-pages, PAC pages, Program Planning and Career Education sub-pages, Mission Statement, Strikers Athletics, Club Directory, Biblio Bites, the concussion PDF via the District Concussion Protocol hub). URLs are flat, audience-free aliases (only real parent pages prefix their children), so moving a page between topics never changes its URL; old aliases 301 via Redirect. Utility bar also holds the existing Translate, Search and Accessibility Settings blocks; the footer no longer repeats the main menu. Home is the crest link, not a menu item. Breadcrumbs follow the menu trail (topic > section > page), built in the theme preprocess."
+}

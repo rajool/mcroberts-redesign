@@ -1,0 +1,12 @@
+{#
+/**
+ * @file
+ * Rich cards (build.py child_cards()): title, the page's first sentence, arrow. A list of title-only cards is
+ * compact; in a list that mixes both, every card keeps one shape.
+ *
+ * Variables: cards (Teaser::card() items), tag (h2/h3), cls (extra list class), bare (true: no card has a line).
+ */
+#}
+{% import '@mcroberts/includes/macros.html.twig' as m %}
+{% set bare = bare is defined ? bare : (cards|filter(x => x.desc)|length == 0) %}
+<ul class="hub-cards{{ cls ? ' ' ~ cls : '' }}">{% for x in cards %}<li><a class="hub-card{{ bare ? ' hub-card--bare' : '' }}" href="{{ x.url }}"><{{ tag }}>{{ x.title }}</{{ tag }}>{% if x.desc %}<p>{% if x.lines %}{% for ln in x.lines %}<span class="ln">{{ ln }}</span>{% endfor %}{% else %}{{ x.desc }}{% endif %}</p>{% endif %}<span class="go" aria-hidden="true">{{ x.webcal ? m.icon('cal-plus') : m.icon('arrow') }}</span></a></li>{% endfor %}</ul>

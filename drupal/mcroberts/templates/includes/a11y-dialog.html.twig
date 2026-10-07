@@ -1,0 +1,12 @@
+{#
+/**
+ * @file
+ * Accessibility Settings: region accessibility_dropdown (the a11y block) in a native modal dialog, on every page
+ * (the live site prints its modal on the front page only, so 186 pages had a dead button).
+ *
+ * Variables: region (rendered region accessibility_dropdown; the controls themselves when it is empty).
+ */
+#}
+{% import '@mcroberts/includes/macros.html.twig' as m %}
+<!-- region accessibility_dropdown (a11y block) inside a native dialog; module classes and data-a11y-action kept -->
+<dialog class="a11y-dialog" id="a11y-dialog" aria-labelledby="a11y-title"><div class="a11y-inner"><h2 id="a11y-title">{{ m.icon('access') }}Accessibility Settings</h2>{% if region|striptags('<button>')|trim %}{{ region }}{% else %}<div class="region region-accessibility-dropdown" id="block-a11y">{% include '@mcroberts/includes/a11y-controls.html.twig' only %}</div>{% endif %}<p class="a11y-note"><a class="link" href="https://sd38.bc.ca/accessibility">Learn more about how the Richmond School District supports accessibility.</a></p><div class="a11y-foot"><button class="close-btn" type="button" data-close-dialog commandfor="a11y-dialog" command="close">{{ m.icon('close') }}Close</button></div></div></dialog>

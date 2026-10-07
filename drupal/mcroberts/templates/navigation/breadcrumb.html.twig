@@ -1,0 +1,12 @@
+{#
+/**
+ * @file
+ * Breadcrumb (system_breadcrumb_block): Home, the path's pages, the hub the menu adds for a page whose URL is not
+ * under its section (Contact Us, School Learning Story, calendar events), and the page itself with aria-current.
+ *
+ * Variables beyond core: current_title (mcroberts_preprocess_breadcrumb()).
+ */
+#}
+{% if breadcrumb or current_title %}
+<nav class="breadcrumb" id="block-breadcrumbs" aria-label="breadcrumb"><ol>{% for item in breadcrumb %}<li>{% if item.url %}<a href="{{ item.url }}">{{ item.text }}</a>{% else %}{{ item.text }}{% endif %}</li>{% endfor %}{% if current_title %}<li><span aria-current="page">{{ current_title }}</span></li>{% endif %}</ol></nav>
+{% endif %}

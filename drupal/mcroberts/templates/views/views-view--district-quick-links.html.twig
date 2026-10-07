@@ -1,0 +1,12 @@
+{#
+/**
+ * @file
+ * View district_quick_links (block_1): on the front page, MyEducation BC and School Cash Online as Helpful Links
+ * tiles (their names live in the image links' title attributes). Elsewhere the view prints as it is.
+ */
+#}
+{% if is_front %}
+{% for t in mcroberts_tiles %}{% include '@mcroberts/includes/task-tile.html.twig' with {url: t.url, icon: t.icon, label: t.label, sub: t.sub, live: '', ext: true} only %}{% endfor %}
+{% else %}
+<div{{ attributes }}>{{ rows }}</div>
+{% endif %}

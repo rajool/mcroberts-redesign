@@ -1,0 +1,29 @@
+{
+ "_source": "Transcribed word for word from the bell schedule image on /information/bell-schedule (assets/content/bf352cd7a200.png).",
+ "title": "BELL SCHEDULE",
+ "semesters": [
+  {"name": "SEMESTER ONE", "dates": "September 8 – January 29", "rotations": ["Rotation One: Sept. 9 - Nov. 13", "Rotation Two: Nov. 16 - Jan. 28"]},
+  {"name": "SEMESTER TWO", "dates": "February 1 – June 24", "rotations": ["Rotation One: Feb. 2 - April 16", "Rotation Two: April 19 - June 24"]}
+ ],
+ "days": ["MON", "TUE", "WED", "THU", "FRI", "Collaboration Days"],
+ "rotations": {
+  "Rotation One": {
+   "MON": [["8:30-9:51", "A"], ["9:56-11:17", "B"], ["11:30-12:51", "C"], ["12:51-1:36", "Lunch"], ["1:39-3:00", "D"]],
+   "TUE": [["8:30-9:36", "A"], ["9:41-10:41", "PLT"], ["10:46-11:52", "B"], ["12:03-1:09", "C"], ["1:09-1:54", "Lunch"], ["1:54-3:00", "D"]],
+   "WED": [["8:30-9:51", "A"], ["9:56-11:17", "B"], ["11:30-12:51", "C"], ["12:51-1:36", "Lunch"], ["1:39-3:00", "D"]],
+   "THU": [["8:30-9:36", "A"], ["9:41-10:41", "PLT"], ["10:46-11:52", "B"], ["12:03-1:09", "C"], ["1:09-1:54", "Lunch"], ["1:54-3:00", "D"]],
+   "FRI": [["8:30-9:51", "A"], ["9:56-11:17", "B"], ["11:30-12:51", "C"], ["12:51-1:36", "Lunch"], ["1:39-3:00", "D"]],
+   "Collaboration Days": [["8:30-9:30", "Collab Time"], ["9:35-10:41", "A"], ["10:46-11:52", "B"], ["12:01-1:10", "C"], ["1:07-1:52", "Lunch"], ["1:54-3:00", "D"]]
+  },
+  "Rotation Two": {
+   "MON": [["8:30-9:51", "B"], ["9:56-11:17", "A"], ["11:30-12:51", "D"], ["12:51-1:36", "Lunch"], ["1:39-3:00", "C"]],
+   "TUE": [["8:30-9:36", "B"], ["9:41-10:41", "PLT"], ["10:46-11:52", "A"], ["12:03-1:09", "D"], ["1:09-1:54", "Lunch"], ["1:54-3:00", "C"]],
+   "WED": [["8:30-9:51", "B"], ["9:56-11:17", "A"], ["11:30-12:51", "D"], ["12:51-1:36", "Lunch"], ["1:39-3:00", "C"]],
+   "THU": [["8:30-9:36", "B"], ["9:41-10:41", "PLT"], ["10:46-11:52", "A"], ["12:03-1:09", "D"], ["1:09-1:54", "Lunch"], ["1:54-3:00", "C"]],
+   "FRI": [["8:30-9:51", "B"], ["9:56-11:17", "A"], ["11:30-12:51", "D"], ["12:51-1:36", "Lunch"], ["1:39-3:00", "C"]],
+   "Collaboration Days": [["8:30-9:30", "Collab Time"], ["9:35-10:41", "B"], ["10:46-11:52", "A"], ["12:01-1:10", "D"], ["1:07-1:52", "Lunch"], ["1:54-3:00", "C"]]
+  }
+ },
+ "collaborationDaysTitle": "2026-27 Collaboration Days:",
+ "collaborationDays": ["Sept 18", "Oct 16", "Nov 6", "Dec 4", "Jan 15", "Feb 26", "April 30", "May 14", "June 24"]
+}

@@ -1,0 +1,9 @@
+{#
+/**
+ * @file
+ * The search box (search_form_block): a plain GET form to core search (/search/node?keys=), so every copy works
+ * without a form build id. Variables: action (the search page URL), uid (unique per copy).
+ */
+#}
+{% import '@mcroberts/includes/macros.html.twig' as m %}
+<form class="search-form" role="search" action="{{ action }}" method="get"><label class="vh" for="search-{{ uid }}">Search</label><input id="search-{{ uid }}" type="search" name="keys" placeholder="Search" autocomplete="off"><button type="submit">{{ m.icon('search') }}<span class="vh">Search</span></button></form>

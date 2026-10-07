@@ -1,0 +1,11 @@
+{#
+/**
+ * @file
+ * The search page's form (search.view_node_search): a plain GET form with the keywords given, as in the preview.
+ * Core search reads ?keys=, so no form build id is needed; the advanced search is left out.
+ *
+ * Variables beyond core: mcroberts_keys, mcroberts_action (mcroberts_preprocess_form()).
+ */
+#}
+{% import '@mcroberts/includes/macros.html.twig' as m %}
+<form class="search-page-form" role="search" action="{{ mcroberts_action }}" method="get"><label for="search-keys">{{ 'Enter your keywords'|t }}</label><div class="search-page-row"><input id="search-keys" type="search" name="keys" value="{{ mcroberts_keys }}" autocomplete="off" spellcheck="false"><button class="btn btn-solid" type="submit">{{ m.icon('search') }}<span>{{ 'Search'|t }}</span></button></div></form>

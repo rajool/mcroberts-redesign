@@ -1,0 +1,9 @@
+{#
+/**
+ * @file
+ * menu utility, first two links as one pill (the live "Student Absent?" note's own words): the label opens Student
+ * Attendance, the number beside it stays visible and dials. Variables: c (Site::chrome()), cls.
+ */
+#}
+{% import '@mcroberts/includes/macros.html.twig' as m %}
+<span class="{{ cls|default('absent-pill') }}"><span class="dot" aria-hidden="true">{{ m.icon('phone') }}</span><a class="txt" href="{{ c.absent.url }}"{% if c.absent.current %} aria-current="page"{% endif %}>{{ c.absent.label }}</a> <a class="num" href="{{ c.absent.tel }}">{{ c.absent.number }}</a></span>

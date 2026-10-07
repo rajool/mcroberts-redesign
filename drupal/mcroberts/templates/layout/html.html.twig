@@ -1,0 +1,37 @@
+{#
+/**
+ * @file
+ * McRoberts: the document.
+ *
+ * Head: Drupal's head, CSS and JS placeholders, the font preconnects, the crest favicon, and the inline script that
+ * applies saved Accessibility Settings and a closed alert before the first paint (no layout shift). Body: the icon
+ * sprite, the skip link, the design-concept banner (theme setting mcroberts_concept_banner, off by default), then
+ * the page.
+ *
+ * Variables beyond core: mcroberts_icons, mcroberts_concept, alert_key (mcroberts_preprocess_html()).
+ */
+#}
+<!DOCTYPE html>
+<html{{ html_attributes }}>
+  <head>
+    <head-placeholder token="{{ placeholder_token }}">
+    <title>{{ head_title|safe_join(' | ') }}</title>
+    <link rel="icon" href="{{ mcroberts_icons.icon32 }}" type="image/png"><link rel="apple-touch-icon" href="{{ mcroberts_icons.icon180 }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <css-placeholder token="{{ placeholder_token }}">
+    <script>{% include '@mcroberts/includes/head-script.html.twig' with {alert_key: alert_key} only %}</script>
+    <js-placeholder token="{{ placeholder_token }}">
+  </head>
+  <body{{ attributes }}>
+<!-- Icon sprite: our own inline SVG (replaces Font Awesome and the module PNG icons) -->
+{% include '@mcroberts/includes/sprite.html.twig' %}
+<a class="skip-link" href="#main-content">{{ 'Skip to main content'|t }}</a>
+{% if mcroberts_concept %}
+<div class="concept-banner" role="note">Design concept for discussion — not the official school website. The official site is <a href="https://mcroberts.sd38.bc.ca">mcroberts.sd38.bc.ca</a>.</div>
+{% endif %}
+    {{ page_top }}
+    {{ page }}
+    {{ page_bottom }}
+    <js-bottom-placeholder token="{{ placeholder_token }}">
+  </body>
+</html>

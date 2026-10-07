@@ -1,0 +1,9 @@
+{#
+/**
+ * @file
+ * One date of the agenda (view calendar, list display): date chip, the events, the rotation code.
+ * Variables: d (Calendar::agendaDay()).
+ */
+#}
+{% import '@mcroberts/includes/macros.html.twig' as m %}
+<li class="{{ d.cls }}"{% if d.id %} id="{{ d.id }}"{% endif %} data-date="{{ d.iso }}"{% if d.code_only %} data-codes-only{% endif %}{% if d.today %} aria-current="date"{% endif %}>{{ m.chip(d.chip) }}<div class="aday-body">{% if d.today %}<span class="tag-today">Today</span>{% endif %}{% if d.events %}<ul class="aday-events">{% for e in d.events %}<li class="ev{{ e.noschool ? ' ev--noschool' : '' }}">{% if e.u %}<a href="{{ e.u }}"><span>{{ e.t }}</span></a>{% else %}<span>{{ e.t }}</span>{% endif %}{% if e.tag %} <span class="tag-noschool">No School</span>{% endif %}</li>{% endfor %}</ul>{% endif %}{% for x in d.codes %}<span class="aday-code">{% if x.u %}<a href="{{ x.u }}">{{ x.t }}</a>{% else %}{{ x.t }}{% endif %}</span>{% endfor %}</div></li>

@@ -1,0 +1,21 @@
+/* ==========================================================================
+   McRoberts (Drupal only): Drupal's own interface in the theme's tokens: status messages (region highlighted),
+   editor tabs, the logged-in toolbar offset. The preview has none of these.
+   ========================================================================== */
+.highlighted .wrap { padding-top: 1rem; }
+.highlighted .wrap:empty, .highlighted [data-drupal-messages]:empty { display: none; }
+.messages {
+  margin: 0 0 1rem; padding: .9rem 1.1rem; border: 1px solid var(--rule); border-left: 6px solid var(--forest);
+  border-radius: var(--radius-sm); background: var(--card); color: var(--ink);
+}
+.messages--warning { border-left-color: var(--gold); }
+.messages--error { border-left-color: var(--alert-urgent-bg); }
+.messages__list { margin: 0; padding-left: 1.2rem; }
+
+/* editor tabs (local tasks) above the content for people who can edit */
+.tabs, .tabs--primary { display: flex; flex-wrap: wrap; gap: .4rem; margin: 1rem 0; padding: 0; list-style: none; }
+.tabs a { display: inline-block; padding: .35rem .9rem; border: 1px solid var(--rule); border-radius: 999px; background: var(--card); color: var(--ink); text-decoration: none; font-size: .9375rem; }
+.tabs a.is-active, .tabs a:hover { border-color: var(--forest); color: var(--forest); }
+
+/* the admin toolbar sits above the sticky header for editors */
+body.toolbar-fixed .site-header { top: calc(var(--drupal-displace-offset-top, 0px) - var(--mast-h)); }

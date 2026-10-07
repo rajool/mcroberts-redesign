@@ -1,0 +1,18 @@
+{#
+/**
+ * @file
+ * Status messages: static (no toasts, no Bootstrap), role=status, errors role=alert, each with its type's label for
+ * screen readers. data-drupal-messages keeps scripted messages (Drupal.Message) working.
+ */
+#}
+<div data-drupal-messages>
+{% for type, messages in message_list %}
+  <div class="messages messages--{{ type|clean_class }}" role="{{ type == 'error' ? 'alert' : 'status' }}" aria-label="{{ status_headings[type] }}">
+    {% if messages|length > 1 %}
+      <ul class="messages__list">{% for message in messages %}<li>{{ message }}</li>{% endfor %}</ul>
+    {% else %}
+      {{ messages|first }}
+    {% endif %}
+  </div>
+{% endfor %}
+</div>

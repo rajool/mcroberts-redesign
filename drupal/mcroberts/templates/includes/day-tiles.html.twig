@@ -1,0 +1,13 @@
+{#
+/**
+ * @file
+ * The day-dependent Helpful Links tiles: School Calendar (the next event), Bell Schedule (today's rotation and code)
+ * and Striker Weekly (the latest issue's week). js/today.js refreshes the live sub-lines on a later day.
+ * Variables: c (Site::chrome()), day, first, weekly (from Calendar::front() and Teaser::weeklies()), bell_title.
+ */
+#}
+{% set cal_sub %}{% if first %}<span>{{ first.title }}</span> · <time datetime="{{ first.chip.iso }}">{{ first.chip.month_day }}</time>{% else %}Upcoming Events{% endif %}{% endset %}
+{% set bell_sub %}{% if day %}{% if day.rot %}<span>{{ day.rot }}</span> · {% endif %}<span>{{ day.code }}</span>{% else %}{{ bell_title }}{% endif %}{% endset %}
+{% include '@mcroberts/includes/task-tile.html.twig' with {url: c.paths.calendar, icon: 'calendar', label: 'School Calendar', sub: cal_sub, live: 'tile-calendar', ext: false} only %}
+{% include '@mcroberts/includes/task-tile.html.twig' with {url: c.paths.bell, icon: 'clock', label: 'Bell Schedule', sub: bell_sub, live: 'tile-bell', ext: false} only %}
+{% if weekly %}{% include '@mcroberts/includes/task-tile.html.twig' with {url: weekly.url, icon: 'paper', label: 'Striker Weekly', sub: weekly.range, live: 'tile-weekly', ext: false} only %}{% endif %}

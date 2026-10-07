@@ -1,0 +1,10 @@
+{#
+/**
+ * @file
+ * The district strip (hardcoded in the live page.html.twig: district logo linking sd38.bc.ca) with Translate,
+ * Accessibility Settings and menu utility. Variables: c (Site::chrome()), menu (rendered region secondary_menu,
+ * where the utility menu block sits; the same list from the menu data when the block is not placed).
+ */
+#}
+<!-- District strip (hardcoded in page.html.twig) + menu utility (system_menu_block:utility, design/ia.json "utility"): Student Absent? and its number as one pill, the three sign-ins, Contact Us -->
+<div class="utility on-dark"><div class="wrap"><a class="district-link" href="{{ c.district.url }}"><img src="{{ c.district.logo.src }}" alt="{{ c.district.name }}" width="{{ c.district.logo.w }}" height="{{ c.district.logo.h }}"></a><div class="utility-tools">{% include '@mcroberts/includes/translate.html.twig' with {c: c, uid: 'utility', variant: 'utility'} only %}{% include '@mcroberts/includes/a11y-button.html.twig' with {cls: 'tool-btn', label: false} only %}</div>{% if menu|striptags('<a>')|trim %}{{ menu }}{% else %}{% include '@mcroberts/includes/utility-menu.html.twig' with {c: c} only %}{% endif %}</div></div>

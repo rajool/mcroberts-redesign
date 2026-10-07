@@ -1,0 +1,14 @@
+{#
+/**
+ * @file
+ * sidebar_notes block_2, the "Student Absent?" note. On the front page it leads Helpful Links as the same pair as
+ * every other Student Absent? control (menu utility): the label opens Student Attendance, the number dials the
+ * Early Warning line. Elsewhere the note prints as it is.
+ */
+#}
+{% import '@mcroberts/includes/macros.html.twig' as m %}
+{% if is_front %}
+<li class="is-featured"><div class="task task--absent on-dark"><span class="task-ico" aria-hidden="true">{{ m.icon('phone') }}</span><span class="absent-body"><a class="absent-title" href="{{ mcroberts.absent.url }}"><span>{{ mcroberts.absent.label }}</span>{{ m.icon('arrow') }}</a><a class="absent-num" href="{{ mcroberts.contact.tel_ext }}">{{ mcroberts.contact.phone }} <span class="absent-ext">(Ext. 1)</span></a></span></div></li>
+{% else %}
+{{ title_prefix }}{{ title_suffix }}{{ content }}
+{% endif %}

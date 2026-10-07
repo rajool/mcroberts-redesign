@@ -1,0 +1,13 @@
+{#
+/**
+ * @file
+ * Bootstrap Paragraphs accordion (bp_accordion): its header, then one native <details> per section
+ * (bp_accordion_section: title → summary, body → the section's own paragraphs). No Bootstrap collapse script; it
+ * works without JS and prints open (js/behaviors.js opens closed ones for printing).
+ *
+ * Variables: mcroberts_sections (mcroberts_preprocess_paragraph__bp_accordion()).
+ */
+#}
+{% set header = content.bp_header|render|striptags|trim %}
+{% if header %}<h2>{{ header }}</h2>{% endif %}
+{% for s in mcroberts_sections %}<details class="accordion"><summary>{{ s.title }}</summary><div class="accordion__body">{{ s.body }}</div></details>{% endfor %}

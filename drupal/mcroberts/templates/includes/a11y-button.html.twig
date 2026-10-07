@@ -1,0 +1,10 @@
+{#
+/**
+ * @file
+ * The Accessibility Settings opener (native dialog; commandfor/command open it with scripts off where supported).
+ * Variables: cls (default "tool-btn"; "" for none), label (true: visible label, false: visually hidden).
+ */
+#}
+{% import '@mcroberts/includes/macros.html.twig' as m %}
+{% set cls = cls is defined ? cls : 'tool-btn' %}
+<button{% if cls %} class="{{ cls }}"{% endif %} type="button" data-open-dialog="a11y-dialog" commandfor="a11y-dialog" command="show-modal" aria-haspopup="dialog">{{ m.icon('access') }}{% if label %}<span class="label-a11y">Accessibility Settings</span>{% else %}<span class="vh">Accessibility Settings</span>{% endif %}</button>

@@ -1,0 +1,25 @@
+{#
+/**
+ * @file
+ * Hub page sections (Site::hubSections()): the main-menu subtree on the section hubs, menu hub-links on the others,
+ * both through one card template, so hub and menu cannot drift apart. A labelled group gets its live heading (a
+ * link when the menu item links); the cards of an unlabelled group are h2 themselves, so no level is skipped.
+ *
+ * Variables: hub (Site::hubSections()).
+ */
+#}
+{% import '@mcroberts/includes/macros.html.twig' as m %}
+<!-- menu block (main subtree / hub links) as cards, grouped as in design/ia.json -->
+<div class="hub-sections">
+{%- for s in hub -%}
+{%- set el = s.heading ? 'section' : 'div' -%}
+<{{ el }} class="hub-group{{ s.featured ? ' hub-group--featured' : '' }}"{% if s.heading %} aria-labelledby="{{ s.id }}"{% endif %}>
+{%- if s.heading -%}<h2 class="hub-group-title" id="{{ s.id }}">{% if s.href %}<a href="{{ s.href.url }}"><span>{{ s.heading }}</span>{{ m.icon('arrow') }}</a>{% else %}{{ s.heading }}{% endif %}</h2>{%- endif -%}
+{%- if s.photo -%}
+<ul class="photo-tiles">{% for t in s.cards %}<li><a class="photo-tile{{ t.icon ? ' is-icon' : '' }}" href="{{ t.url }}"><span class="photo-tile-img">{% if t.img %}<img src="{{ t.img.src }}" alt="" width="{{ t.img.w }}" height="{{ t.img.h }}" loading="lazy" decoding="async">{% else %}<span class="tile-ico">{{ m.icon(t.ico) }}</span>{% endif %}</span><{{ s.tag }} class="photo-tile-title">{{ t.label }}</{{ s.tag }}>{{ m.icon(t.external ? 'ext' : 'arrow', 'icon tile-go') }}</a></li>{% endfor %}</ul>
+{%- else -%}
+{% include '@mcroberts/includes/hub-cards.html.twig' with {cards: s.cards, tag: s.tag, cls: s.featured ? 'hub-cards--featured' : '', bare: s.bare} only %}
+{%- endif -%}
+</{{ el }}>
+{%- endfor -%}
+</div>

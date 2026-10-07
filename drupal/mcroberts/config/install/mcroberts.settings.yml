@@ -1,0 +1,63 @@
+# Theme settings. Bootstrap Barrio's own settings are inherited unchanged: whatever Bootstrap library they attach is
+# switched off by libraries-override in mcroberts.info.yml.
+features:
+  comment_user_picture: true
+  comment_user_verification: true
+  favicon: false
+  logo: true
+  name: true
+  node_user_picture: false
+  slogan: true
+logo:
+  use_default: true
+favicon:
+  use_default: true
+
+# The design-concept banner and noindex of the static preview. Off for a real site; turn it on for a demo copy
+# that is publicly reachable: drush config:set mcroberts.settings mcroberts_concept_banner 1
+mcroberts_concept_banner: false
+
+# Fallbacks, used only when the data is missing in Drupal: the block_content address_block (contact), menu utility
+# (Student Absent? and its number) or the GTranslate block configuration (languages).
+mcroberts_contact:
+  address_line1: '8980 Williams Road'
+  locality: Richmond
+  administrative_area: BC
+  postal_code: 'V7A 1G6'
+  map_url: 'https://maps.apple.com/?q=8980%20Williams%20Road%20Richmond%20BC%20V7A%201G6%20CA'
+  phone: '604-668-6600'
+  email: mcroberts@sd38.bc.ca
+mcroberts_absent:
+  label: 'Student Absent?'
+  path: /parents/student-attendance
+  number_label: '604-668-6600 (Ext. 1)'
+  number_uri: 'tel:+16046686600,1'
+mcroberts_district:
+  name: 'School District No. 38 (Richmond)'
+  url: 'https://www.sd38.bc.ca'
+mcroberts_languages:
+  - en
+  - zh-CN
+  - fr
+  - de
+  - it
+  - ja
+  - ru
+  - es
+
+# Pages the theme links to by path alias (design/ia.json URLs).
+mcroberts_paths:
+  attendance: /parents/student-attendance
+  bell: /school-calendar/bell-schedule
+  calendar: /school-calendar
+  contact: /contact-us
+  news: /news
+  newsletters: /news/newsletters
+  story: /school-learning-story
+  about: /about-us
+  staff: /about-us/our-staff
+  catchment: /about-us/catchment
+  mission: /about-us/mission-statement
+  strikers: /extra-curricular/strikers-athletics
+  clubs: /extra-curricular/club-directory
+mcroberts_webcal: 'webcal://mcroberts.sd38.bc.ca/calendar-feed.ics'

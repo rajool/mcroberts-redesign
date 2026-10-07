@@ -1,0 +1,19 @@
+{#
+/**
+ * @file
+ * The footer: the sign-off (top_header data repeated), menu footer with the address_block folded in, Social Media
+ * (region footer_second), the district logo and copyright (hardcoded in the live page.html.twig), Accessibility
+ * Settings, and on phones the bottom action bar, all in one contentinfo landmark. "Log in" stays off public pages.
+ *
+ * Variables: c (Site::chrome()), menu (rendered region footer_first: the footer menu block), cols (the same
+ * columns from the menu data, when the block is not placed), social (rendered region footer_second),
+ * fifth (rendered region footer_fifth), dup (action bar folded).
+ */
+#}
+<footer class="page-footer">
+<!-- Sign-off: top_header data repeated -->
+<div class="signoff"><div class="wrap"><img src="{{ c.crest_full.src }}" alt="" width="{{ c.crest_full.w }}" height="{{ c.crest_full.h }}" loading="lazy" decoding="async"><p class="name">{{ c.name }}</p><p class="motto">{{ c.motto }}</p></div></div>
+<!-- footer: menu footer (system_menu_block:footer, 3 columns) + address_block, block social media, hardcoded district logo + copyright -->
+<div class="site-footer on-dark"><div class="wrap foot-grid">{% if menu|striptags('<a>')|trim %}{{ menu }}{% else %}{% include '@mcroberts/includes/footer-menu.html.twig' with {c: c, cols: cols} only %}{% endif %}{{ social }}</div><div class="foot-bottom"><div class="wrap"><div class="foot-district"><a href="{{ c.district.url }}"><img src="{{ c.district.logo.src }}" alt="{{ c.district.name }}" width="{{ c.district.logo.w }}" height="{{ c.district.logo.h }}" loading="lazy" decoding="async"></a><span><span>Copyright © {{ c.year }}</span> <span>{{ c.district.name }}</span></span></div><div class="links region region-footer-fifth">{% include '@mcroberts/includes/a11y-button.html.twig' with {cls: '', label: true} only %}{{ fifth }}</div></div></div></div>
+{% include '@mcroberts/includes/action-bar.html.twig' with {c: c, dup: dup} only %}
+</footer>

@@ -1,0 +1,10 @@
+{#
+/**
+ * @file
+ * Menu main printed outside region primary_menu (the live footer copy, block mainnavigation_2): level 1 only, as a
+ * plain list. config-changes/blocks.md disables that block; this keeps it sane if it is left on.
+ */
+#}
+{% if items %}
+<ul class="menu menu--main-flat">{% for item in items %}<li><a href="{{ item.url }}">{{ item.title }}</a></li>{% endfor %}</ul>
+{% endif %}

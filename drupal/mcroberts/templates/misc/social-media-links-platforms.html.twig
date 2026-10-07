@@ -1,0 +1,11 @@
+{#
+/**
+ * @file
+ * Social Media (social_media_links block): the same links, our inline SVG icons (no Font Awesome CDN) and the
+ * platform's name as visible text (the live links are icon-only, with no accessible name).
+ *
+ * Variables beyond the module: mcroberts_social (mcroberts_preprocess_social_media_links_platforms()).
+ */
+#}
+{% import '@mcroberts/includes/macros.html.twig' as m %}
+<ul class="social">{% for s in mcroberts_social %}<li><a href="{{ s.url }}"><span class="ring">{{ m.icon(s.icon) }}</span>{{ s.name }}</a></li>{% endfor %}</ul>

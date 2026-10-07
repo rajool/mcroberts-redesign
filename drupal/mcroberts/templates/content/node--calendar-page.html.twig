@@ -1,0 +1,28 @@
+{#
+/**
+ * @file
+ * School Calendar (node calendar_page + view calendar). The calendar leads, server-rendered as an agenda that works
+ * without scripts (every month; with scripts this month and the next, the rest folded); js/calendar.js adds the
+ * month grid, today, the month chips and the rotation-code switch, from #cal-data. The body's Notes fold away under
+ * their own label, then the printable calendar and the hub's cards. FullCalendar (unpkg CDN) is not loaded.
+ *
+ * Variables: mcroberts (_mcroberts_node_variables()): calendar (Calendar::page() + notes, print, pdf), hub, title,
+ * breadcrumb, rail, chrome.
+ */
+#}
+{% import '@mcroberts/includes/macros.html.twig' as m %}
+{% if mcroberts.page %}
+{% set mc = mcroberts %}
+{% set cal = mc.calendar %}
+{{ attach_library('mcroberts/calendar') }}
+{% include '@mcroberts/includes/hero.html.twig' with {c: mc.chrome, title: mc.title, eyebrow: mc.eyebrow, alias: mc.alias, compact: true, breadcrumb: mc.breadcrumb, meta: null} only %}
+<div class="page-body"><div class="wrap page-grid no-sidebar"><div{{ attributes.addClass('page-content', 'cal').setAttribute('data-calendar', '') }}>{{ title_prefix }}{{ title_suffix }}<!-- view calendar (fullcalendar_view): agenda = listYear, month grid = dayGridMonth; rotation codes (ABCD, BADC, PLT Rot n, COLLAB) can be hidden -->
+<div class="cal-toolbar"><div class="seg cal-views needs-js" role="group" aria-label="{{ mc.title }}" data-cal-views><button type="button" aria-pressed="true" data-view="list">{{ m.icon('list') }}<span>list</span></button><button type="button" aria-pressed="false" data-view="month">{{ m.icon('grid') }}<span>month</span></button></div><label class="switch"><input type="checkbox" role="switch" checked data-cal-codes><span class="switch-track" aria-hidden="true"></span><span class="switch-label"><span>ABCD</span> <span>BADC</span> <span>PLT Rot</span> <span>COLLAB</span></span></label><p class="cal-legend"><span class="sw" aria-hidden="true"></span><span class="tag-noschool">No School</span></p><a class="btn btn-subscribe cal-subscribe" href="{{ mc.chrome.webcal }}">{{ m.icon('cal-plus') }}<span>Subscribe to our calendar</span></a></div><nav class="cal-months" aria-label="{{ mc.title }}"><ul>{% for ch in cal.chips %}<li><a href="#{{ ch.mid }}" data-month="{{ ch.ym }}"{% if ch.this %} class="is-this-month"{% endif %}{% if ch.shown %} aria-current="true"{% endif %}><span>{{ ch.label }}</span>{% if ch.year %} <small>{{ ch.year }}</small>{% endif %}</a></li>{% endfor %}</ul></nav><div class="cal-list" data-cal-list>{% for b in cal.months %}<section class="cal-mblock{{ b.folded ? ' is-folded' : '' }}" id="{{ b.mid }}" aria-labelledby="{{ b.mid }}-t"><h2 class="month-title" id="{{ b.mid }}-t">{{ b.label }}</h2><ol class="agenda">{% for d in b.rows %}{% include '@mcroberts/includes/agenda-day.html.twig' with {d: d} only %}{% endfor %}</ol></section>{% endfor %}</div><div class="cal-grid" data-cal-grid hidden></div><script type="application/json" id="cal-data">{{ cal.json }}</script>
+{%- if cal.notes or cal.print or cal.pdf -%}
+<!-- field body: Notes and the Monthly calendar pages (PDF), after the calendar -->
+<div class="cal-intro">{% if cal.notes %}<details class="cal-notes accordion"><summary>Notes:</summary><div class="accordion__body"><ul>{% for n in cal.notes %}<li>{{ n }}</li>{% endfor %}</ul></div></details>{% endif %}<div class="cal-print"><p>{{ cal.print }}</p>{% if cal.pdf %}{% include '@mcroberts/includes/file-card.html.twig' with {f: cal.pdf} only %}{% endif %}</div></div>
+{%- endif -%}
+{% if mc.hub %}{% include '@mcroberts/includes/hub-sections.html.twig' with {hub: mc.hub} only %}{% endif %}</div>{% include '@mcroberts/includes/rail.html.twig' with {c: mc.chrome, r: mc.rail} only %}</div></div>
+{% else %}
+<article{{ attributes.addClass('node', 'node--type-calendar-page') }}>{{ title_prefix }}{{ title_suffix }}{{ content }}</article>
+{% endif %}

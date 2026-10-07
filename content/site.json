@@ -1,0 +1,139 @@
+{
+ "name": "École Secondaire Hugh McRoberts Secondary School",
+ "motto": "Learning Together... Achieving Our Dreams",
+ "logo": "39ef9ae7e316.png",
+ "logoStyled": "1653644d0ced.png",
+ "headerImage": "9f961d6d672b.jpg",
+ "district": {
+  "name": "School District No. 38 (Richmond)",
+  "href": "https://www.sd38.bc.ca",
+  "logo": "ce22c9dd5452.png"
+ },
+ "address": [
+  "8980 Williams Road",
+  "Richmond",
+  "BC",
+  "V7A 1G6",
+  "Canada"
+ ],
+ "mapHref": "https://maps.apple.com/?q=8980%20Williams%20Road%20Richmond%20BC%20V7A%201G6%20CA",
+ "phone": "604-668-6600",
+ "email": "mcroberts@sd38.bc.ca",
+ "social": [
+  {
+   "href": "mailto:mcroberts@sd38.bc.ca",
+   "kind": "email"
+  },
+  {
+   "href": "https://www.instagram.com/hugh_mcroberts",
+   "kind": "instagram"
+  },
+  {
+   "href": "https://x.com/hugh_mcroberts",
+   "kind": "twitter"
+  }
+ ],
+ "quickLinks": [
+  {
+   "href": "https://myeducation.gov.bc.ca/aspen/logon.do",
+   "title": "MyEducation BC",
+   "img": null,
+   "source": "district"
+  },
+  {
+   "href": "https://schoolcashonline.com/",
+   "title": "School Cash Online",
+   "img": null,
+   "source": "district"
+  },
+  {
+   "href": "https://www2.gov.bc.ca/gov/content/erase",
+   "title": "ERASE",
+   "img": null,
+   "source": "district"
+  },
+  {
+   "href": "/parents/myed-parent-portal-request-assistance",
+   "title": "",
+   "img": "a5cb346ab44e.jpg",
+   "source": "school"
+  },
+  {
+   "href": "https://portal.office.com",
+   "title": "",
+   "img": "a353b98db77a.png",
+   "source": "school"
+  }
+ ],
+ "frontBlocks": [
+  {
+   "id": "block-a11y",
+   "heading": "",
+   "html": ""
+  },
+  {
+   "id": "block-searchform",
+   "heading": "Search",
+   "html": ""
+  },
+  {
+   "id": "block-views-block-upcoming-events-block-1",
+   "heading": "Upcoming Events",
+   "html": "<ul><li><a href=\"/2026/abcd-32\">ABCD</a><time datetime=\"2026-10-05\">Oct 5 2026</time></li><li><a href=\"/2026/plt-rot-2-1\">PLT Rot 2</a><time datetime=\"2026-10-06\">Oct 6 2026</time></li><li><a href=\"/2026/abcd-33\">ABCD</a><time datetime=\"2026-10-07\">Oct 7 2026</time></li><li><a href=\"/2026/plt-rot-2-2\">PLT Rot 2</a><time datetime=\"2026-10-08\">Oct 8 2026</time></li><li><a href=\"/2026/abcd-34\">ABCD</a><time datetime=\"2026-10-09\">Oct 9 2026</time></li></ul>"
+  },
+  {
+   "id": "block-views-block-sidebar-notes-block-1",
+   "heading": "",
+   "html": ""
+  },
+  {
+   "id": "block-socialmedialinks",
+   "heading": "Social Media",
+   "html": "<ul></ul>"
+  },
+  {
+   "id": "block-gtranslate",
+   "heading": "Translate",
+   "html": ""
+  },
+  {
+   "id": "block-views-block-sidebar-notes-block-2",
+   "heading": "",
+   "html": "<h2>Student Absent?</h2><p><a href=\"tel:604-668-6600\">604-668-6600</a> (Ext. 1)</p>"
+  },
+  {
+   "id": "block-views-block-district-quick-links-block-1",
+   "heading": "",
+   "html": ""
+  },
+  {
+   "id": "block-views-block-home-page-buttons-block-1",
+   "heading": "",
+   "html": "<a href=\"/parents/myed-parent-portal-request-assistance\"><img src=\"@img/a5cb346ab44e.jpg\" alt=\"\" width=\"480\" height=\"193\" loading=\"lazy\"></a><a href=\"https://portal.office.com\"><img src=\"@img/a353b98db77a.png\" alt=\"\" width=\"480\" height=\"320\" loading=\"lazy\"></a>"
+  }
+ ],
+ "copyright": "Copyright © 2026 School District No. 38 (Richmond)",
+ "accessibilityNote": "<p><a href=\"https://sd38.bc.ca/accessibility\">Learn more</a> about how the Richmond School District supports accessibility.</p>",
+ "frontNews": [
+  "/news/2026/10/ap-exam-registration-now-open-2026-2027",
+  "/news/2026/10/world-teachers-day",
+  "/news/2026/10/striker-weekly-oct-5-9",
+  "/news/2026/10/bcs-welcoming-schools-website",
+  "/news/2026/09/national-day-truth-and-reconciliation-orange-shirt-day",
+  "/news/2026/09/striker-weekly-sept-28-oct-2",
+  "/news/2026/09/terry-fox-run-mon-sept-28",
+  "/news/2026/09/rdpa-trustee-candidate-meet-and-greet",
+  "/news/2026/09/public-board-meeting-wednesday-september-23",
+  "/news/2026/09/striker-weekly-sept-21-25"
+ ],
+ "translateLanguages": [
+  "en",
+  "zh-CN",
+  "fr",
+  "de",
+  "it",
+  "ja",
+  "ru",
+  "es"
+ ]
+}

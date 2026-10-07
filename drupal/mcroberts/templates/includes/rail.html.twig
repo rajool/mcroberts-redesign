@@ -1,0 +1,16 @@
+{#
+/**
+ * @file
+ * Rail (region sidebar_second): Student Absent? (sidebar_notes block_2), Bell Schedule and School Calendar lead on
+ * every page, then the page's extra (Latest News on articles), then the address block. A page never repeats itself
+ * here. Variables: c (Site::chrome()), r (_mcroberts_rail()).
+ */
+#}
+{% import '@mcroberts/includes/macros.html.twig' as m %}
+<!-- Rail: sidebar_note "Student Absent?" (sidebar_notes:block_2) + Bell Schedule + School Calendar + address_block -->
+<aside class="page-rail region region-sidebar-second">
+{%- if r.absent -%}<div class="rail-absent on-dark"><span class="ring" aria-hidden="true">{{ m.icon('phone') }}</span><a class="absent-title" href="{{ c.absent.url }}"><span>{{ c.absent.label }}</span>{{ m.icon('arrow') }}</a><a class="absent-num" href="{{ c.contact.tel_ext }}">{{ c.contact.phone }} <span class="absent-ext">(Ext. 1)</span></a></div>{%- endif -%}
+{%- if r.bell or r.calendar -%}<ul class="rail-links">{% if r.bell %}<li><a href="{{ c.paths.bell }}"><span class="task-ico">{{ m.icon('clock') }}</span><span>Bell Schedule</span>{{ m.icon('arrow') }}</a></li>{% endif %}{% if r.calendar %}<li><a href="{{ c.paths.calendar }}"><span class="task-ico">{{ m.icon('calendar') }}</span><span>School Calendar</span>{{ m.icon('arrow') }}</a></li>{% endif %}</ul>{%- endif -%}
+{%- if r.after -%}<section class="rail-news" aria-labelledby="rail-news-title"><h2 id="rail-news-title">Latest News</h2><ul>{% for x in r.after %}<li><a href="{{ x.url }}"><time datetime="{{ x.date.iso }}">{{ x.date.short }}</time><span>{{ x.title }}</span></a></li>{% endfor %}</ul></section>{%- endif -%}
+{%- if r.contact -%}<section class="contact-card" aria-labelledby="contact-card-title"><h2 id="contact-card-title">Contact Us</h2><address>{{ r.c.address_line1 }}<br>{{ r.c.line2 }} <span class="nowrap">{{ r.c.postal_code }}</span></address><ul><li><span>Telephone:</span> <a href="{{ r.c.tel }}">{{ r.c.phone_dots }}</a></li><li><span>Early Warning:</span> <a href="{{ r.c.tel_ext }}">{{ r.c.phone_dots }} Ext. 1</a></li><li><a href="mailto:{{ r.c.email }}">{{ r.c.email }}</a></li></ul></section>{%- endif -%}
+</aside>
