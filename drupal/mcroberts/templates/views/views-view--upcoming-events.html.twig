@@ -4,8 +4,9 @@
  * View upcoming_events (block_1): the next eight real events (rotation codes excluded), from the same
  * calendar_event nodes as the Today card, so the two never disagree; js/today.js refreshes the list on a later day.
  *
- * Variables: mcroberts_events (Calendar::eventItem() list).
+ * Variables: mcroberts_events (Calendar::eventItem() list); attributes and dom_id as core prints them, so an AJAX
+ * pager finds its view (js-view-dom-id-*).
  */
 #}
 {% import '@mcroberts/includes/macros.html.twig' as m %}
-<ul class="event-grid" data-t="events">{% for e in mcroberts_events %}<li class="event{{ e.noschool ? ' event--noschool' : '' }}"><a href="{{ e.url }}">{{ m.chip(e.chip) }}<span class="title"><span>{{ e.title }}</span>{% if e.tag %} <span class="tag-noschool">No School</span>{% endif %}</span></a></li>{% endfor %}</ul>
+<ul{{ attributes.addClass('event-grid', dom_id ? 'js-view-dom-id-' ~ dom_id : 'event-grid') }} data-t="events">{% for e in mcroberts_events %}<li class="event{{ e.noschool ? ' event--noschool' : '' }}"><a href="{{ e.url }}">{{ m.chip(e.chip) }}<span class="title"><span>{{ e.title }}</span>{% if e.tag %} <span class="tag-noschool">No School</span>{% endif %}</span></a></li>{% endfor %}</ul>

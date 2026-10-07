@@ -1,8 +1,9 @@
 {#
 /**
  * @file
- * Previous / next through the section in menu order: the book navigation a hub implies. Variables: p (Site::pager()).
+ * Previous / next through the section in menu order: the book navigation a hub implies. Not a landmark: the section
+ * menu beside it is the section's navigation, so two landmarks would share its name. Variables: p (Site::pager()).
  */
 #}
 {% import '@mcroberts/includes/macros.html.twig' as m %}
-<!-- book-style pager over the section menu (menu order from design/ia.json) --><nav class="article-nav section-pager" aria-labelledby="pager-title"><h2 class="vh" id="pager-title">{{ p.label }}</h2>{% if p.prev %}<a class="prev" href="{{ p.prev.url }}" rel="prev"><span class="dir">{{ m.icon('arrow') }}Previous</span><span class="t">{{ p.prev.label }}</span></a>{% endif %}{% if p.next %}<a class="next" href="{{ p.next.url }}" rel="next"><span class="dir">{{ m.icon('arrow') }}Next</span><span class="t">{{ p.next.label }}</span></a>{% endif %}</nav>
+<!-- book-style pager over the section menu (menu order from design/ia.json) --><div class="article-nav section-pager">{% if p.prev %}<a class="prev" href="{{ p.prev.url }}" rel="prev"><span class="dir">{{ m.icon('arrow') }}Previous</span><span class="t">{{ p.prev.label }}</span></a>{% endif %}{% if p.next %}<a class="next" href="{{ p.next.url }}" rel="next"><span class="dir">{{ m.icon('arrow') }}Next</span><span class="t">{{ p.next.label }}</span></a>{% endif %}</div>

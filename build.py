@@ -1007,21 +1007,20 @@ def utility_strip(cur):
     src, w, h = img_src(cur, DISTRICT_LOGO)
     return ('<!-- District strip (hardcoded in page.html.twig) + menu utility (system_menu_block:utility, design/ia.json'
             ' "utility"): Student Absent? and its number as one pill, the three sign-ins, Contact Us -->\n'
-            '<div class="utility on-dark"><div class="wrap">'
+            '<nav class="utility on-dark"><div class="wrap">'
             '<a class="district-link" href="{dh}"><img src="{src}" alt="{dn}" width="{w}" height="{h}"></a>'
-            '<div class="utility-tools">{gt}{a11y}</div>'
-            '<ul class="signin utility-menu"><li class="utility-absent">{pill}</li>{links}</ul></div></div>').format(
+            '<ul class="signin utility-menu"><li class="utility-absent">{pill}</li>{links}</ul></div></nav>').format(
         dh=esc(SITE["district"]["href"]), src=src, dn=esc(SITE["district"]["name"]), w=w, h=h,
-        gt=translate_block("utility", "utility"), a11y=a11y_button("tool-btn", label=False), links=utility_links(cur),
+        links=utility_links(cur),
         pill=absent_pill(cur))
 
 
 def header(cur):
     return ('<header class="site-header" id="site-header" data-sticky-header>'
             '<span class="sticky-sentinel" aria-hidden="true"></span>\n'
-            '<!-- region top_header (view site_header_content_block: crest, name) + header_form (Translate, Accessibility Settings, Search) -->\n'
+            '<!-- region top_header (view site_header_content_block: crest, name) + header_form (Search; Accessibility Settings sits in the footer, Translate is not placed) -->\n'
             '<div class="masthead"><div class="wrap"><div class="region region-top-header">{lockup}</div>'
-            '<div class="mast-tools region region-header-form">{gt}{a11y}{search}</div>'
+            '<div class="mast-tools region region-header-form">{search}</div>'
             '<div class="mobile-actions">'
             '<button class="icon-btn" type="button" aria-expanded="false" aria-controls="mobile-search" data-toggle-search>{si}<span class="vh">Search</span></button>'
             '{tabpill}'
@@ -1029,7 +1028,7 @@ def header(cur):
             '</div></div></div>'
             '<div class="mobile-search" id="mobile-search" hidden><div class="wrap">{msearch}</div></div>\n'
             '{nav}</header>').format(
-        lockup=lockup(cur), gt=translate_block("desktop", "desktop"), a11y=a11y_button(), search=search_form(cur, "desktop"),
+        lockup=lockup(cur), search=search_form(cur, "desktop"),
         si=icon("search"), mi=icon("menu"), tabpill=absent_pill(cur, "absent-pill tablet-absent"),
         msearch=search_form(cur, "mobile"), nav=primary_nav(cur))
 
@@ -1110,19 +1109,18 @@ def footer(cur):
 
 
 def action_bar(cur):
-    """Phone bottom bar (design/ia.json utility, phone rule): Student Absent? and its number lead, then Translate,
+    """Phone bottom bar (design/ia.json utility, phone rule): Student Absent? and its number lead, then
     Search and Menu. The number keeps a 44 px target, so an absence is one tap from every page."""
-    return ('<!-- Phone bottom action bar: menu utility\'s Student Absent? pill, then Translate, Search and Menu -->\n'
+    return ('<!-- Phone bottom action bar: menu utility\'s Student Absent? pill, then Search and Menu -->\n'
             '<div class="action-bar{dup}">'
             '<span class="bar-absent" role="group" aria-labelledby="bar-absent">{lab}<a class="bar-num" href="{tel}">{pi}<span>{num}</span></a></span>'
-            '{gt}'
             '<button class="bar-btn" type="button" aria-expanded="false" aria-controls="mobile-search" data-toggle-search>{si}<span>Search</span></button>'
             '<button class="bar-btn" type="button" data-open-dialog="menu-drawer" commandfor="menu-drawer" command="show-modal" aria-haspopup="dialog" aria-expanded="false" aria-controls="menu-drawer">{mi}<span>Menu</span></button>'
             '</div>').format(
         lab=a(cur, UTIL_ABSENT["href"], "<span>{}</span>{}".format(esc(UTIL_ABSENT["label"]), icon("arrow")), "bar-label",
               ' id="bar-absent"' + here_attr(cur, UTIL_ABSENT["href"])),
         tel=esc(UTIL_NUMBER["href"]), pi=icon("phone"), num=esc(UTIL_NUMBER["label"]),
-        gt=translate_block("bar", "bar"), si=icon("search"), mi=icon("menu"),
+        si=icon("search"), mi=icon("menu"),
         # the front page's Today card and Student Attendance's call-out carry the call button on the first screen, so
         # the bar is built folded there (js/nav.js absentDup unfolds it once that button scrolls away)
         dup=" has-dup" if cur in ("/", ATTENDANCE) else "")
@@ -1147,16 +1145,16 @@ def drawer(cur):
             o=" open" if sec is m else "", t=esc(m["label"]), chev=icon("chev", "chev"), body=body,
             hub=a(cur, m["href"], "<span>{}</span>{}".format(esc(m["label"]), icon("arrow")), "drawer-section-link",
                   ' aria-current="page"' if here else "")))
-    return ('<!-- Phone menu: native modal dialog (focus trap + Esc for free); the same menu main, then menu utility, plus Translate -->\n'
+    return ('<!-- Phone menu: native modal dialog (focus trap + Esc for free); the same menu main, then menu utility -->\n'
             '<dialog class="drawer" id="menu-drawer" aria-label="Menu"><div class="drawer-head">{lockup}'
             '<button class="close-btn" type="button" data-close-dialog commandfor="menu-drawer" command="close" autofocus>{ci}Close</button></div>'
-            '<div class="drawer-body">{search}<div class="drawer-tools">{gt}{a11y}</div>'
+            '<div class="drawer-body">{search}'
             '<nav aria-label="Main navigation"><ul class="drawer-nav">{items}</ul></nav>'
             '<ul class="drawer-signin"><li class="drawer-absent">{pill}</li>{signin}</ul>'
             '<button class="close-btn drawer-close-end" type="button" data-close-dialog commandfor="menu-drawer" command="close">{ci}Close</button>'
             '</div></dialog>').format(
         lockup=lockup(cur, post=False, eager=False), ci=icon("close"), search=search_form(cur, "drawer"),
-        gt=translate_block("drawer", "drawer"), a11y=a11y_button("tool-btn", label=False), items="".join(items),
+        items="".join(items),
         pill=absent_pill(cur), signin=utility_links(cur, "icon"))
 
 
@@ -1276,6 +1274,60 @@ def strip_bullet(el):
         if isinstance(ch, El):
             strip_bullet(ch)
             return
+
+
+DASH_LINE_RE = re.compile(r"^[\s\xa0]*[-\u2013][\s\xa0]+")
+
+
+def dash_lines(root):
+    """A paragraph whose lines after the first each start with a typed "- " (the PAC roles, the Career Centre links,
+    the mural's flora) → that first line, then a real list of the rest. The typed hyphens are the list's bullets, so no
+    word changes; a short first line ("1. Chair") is set as the list's lead (BodyFilter::dashLines())."""
+    for p in list(root.elements("p")):
+        kids = [c for c in p.children if not (isinstance(c, str) and not c.strip())]
+        wrap = kids[0] if (len(kids) == 1 and isinstance(kids[0], El) and kids[0].tag in ("em", "strong", "i", "b", "span")) else None
+        lines = [[]]
+        for c in (wrap or p).children:
+            if isinstance(c, El) and c.tag == "br":
+                lines.append([])
+            else:
+                lines[-1].append(c)
+        lines = [l for l in lines if any(isinstance(x, El) or x.strip("\xa0 \n\t") for x in l)]
+        if len(lines) < 2:
+            continue
+
+        def lead(line):
+            first = next((x for x in line if not (isinstance(x, str) and not x.strip("\xa0 \n\t"))), None)
+            return first if isinstance(first, str) and DASH_LINE_RE.match(first) else None
+
+        if lead(lines[0]) is not None or any(lead(l) is None for l in lines[1:]):
+            continue
+        for l in lines[1:]:
+            i = l.index(lead(l))
+            l[i] = DASH_LINE_RE.sub("", l[i], count=1)
+
+        def box(tag, line):
+            el = El(tag)
+            target = el
+            if wrap is not None:
+                target = El(wrap.tag, wrap.attrs, el)
+                el.children.append(target)
+            for x in line:
+                if isinstance(x, El):
+                    x.parent = target
+                target.children.append(x)
+            return el
+
+        head = box("p", lines[0])
+        head.attrs = dict(p.attrs)
+        if len(norm_ws(head.text())) <= 40 and not head.elements("a"):
+            head.add_class("list-lead")
+        ul = El("ul")
+        for l in lines[1:]:
+            li = box("li", l)
+            li.parent = ul
+            ul.children.append(li)
+        replace_node(p, [head, ul])
 
 
 def only_image(cell):
@@ -1431,6 +1483,8 @@ def transform_body(cur, body, title):
                     parent.children.remove(p_el)
                 parent.children.insert(i, ul)
             run = []
+
+    dash_lines(root)
 
     # runs of non-breaking spaces typed for layout ("Telephone:" + 12 &nbsp;) → one space (whitespace only)
     for el in root.iter():
@@ -1670,7 +1724,7 @@ def transform_body(cur, body, title):
                 replace_node(t, flat)
                 continue
             cols = max((len(r.element_children()) for r in rows), default=0)
-            wrap = El("div", {"class": "table-wrap" + (" is-wide" if cols >= 5 else ""), "tabindex": "0"})
+            wrap = El("div", {"class": "table-wrap" + (" is-wide" if cols >= 5 else "")})
             replace_node(t, [wrap])
             t.parent = wrap
             wrap.children = [t]
@@ -2167,6 +2221,12 @@ PAGE_TWEAKS = {"/contact-us": _tweak_contact, "/parents/student-attendance": _tw
 
 
 # ---------------------------------------------------------------------------------------------- page pieces
+def nowrap_ranges(h):
+    """A number range typed with spaces ("Incoming 9 - 12") never breaks inside, so no line starts with its dash. Takes
+    and returns escaped HTML; the words are unchanged."""
+    return re.sub(r"(\d+) - (\d+)", r'<span class="nowrap">\1 - \2</span>', h)
+
+
 def page_hero(cur, title, eyebrow="", meta="", compact=False):
     """Page header. Hubs keep the tall photo band; leaf and task pages get the compact one, so the body starts on the
     first screen. When the menu names the page differently (Bell Schedule → "Timetable Structure 2026-2027"), the
@@ -2189,7 +2249,7 @@ def page_hero(cur, title, eyebrow="", meta="", compact=False):
             '<div class="page-hero-img" aria-hidden="true"><img src="{src}" alt="" width="{w}" height="{h}" fetchpriority="high"></div>'
             '<div class="wrap"><div class="region region-breadcrumb"><nav class="breadcrumb" id="block-breadcrumbs" aria-label="breadcrumb"><ol>{lis}</ol></nav></div>'
             '{eb}<h1 id="page-title">{t}</h1>{meta}</div></header>').format(
-        c=" page-hero--compact" if compact else "", src=src, w=w, h=h, lis=lis, eb=eb, t=esc(title), meta=meta)
+        c=" page-hero--compact" if compact else "", src=src, w=w, h=h, lis=lis, eb=eb, t=nowrap_ranges(esc(title)), meta=meta)
 
 
 def section_nav(cur):
@@ -2243,8 +2303,8 @@ def section_pager(cur):
                     panel_label(sec, target) or page_title(target))))
 
     return ('<!-- book-style pager over the section menu (menu order from design/ia.json) -->'
-            '<nav class="article-nav section-pager" aria-labelledby="pager-title"><h2 class="vh" id="pager-title">{}</h2>{}{}</nav>').format(
-        esc(sec["label"]), card(prev_p, "prev", "Previous"), card(next_p, "next", "Next"))
+            '<div class="article-nav section-pager">{}{}</div>').format(
+        card(prev_p, "prev", "Previous"), card(next_p, "next", "Next"))
 
 
 def absent_card(cur, cls="rail-absent"):
@@ -2309,7 +2369,7 @@ def child_cards(cur, children, heading_tag="h3", numbered=False, start=1, cls=""
         lis.append('<li><a class="hub-card{b}" href="{u}">{num}<{h}>{t}{x}</{h}>{d}'
                    '<span class="go" aria-hidden="true">{go}</span></a></li>'.format(
                        b=" hub-card--bare" if all_bare else "", u=esc(url), num='<span class="num" aria-hidden="true">{:02d}</span>'.format(i) if numbered else "",
-                       h=heading_tag, t=esc(keep_dash(c["title"])), x=EXT if ext else "",
+                       h=heading_tag, t=keep_dash(nowrap_ranges(esc(c["title"]))), x=EXT if ext else "",
                        d="<p>{}</p>".format("".join('<span class="ln">{}</span>'.format(esc(x)) for x in desc.split(LINE))
                                             if LINE in desc else esc(desc)) if desc else "",
                        go=go))
@@ -2528,9 +2588,10 @@ def render_article(path):
         links="".join("<li>{}</li>".format(a(path, h, "<span>{}</span>{}".format(esc(t), icon("arrow")), "arrow-link"))
                       for h, t in back))
     main = ('{hero}\n<div class="page-body"><div class="wrap page-grid">'
-            '<article class="page-content"><!-- field body + field attachments (media file) -->\n<div class="prose">{body}</div>{pager}</article>{side}'
+            '<article class="page-content"><!-- field body + field attachments (media file) -->\n<div class="prose">{body}</div>{pager}'
+            '<!-- Latest News under the article, not in the rail: a short story leaves no empty band under it -->{latest}</article>{side}'
             '{rail}</div></div>').format(hero=page_hero(path, title, sec["label"] if sec else "", meta, compact=True), side=side, body=body,
-                                         pager=pager, rail=rail(path, after=latest_html))
+                                         pager=pager, latest=latest_html, rail=rail(path))
     return shell(path, title, main, body_class(path), first_sentence(p.get("body", "")))
 
 
@@ -2723,7 +2784,7 @@ def render_home():
     # --- hero
     hero = ('<!-- region top_header: view site_header_content_block (name, slogan); the photo keeps #header-img-area for'
             ' bg_image_formatter, here as a real <img> so the browser finds it early -->\n'
-            '<section class="hero" id="header-img-area"><div class="wrap"><div class="hero-text">'
+            '<section class="hero"><div class="wrap"><div class="hero-text">'
             '<h1><span class="h1-pre">École Secondaire</span><span class="h1-main">Hugh McRoberts</span>'
             '<span class="h1-post">Secondary School</span></h1>'
             '<p class="slogan">Learning Together… <em>Achieving Our Dreams</em></p>'
@@ -3185,7 +3246,7 @@ def bell_html(cur):
             rot_rows[i].append('<td class="sem-rot{c}" data-from="{f}" data-to="{t}"><span class="rname">{n}:</span> '
                                '<span>{s}</span></td>'.format(c=" is-current" if here else "", f=d_iso(fr) if fr else "",
                                                               t=d_iso(to) if to else "", n=esc(name.strip()), s=esc(span.strip())))
-    semesters = ('<div class="table-wrap sem-wrap" tabindex="0"><table class="sem-table"><thead><tr>{}</tr></thead><tbody>'
+    semesters = ('<div class="table-wrap sem-wrap"><table class="sem-table"><thead><tr>{}</tr></thead><tbody>'
                  '<tr>{}</tr><tr>{}</tr><tr>{}</tr></tbody></table></div>').format(
         "".join(heads), "".join(dates), "".join(rot_rows[0]), "".join(rot_rows[1]))
     tables = []
@@ -3199,7 +3260,7 @@ def bell_html(cur):
             tds.append('<td data-col="{c}"{cl}>{cell}</td>'.format(c=esc(c), cl=' class="is-today"' if is_hl else "",
                                                                    cell=bell_cell(cols.get(c, []))))
         tables.append('<section class="rot" aria-labelledby="rot-{n}"><h3 class="rot-name" id="rot-{n}">{r}</h3>'
-                      '<div class="rot-wrap" tabindex="0" role="region" aria-labelledby="rot-{n}"><table class="rot-table" data-rot="{r}" aria-labelledby="rot-{n}"><thead><tr>{th}</tr></thead>'
+                      '<div class="rot-wrap" role="region" aria-labelledby="rot-{n}"><table class="rot-table" data-rot="{r}" aria-labelledby="rot-{n}"><thead><tr>{th}</tr></thead>'
                       '<tbody><tr>{td}</tr></tbody></table></div></section>'.format(n=n, r=esc(rname), th="".join(ths), td="".join(tds)))
     src, w, h = img_src(cur, "bf352cd7a200.png")
     data = {"built": d_iso(TODAY), "labels": LABELS,
@@ -3434,7 +3495,7 @@ def build_search_index():
         for t in info["events"]:
             href = EVENT_PAGES.get((t.lower(), d_iso(d)))
             ev = {"t": smart_case(t), "u": href.strip("/") + "/" if href else "school-calendar/#d-" + d_iso(d),
-                  "s": "School Calendar", "x": "", "d": d_iso(d)}
+                  "s": "School Calendar", "x": "", "d": d_iso(d), "c": 1}
             if is_no_school(t):
                 ev["o"] = 1
             out.append(ev)
@@ -3469,7 +3530,7 @@ def render_404():
     cur = "/"
     cards = child_cards(cur, [{"title": m["label"], "href": m["href"]} for m in PRIMARY], "h2", False)
     main = ('<!-- system 404 page (Page not found) in the theme -->\n'
-            '<header class="page-hero page-hero--404 on-dark" id="header-img-area"><div class="wrap nf-wrap"><div>'
+            '<header class="page-hero page-hero--404 on-dark"><div class="wrap nf-wrap"><div>'
             '<nav class="breadcrumb" aria-label="breadcrumb"><ol><li><a href="./">Home</a></li></ol></nav>'
             '<h1>Page not found</h1><p class="nf-lead">The requested page could not be found.</p></div>'
             '<p class="nf-num" aria-hidden="true"><span>4</span><span class="nf-arch">0</span><span>4</span></p></div></header>'
@@ -3495,7 +3556,7 @@ PROPOSAL = "/proposal"
 PROPOSAL_SRC = ROOT / "design" / "proposal"
 PROPOSAL_PDF = "mcroberts-website-redesign-proposal.pdf"
 THEME_ZIP = "downloads/mcroberts-drupal-theme.zip"     # the Drupal 10 sub-theme, linked when the build finds it
-PREVIEW_URL = os.environ.get("PREVIEW_URL", "").strip()  # the public address of docs/, when known (written out on paper)
+PREVIEW_URL = os.environ.get("PREVIEW_URL", "https://rajool.github.io/mcroberts-redesign/").strip()  # the public address of docs/, when known (written out on paper)
 
 # Lighthouse, mobile (accessibility, best practices). Today: research/audit.md §1 (mcroberts.sd38.bc.ca, 2026-10-06).
 # Redesign: the QA run on this preview (2026-10-06). SEO is left out: the preview is noindex on purpose.
@@ -3505,8 +3566,9 @@ LH_REDESIGN = {"home": (100, 100), "attendance": (100, 100)}
 AUDIT = {"multi_h1": "183 of 191", "heavy_page": 3.87e6, "images": 31.7e6, "link_fg": "#51ba8d", "link_bg": "#ffffff"}
 HEAVY_PAGE = "/our-school-story/news/2024/12/grade-8-student-mentor-connections"
 CAREER_PHOTO = "7551c96b0920.png"     # the Career Centre door photo (C5)
-# design/ia.md §1: blind tree test with simulated testers, 26 tasks (success rate)
-TREE_TEST = {"tasks": 26, "new": "88.5%", "live": "73.1%"}
+# design/ia.md §1: blind tree test with simulated testers, 26 tasks (success rate): the final menu (fresh re-test of
+# design/ia.json) and the live menu. With 2 testers per tree one task is worth about 4 points (ia.md §1, last bullet).
+TREE_TEST = {"tasks": 26, "new": "92.3%", "live": "73.1%", "point": "about 4 points"}
 # research/benchmark.md §5: McRoberts today and the best of the 12 benchmark sites, scored 1 to 5. The redesign column
 # is Ali's own score of this preview against the same "what 5 looks like" column.
 BENCH = [
@@ -3517,22 +3579,22 @@ BENCH = [
     ("News", 2, 4, 4, "Walnut Grove, Stevenson"),
     ("Events and calendar", 2, 4, 4, "Westdale, Fairfax Academy"),
     ("Alerts and closures", 2, 4, 4, "Eastside Catholic, Walnut Grove"),
-    ("Look and feel", 2, 5, 5, "Brighton College, West Island College"),
+    ("Look and feel", 2, 5, 5, "Brighton College, West Island College, Saint Xavier"),
     ("Photos", 2, 3, 5, "Brighton College, Webb School"),
     ("Accessibility", 3, 4, 4, "Shenton College, James Ruse"),
-    ("Translation", 3, 4, 5, "Fort Smith"),
+    ("Translation", 3, 1, 5, "Fort Smith"),   # this version shows no Translate control (owner's choice, 2026-10-07)
     ("On a phone", 2, 4, 4, "Eastside Catholic, Westdale"),
 ]
 # The seven before/after pairs: (image name, kind, title, one sentence, alt today, alt redesign)
 PAIRS = [
     ("home", "phone", "The first screen on a phone",
-     "The first screen now shows today's blocks, the next event and a one-tap call to report an absence. "
+     "The first screen now shows the day's blocks, the next event and a one-tap call to report an absence. "
      "Today that number is almost four screens down.",
      "Today's home page on a phone: the crest, the school name and a menu button.",
-     "The redesigned home page on a phone: today's blocks, the next event and the absence call button."),
+     "The redesigned home page on a phone: the day's blocks, the next event and the absence call button."),
     ("attendance", "phone", "Reporting an absence",
      "The page starts right away, and the Early Warning number is a button that calls it. "
-     "Today the title starts near the bottom of the screen and the number can't be tapped.",
+     "Today the title starts near the bottom of the screen and the number is plain text, not a call link.",
      "Today's Student Attendance page on a phone: the header fills most of the screen.",
      "The redesigned Student Attendance page on a phone, with a call button for the Early Warning number."),
     ("bell", "phone", "The bell schedule",
@@ -3625,6 +3687,11 @@ def _p_pair(n, item):
         kind=kind, n=n, t=esc(title), shots=shots, s=esc(sentence))
 
 
+def _url_html(u):
+    """An address as HTML that may break only after a slash (<wbr>), never inside a word."""
+    return re.sub(r"(?<!/)/(?!/)", "/<wbr>", esc(u))
+
+
 def _meter(v):
     return '<span class="meter" aria-hidden="true">{}</span>'.format("".join(
         '<i class="on"></i>' if k < v else "<i></i>" for k in range(5)))
@@ -3656,11 +3723,12 @@ def _ia_outline():
         cells.append('<li class="ia-cell"><h3><span class="ia-i" aria-hidden="true">{}</span>{}</h3><ul>{}</ul>{}</li>'.format(
             i, esc(m["label"]), items, more))
     test = ('<li class="ia-cell ia-test"><h3>Tree test</h3>'
-            '<div class="tt"><p class="tt-row tt-new"><span class="tt-bar" style="--v:{nv}"></span><b>{new}</b> new structure</p>'
+            '<div class="tt"><p class="tt-row tt-new"><span class="tt-bar" style="--v:{nv}"></span><b>{new}</b> the new menu</p>'
             '<p class="tt-row"><span class="tt-bar" style="--v:{lv}"></span><b>{live}</b> today&#x27;s menu</p></div>'
-            '<p class="tt-text">In a blind tree test with simulated testers and {n} everyday tasks, the structure this menu '
-            'is based on led to the right page {new} of the time, against {live} for today&#x27;s menu.</p></li>').format(
-        n=TREE_TEST["tasks"], new=TREE_TEST["new"], live=TREE_TEST["live"],
+            '<p class="tt-text">In a blind tree test with simulated testers and {n} everyday tasks, the new menu '
+            'led to the right page {new} of the time, against {live} for today&#x27;s menu. With two testers '
+            'each, one task is worth {pt}, so read these as a direction.</p></li>').format(
+        n=TREE_TEST["tasks"], new=TREE_TEST["new"], live=TREE_TEST["live"], pt=TREE_TEST["point"],
         nv=TREE_TEST["new"].rstrip("%"), lv=TREE_TEST["live"].rstrip("%"))
     return ('<div class="ia"><div class="ia-util"><p class="ia-k">On every page</p><ul>{}</ul></div>'
             '<ul class="ia-menu">{}{}</ul></div>').format("".join(util), "".join(cells), test)
@@ -3676,7 +3744,11 @@ def render_proposal():
     tel_pages = sum(1 for t in texts if 'href="tel:' in t)
     career_before = (ROOT / "assets" / "content" / CAREER_PHOTO).stat().st_size
     career_after = (DOCS / "assets" / "img" / IMAGES["map"].get(CAREER_PHOTO, CAREER_PHOTO)).stat().st_size
-    heavy_after = out_file(canon(HEAVY_PAGE)).stat().st_size
+    heavy_file = out_file(canon(HEAVY_PAGE))
+    heavy_html = heavy_file.read_text()
+    story = heavy_html[heavy_html.index("</header>", heavy_html.index('class="page-hero')):heavy_html.index("</main>")]
+    heavy_photos = dict.fromkeys(re.findall(r'<img\b[^>]*?\ssrc="([^"]+)"', story))   # the story's own photos, as today
+    heavy_after = heavy_file.stat().st_size + sum((heavy_file.parent / src).resolve().stat().st_size for src in heavy_photos)
     images_after = sum(f.stat().st_size for f in (DOCS / "assets" / "img").iterdir() if f.is_file())
     link_before = _contrast(AUDIT["link_fg"], AUDIT["link_bg"])
     link_after = _contrast(_token("forest"), _token("paper"))
@@ -3693,10 +3765,12 @@ def render_proposal():
                                "The site&#x27;s green comes from the crest."),
         ("words", "Every word", "Every heading, menu label and page uses words that are on our site today. "
                                 "A check compares each page with the live site and finds 0 new words."),
-        ("drupal", "Drupal 10 and the district&#x27;s setup", "The same content, views and blocks. It comes as a new "
-                                                             "theme plus menu settings, so no content has to move."),
-        ("undo", "Easy to undo", "Going back is one setting: make the current theme the default again. "
-                                 "Today&#x27;s menu can be saved first and put back too."),
+        ("drupal", "Drupal 10 and the district&#x27;s setup", "The same content and views; no page text is edited. "
+                                                             "A new theme plus settings for menus, page addresses (old "
+                                                             "ones redirect) and blocks. The bell schedule and a few "
+                                                             "home-page sentences are kept in the theme."),
+        ("undo", "Easy to undo", "Two steps: make the current theme the default again, then run the undo script that "
+                                 "comes with the theme. It puts back today&#x27;s menu, page addresses and any retired pages."),
     ]
     same_html = "".join('<li><span class="well">{}</span><h3>{}</h3><p>{}</p></li>'.format(_p_icon(k), t, d)
                         for k, t, d in same)
@@ -3717,7 +3791,7 @@ def render_proposal():
         ("Pages with more than one main heading", AUDIT["multi_h1"], "{} of {}".format(multi_h1, len(texts))),
         ("Pages where the absence number calls with one tap", "Home page only", "All {}".format(tel_pages)),
         ("Career Centre photo", _size(career_before), _size(career_after)),
-        ("Heaviest page (a story with images pasted into the text)", _size(AUDIT["heavy_page"]), _size(heavy_after)),
+        ("Heaviest page with its photos (a story with images pasted into the text)", _size(AUDIT["heavy_page"]), _size(heavy_after)),
         ("All images on the site", _size(AUDIT["images"]), _size(images_after)),
     ]
     num_rows = "".join('<tr><th scope="row">{}</th><td class="c-today">{}</td><td class="c-new">{}</td></tr>'.format(
@@ -3727,13 +3801,15 @@ def render_proposal():
     desks = "".join(_p_pair(i, p) for i, p in enumerate(PAIRS, 1) if p[1] == "desktop")
 
     zip_name = THEME_ZIP.rsplit("/", 1)[-1]
+    # on paper the address is written out (a break only after a slash, never inside a word)
+    zip_where = '<span class="url">{}</span>'.format(_url_html(PREVIEW_URL + THEME_ZIP)) if PREVIEW_URL else zip_name
     if zip_ok:
         zip_step = ('<a href="{}" download>Download the Drupal theme</a> ({}) and pass it to whoever looks after our '
-                    'site at the district.').format("../" * depth(cur) + THEME_ZIP, zip_name)
+                    'site at the district.').format("../" * depth(cur) + THEME_ZIP, zip_where)
     else:
-        zip_step = 'Download the Drupal theme ({}) and pass it to whoever looks after our site at the district.'.format(zip_name)
+        zip_step = 'Download the Drupal theme ({}) and pass it to whoever looks after our site at the district.'.format(zip_where)
     preview_line = ('<a href="{u}">Open the live preview</a>{w}').format(
-        u=esc(preview), w=' <span class="url">{}</span>'.format(esc(PREVIEW_URL)) if PREVIEW_URL else "")
+        u=esc(preview), w=' <span class="url">{}</span>'.format(_url_html(PREVIEW_URL)) if PREVIEW_URL else "")
 
     main = '''<header class="cover">
 <p class="eyebrow">Website redesign proposal</p>
@@ -3750,7 +3826,7 @@ def render_proposal():
 who wants to report an absence has to scroll almost four screens down the home page to find the number, and the bell
 schedule is a picture that is too small to read. I took the site&#x27;s own pages and built a working preview of a new
 design. It keeps the crest and every word as they are today, and it stays on Drupal 10, so it can be added as a new
-theme without moving any content.</p></div>
+theme without changing the text of any page.</p></div>
 <aside class="ask" aria-labelledby="ask-title"><h2 id="ask-title">What I am asking</h2>
 <p class="ask-big">Your feedback.</p>
 <p>Please open the preview on your phone and on a computer, and tell me what works and what doesn&#x27;t. If you like the
@@ -3761,7 +3837,8 @@ direction, I would be happy to walk you through it.</p>
 <div class="hero-today"><p class="shot-label shot-label--today">Today&#x27;s site</p>{hero_today}</div>
 <div class="hero-new"><p class="shot-label shot-label--redesign">Redesign</p><div class="hero-stage">{hero_desk}{hero_phone}</div></div>
 <figcaption><b>The home page.</b> The crest, our name and our motto lead the page, with the top tasks right under
-them and the absence number in the top bar of every page.</figcaption></figure>
+them and the absence number in the top bar of every page (on a phone, a call button in the bottom bar). The yellow
+bar shows how an alert from the school would look.</figcaption></figure>
 <section class="sec sec--same" aria-labelledby="same-title">
 <h2 id="same-title">What stays exactly the same</h2>
 <ul class="same-grid">{same}</ul>
@@ -3780,9 +3857,8 @@ every page holds the absence line and the main sign-ins.</p>
 </section>
 <section class="sec sec--numbers" aria-labelledby="numbers-title">
 <h2 id="numbers-title">Accessibility and speed, before and after</h2>
-<p class="lead">Measured with Lighthouse on a phone and from the files themselves. The home page was already quick
-(about 1.1 seconds on a slow phone connection), and nothing on it jumps while it loads. That stays the same. The big
-gains are in accessibility and in the heaviest files.</p>
+<p class="lead">Measured with Lighthouse on a phone and from the files themselves. The big gains are in accessibility
+and in the heaviest files.</p>
 <div class="table-wrap"><table class="numbers">
 <thead><tr><th scope="col">Measure</th><th scope="col">Today</th><th scope="col">Redesign</th></tr></thead>
 <tbody>{num_rows}</tbody></table></div>
@@ -3790,8 +3866,9 @@ gains are in accessibility and in the heaviest files.</p>
 </section>
 <section class="sec sec--compare" aria-labelledby="compare-title">
 <h2 id="compare-title">How it compares with the best school websites</h2>
-<p class="lead">We compared McRoberts with 12 of the best school websites of 2024 to 2026, from BC to the UK, on a scale
-of 1 to 5. I scored the redesign the same way. Those scores are mine, so please judge them on the preview.</p>
+<p class="lead">I compared McRoberts with 12 of the best school websites today, most of them launched or awarded in 2025
+or 2026, from BC to the UK, on a scale of 1 to 5, and scored the redesign the same way. The redesign&#x27;s scores are my
+own, so please judge them on the preview.</p>
 <div class="table-wrap"><table class="bench">
 <thead><tr><th scope="col">Area</th><th scope="col">Today</th><th scope="col">Redesign</th><th scope="col">Best of the 12</th></tr></thead>
 <tbody>{bench_rows}</tbody>
@@ -3805,8 +3882,10 @@ of 1 to 5. I scored the redesign the same way. Those scores are mine, so please 
 <li><span>{zip_step}</span></li>
 <li><span>Try it on a staging copy first. A Platform.sh branch environment copies the live site&#x27;s content, so the
 real site does not change while it is tested.</span></li>
-<li><span>When it looks right, make the new theme the default and add the new menu settings.</span></li>
-<li><span>If anything goes wrong, make the current theme the default again.</span></li>
+<li><span>When it looks right, make the new theme the default and apply its settings for menus, page addresses and
+blocks.</span></li>
+<li><span>If anything goes wrong, make the current theme the default again and run the theme&#x27;s undo script (the
+steps are in its README).</span></li>
 </ol>
 </section>
 <footer class="signoff">

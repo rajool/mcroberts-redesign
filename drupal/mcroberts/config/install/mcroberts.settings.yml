@@ -1,5 +1,7 @@
-# Theme settings. Bootstrap Barrio's own settings are inherited unchanged: whatever Bootstrap library they attach is
-# switched off by libraries-override in mcroberts.info.yml.
+# Theme settings. Bootstrap Barrio's own settings (bootstrap_barrio_*) are not set here, so theme_get_setting() reads
+# them as unset for this sub-theme: Barrio then adds region__nowrap suggestions and a "row" class to regions, which
+# mcroberts.theme takes out again (mcroberts_theme_suggestions_region_alter(), mcroberts_preprocess_region()). Any
+# Bootstrap library Barrio attaches is switched off by libraries-override in mcroberts.info.yml.
 features:
   comment_user_picture: true
   comment_user_verification: true

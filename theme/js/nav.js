@@ -207,4 +207,25 @@
       targets.forEach(function (t) { io.observe(t); });
     }
   };
+  /* External links open in a new tab; links within the site stay in this tab. Marked on attach, and once more on
+     click so links that scripts add later (search results, calendar) behave the same. */
+  McR.behaviors.externalLinks = {
+    attach: function (context) {
+      var mark = function (a) {
+        if (a.target || !/^https?:$/.test(a.protocol) || a.origin === window.location.origin) return;
+        a.target = '_blank';
+        var rel = (a.getAttribute('rel') || '').split(' ').filter(Boolean);
+        if (rel.indexOf('noopener') === -1) rel.push('noopener');
+        a.setAttribute('rel', rel.join(' '));
+      };
+      Array.prototype.forEach.call((context || document).querySelectorAll('a[href]'), mark);
+      if (!McR.externalClicks) {
+        McR.externalClicks = true;
+        document.addEventListener('click', function (e) {
+          var a = e.target.closest && e.target.closest('a[href]');
+          if (a) mark(a);
+        }, true);
+      }
+    }
+  };
 })();

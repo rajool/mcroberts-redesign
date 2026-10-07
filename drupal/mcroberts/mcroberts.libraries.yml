@@ -79,9 +79,3 @@ gallery:
   dependencies:
     - mcroberts/global
 
-pager:
-  version: '1.0'
-  js:
-    js/pager.js: {}
-  dependencies:
-    - mcroberts/views

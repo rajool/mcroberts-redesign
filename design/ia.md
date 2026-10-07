@@ -26,6 +26,7 @@ failed below when either tester missed the answer page.
 | Audience-first | 86.5% | 88.5% | 1, 5, 16, 20 |
 | **Top-task-first (base of this IA)** | **88.5%** | **94.2%** | 1, 16, 20 |
 | Topic-first | 80.8% | 76.9% | 1, 5, 6, 8, 16, 20, 23 |
+| **Final IA (this file), fresh blind re-test** | **92.3%** | **94.2%** | 2 new testers, same 26 tasks (2026-10-06) |
 
 | # | Task (persona) | Live | Audience | Tasks | Topics | Final tree: where the answer is |
 |---|---|---|---|---|---|---|
@@ -122,7 +123,7 @@ columns use headings that already exist on the live site, or have no heading.
 "Home" is dropped because the crest links home. The vague "Information" bucket is split up and its pages are filed
 by task.
 
-### Utility bar (every page, next to the existing Translate, Search and Accessibility Settings blocks)
+### Utility bar (every page)
 
 **Student Absent?** (to Student Attendance) · **604-668-6600 (Ext. 1)** (`tel:+16046686600,1`) · **MyEducation BC** ·
 **School Cash Online** · **Office 365** · **Contact Us**

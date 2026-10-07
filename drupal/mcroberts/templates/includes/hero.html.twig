@@ -6,9 +6,9 @@
  * the menu names the page differently (Bell Schedule → "Timetable Structure 2026-2027"), the menu label is the
  * eyebrow, so the header confirms where the visitor landed.
  *
- * Variables: c (Site::chrome()), title, eyebrow, alias, compact, breadcrumb (render array or markup),
+ * Variables: c (Site::chrome()), title, title_html (Site::nowrapRanges(): a number range never breaks), eyebrow, alias, compact, breadcrumb (render array or markup),
  * meta (Calendar::parts() of the article's "Updated:" date, or empty).
  */
 #}
 <!-- node full: #header-img-area photo (bg_image_formatter), breadcrumb region (system_breadcrumb_block), title -->
-<header class="page-hero on-dark{{ compact ? ' page-hero--compact' : '' }}" id="header-img-area"><div class="page-hero-img" aria-hidden="true"><img src="{{ c.header_img.src }}" alt="" width="{{ c.header_img.w }}" height="{{ c.header_img.h }}" fetchpriority="high"></div><div class="wrap"><div class="region region-breadcrumb">{{ breadcrumb }}</div>{% if alias %}<p class="eyebrow eyebrow--alias">{{ alias }}</p>{% elseif eyebrow %}<p class="eyebrow">{{ eyebrow }}</p>{% else %}<p class="eyebrow" aria-hidden="true"></p>{% endif %}<h1 id="page-title">{{ title }}</h1>{% if meta %}<p class="hero-meta"><strong>Updated:</strong> <time datetime="{{ meta.iso }}">{{ meta.long }}</time></p>{% endif %}</div></header>
+<header class="page-hero on-dark{{ compact ? ' page-hero--compact' : '' }}" id="header-img-area"><div class="page-hero-img" aria-hidden="true"><img src="{{ c.header_img.src }}" alt="" width="{{ c.header_img.w }}" height="{{ c.header_img.h }}" fetchpriority="high"></div><div class="wrap"><div class="region region-breadcrumb">{{ breadcrumb }}</div>{% if alias %}<p class="eyebrow eyebrow--alias">{{ alias }}</p>{% elseif eyebrow %}<p class="eyebrow">{{ eyebrow }}</p>{% else %}<p class="eyebrow" aria-hidden="true"></p>{% endif %}<h1 id="page-title">{{ title_html|default(title) }}</h1>{% if meta %}<p class="hero-meta"><strong>Updated:</strong> <time datetime="{{ meta.iso }}">{{ meta.long }}</time></p>{% endif %}</div></header>

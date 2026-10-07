@@ -74,6 +74,45 @@
     return total + (item.p ? 1 : 0);
   }
 
+  /* equal scores: calendar events coming up first, nearest first, then past ones, latest first; everything else (news)
+     latest first */
+  function order(a, b, today) {
+    if (b.sc !== a.sc) return b.sc - a.sc;
+    var ad = String(a.it.d || ''), bd = String(b.it.d || '');
+    if (a.it.c && b.it.c) {
+      var au = ad >= today, bu = bd >= today;
+      if (au !== bu) return au ? -1 : 1;
+      return au ? ad.localeCompare(bd) : bd.localeCompare(ad);
+    }
+    return bd.localeCompare(ad);
+  }
+  var days = function (a, b) { return Math.abs(Date.parse(a) - Date.parse(b)) / 864e5; };
+  /* the same event on school days in a row (Grad Photos by Appt, Jan 5 to 13) is one result with its date range;
+     it links to the first date in the order shown */
+  function group(found) {
+    var out = [];
+    found.forEach(function (r) {
+      var g = out[out.length - 1], d = r.it.d;
+      if (g && r.it.c && g.it.c && r.it.t === g.it.t && r.sc === g.sc && (days(d, g.to) <= 4 || days(d, g.from) <= 4)) {
+        if (d < g.from) g.from = d;
+        if (d > g.to) g.to = d;
+        return;
+      }
+      out.push({ it: r.it, sc: r.sc, from: d, to: d });
+    });
+    return out;
+  }
+  /* "Jan 5, 2027", or a range: "Jan 5 – 13, 2027", "Jan 29 – Feb 2, 2027", "Dec 30, 2026 – Jan 2, 2027" */
+  function when(from, to) {
+    var M = McR.date.MONTHS, a = McR.date.parse(from), b = McR.date.parse(to);
+    var t = function (iso, txt) { return '<time datetime="' + iso + '">' + txt + '</time>'; };
+    var md = function (d) { return M[d.getUTCMonth()] + ' ' + d.getUTCDate(); };
+    if (from === to) return t(from, md(a) + ', ' + a.getUTCFullYear());
+    var y = a.getUTCFullYear() === b.getUTCFullYear();
+    var end = (y && a.getUTCMonth() === b.getUTCMonth() ? b.getUTCDate() : md(b)) + ', ' + b.getUTCFullYear();
+    return '<span class="range">' + t(from, md(a) + (y ? '' : ', ' + a.getUTCFullYear())) + ' \u2013 ' + t(to, end) + '</span>';
+  }
+
   McR.behaviors.search = {
     attach: function (context) {
       McR.once('mcr-search-page', '[data-search]', context).forEach(function (root) {
@@ -94,17 +133,18 @@
           var terms = fold(keys).split(/\s+/).filter(function (t) { return t.length > 0; });
           if (!terms.length) { box.hidden = true; status.textContent = ''; return; }
           load().then(function () {
-            var found = index.map(function (it) { return { it: it, sc: score(it, terms) }; })
+            var today = McR.date.now().iso;
+            var found = group(index.map(function (it) { return { it: it, sc: score(it, terms) }; })
               .filter(function (r) { return r.sc > 0; })
-              .sort(function (a, b) { return b.sc - a.sc || String(b.it.d || '').localeCompare(String(a.it.d || '')); });
+              .sort(function (a, b) { return order(a, b, today); }));
             box.hidden = false;
             n.textContent = found.length;
             empty.hidden = found.length > 0;
             status.textContent = box.querySelector('h2 span').textContent + ' ' + found.length;
             list.innerHTML = found.slice(0, 60).map(function (r) {
-              var it = r.it, href = it.e ? it.u : prefix + it.u, d = it.d ? McR.date.parse(it.d) : null;
+              var it = r.it, href = it.e ? it.u : prefix + it.u;
               return '<li class="result"><p class="result-meta">' + (it.s ? '<span class="result-sec">' + esc(it.s) + '</span>' : '') +
-                (d ? '<time datetime="' + it.d + '">' + McR.date.MONTHS[d.getUTCMonth()] + ' ' + d.getUTCDate() + ', ' + d.getUTCFullYear() + '</time>' : '') +
+                (it.d ? when(r.from, r.to) : '') +
                 '</p><h3><a href="' + esc(href) + '">' + mark(it.t, terms) + '</a>' + (it.e ? McR.icon('ext', 'ext-mark') : '') + '</h3>' +
                 (it.x ? '<p class="result-snip">' + excerpt(it.x, terms) + '</p>' : '') + '</li>';
             }).join('');

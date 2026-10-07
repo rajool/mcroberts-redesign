@@ -54,7 +54,7 @@ Nothing in any node, paragraph, media item or field changes. The theme reads wha
 |---|---|
 | District strip, Student Absent? pill, sign-ins | menu `utility` (region secondary_menu), hardcoded district logo as on live |
 | Crest lockup | view `site_header_content_block` (region top_header); the crest is `logo.png`, the original file byte for byte, and `images/39ef9ae7e316-*.png` its scaled copies |
-| Translate, Accessibility Settings, Search | the theme's controls on every page (GTranslate languages from its configuration, the a11y module's class contract, GET `/search/node?keys=`) |
+| Search, Accessibility Settings | Search in the header of every page (GET `/search/node?keys=`); Accessibility Settings in the footer of every page (the a11y module's class contract). Translate is not shown in this version |
 | Mega menu, phone menu, section menu, previous/next, breadcrumb hub | menu `main` (3 levels: item, column, link) |
 | Alert band | view `news_alerts` (region featured_top), only when it has rows |
 | Page header, body, hub cards, rail | the node templates (`templates/content/`), fed by `mcroberts_preprocess_node()`; hub cards from menu `main` or menu `hub-links` |
@@ -78,7 +78,8 @@ configuration still prints (DS layouts, views_bootstrap grids) get a small `brid
 ## Front-end code
 
 `css/` and `js/` are byte-for-byte copies of the preview's `theme/` folder, written by `tools/package_drupal.py`
-(never edit the copies; it also refuses to zip when they differ). `bridge/` holds the only Drupal-specific files:
+(never edit the copies; it also refuses to zip when they differ). The preview's stand-ins for what Drupal does on the
+server, `js/search.js` (core search) and `js/pager.js` (the views pager), are left out. `bridge/` holds the only Drupal-specific files:
 
 - `mcroberts.pre.js` and `mcroberts.post.js` wrap every feature in `Drupal.behaviors` (one behavior per feature,
   `Drupal.behaviors.mcroberts<Name>`) and hand the element marking to `core/once`. No jQuery.
@@ -138,10 +139,12 @@ log. In short:
 2. Display Suite: the five node types render through the theme's templates (look for `page-hero` on a basic page,
    an article, an event, School Calendar and Our Staff).
 3. Views: the `views-element-container` wrapper is gone around the quick links, home buttons, alerts, site header
-   and upcoming events (the container suggestions `container__view__<view>__<display>`); field names used in the
+   and upcoming events (the container suggestions `container__view__<view>__<display>`, added by
+   `mcroberts_theme_suggestions_container_alter()`); field names used in the
    preprocess (`field_event_date`, `field_content_area`, `field_link`, `bp_accordion_section`) match, and the
    Social Media Links template still receives `platforms` with a `url` per platform.
-4. Front page: Helpful Links lists the Student Absent? note first, then the three day tiles, then the quick links.
+4. Front page: Helpful Links (the theme's `region--sidebar-second.html.twig`, not Barrio's `region--nowrap`) lists the
+   Student Absent? note first, then the three day tiles, then the quick links, on a cold and a warm render cache.
 5. Menus: the mega panels show all three levels; `[Most requested]` columns print no heading.
 6. Redirects: every row of `redirects.csv` answers 301; `/node/1813` and `/media/1069` reach their new aliases.
 7. Caching: today-dependent parts (Today, School Calendar, Bell Schedule, Upcoming Events) set a max-age to midnight;
@@ -152,13 +155,13 @@ log. In short:
 
 ```
 mcroberts.info.yml          regions (the live machine names), libraries-override, logo
-mcroberts.libraries.yml     fonts, global, views, today, calendar, bell, filter, gallery, pager
+mcroberts.libraries.yml     fonts, global, views, today, calendar, bell, filter, gallery
 mcroberts.theme             preprocess hooks and template suggestions
 logo.png                    the crest, the original file byte for byte
 config/install, config/schema   theme settings
 src/                        Site (menus, sections, contact), Teaser (card lines, news items),
                             Calendar (events, bell schedule, today), BodyFilter (rich text at render time)
-css/, js/                   copies of the preview's theme/ (tools/package_drupal.py)
+css/, js/                   copies of the preview's theme/, less js/search.js and js/pager.js (tools/package_drupal.py)
 bridge/                     Drupal.behaviors + core/once adapter; compat.css, drupal.css
 data/                       bell-schedule.json, image-text.json, tiles.json, empty.json
 images/                     scaled crest, district logo, header photo, front-page and tile pictures

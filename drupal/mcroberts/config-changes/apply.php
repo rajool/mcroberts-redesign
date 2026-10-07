@@ -132,6 +132,24 @@ if ($rollback) {
 if (!$apply) {
   $say('DRY RUN: nothing is saved. Add -- --apply to apply.');
 }
+elseif ($log) {
+  // a second --apply would create every new menu link again and disable the first run's links
+  $say('Already applied: ' . count($log) . ' changes are logged (state mcroberts_ia.log). Run -- --rollback first, then -- --apply.');
+  return;
+}
+elseif (!$etm->getStorage('block')->loadByProperties(['theme' => 'mcroberts'])) {
+  // checked before any change, so the run never stops half way for this
+  $say('The mcroberts theme has no blocks yet: run `drush theme:install mcroberts` while rsd_sites_barrio is the default, then run this again. Nothing was changed.');
+  return;
+}
+else {
+  // the log is saved however the run ends (an exception half way included), so --rollback can undo what was done
+  register_shutdown_function(function () use ($state, &$log) {
+    if ($log) {
+      $state->set('mcroberts_ia.log', $log);
+    }
+  });
+}
 
 /**
  * The system path behind an alias or a system path ("/node/12"), or NULL.
@@ -329,7 +347,7 @@ $say('4. Blocks of the mcroberts theme');
 $blocks = $etm->getStorage('block');
 $theme_blocks = $blocks->loadByProperties(['theme' => 'mcroberts']);
 if (!$theme_blocks) {
-  $say('  the mcroberts theme has no blocks yet: run `drush theme:install mcroberts` while rsd_sites_barrio is the default, then re-run');
+  $say('  the mcroberts theme has no blocks yet: run `drush theme:install mcroberts` while rsd_sites_barrio is the default first');
 }
 $find = function (string $plugin, ?string $region = NULL) use ($theme_blocks) {
   foreach ($theme_blocks as $block) {
