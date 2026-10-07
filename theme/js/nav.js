@@ -18,8 +18,13 @@
         var tops = Array.prototype.slice.call(nav.querySelectorAll(':scope > li > a, :scope > li > button'));
         var panelOf = function (b) { return document.getElementById(b.getAttribute('aria-controls')); };
         var openBtn = function () { return buttons.filter(function (b) { return b.getAttribute('aria-expanded') === 'true'; })[0]; };
+        var topOf = function (b) {
+          var a = b.previousElementSibling;
+          return a && a.classList.contains('menu-top') ? a : null;
+        };
         var setOpen = function (b, open) {
           b.setAttribute('aria-expanded', String(open));
+          if (topOf(b)) topOf(b).setAttribute('aria-expanded', String(open));
           var p = panelOf(b);
           if (!p) return;
           p.hidden = !open;
@@ -43,6 +48,36 @@
             if (btn.getAttribute('aria-expanded') !== 'true') { closeAll(btn); setOpen(btn, true); }
             var first = panelOf(btn) && panelOf(btn).querySelector('a');
             if (first) first.focus();
+          });
+        });
+
+        /* The top-level title opens its panel (it does not navigate); the hub page is the panel's own title link.
+           With a mouse, resting on an item opens its panel and leaving it closes it, after short delays. */
+        var hover = window.matchMedia && window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+        buttons.forEach(function (btn) {
+          var top = topOf(btn);
+          var li = btn.parentElement;
+          var timer = null;
+          if (top) {
+            top.setAttribute('aria-expanded', 'false');
+            top.setAttribute('aria-controls', btn.getAttribute('aria-controls'));
+            top.addEventListener('click', function (e) {
+              e.preventDefault();
+              if (btn.getAttribute('aria-expanded') !== 'true') { closeAll(btn); setOpen(btn, true); }
+            });
+          }
+          if (!hover || !li) return;
+          li.addEventListener('mouseenter', function () {
+            clearTimeout(timer);
+            timer = setTimeout(function () {
+              if (btn.getAttribute('aria-expanded') !== 'true') { closeAll(btn); setOpen(btn, true); }
+            }, 120);
+          });
+          li.addEventListener('mouseleave', function () {
+            clearTimeout(timer);
+            timer = setTimeout(function () {
+              if (!li.contains(document.activeElement)) setOpen(btn, false);
+            }, 280);
           });
         });
 
