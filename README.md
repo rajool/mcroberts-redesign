@@ -33,10 +33,7 @@ To refresh the content from the live site:
 The build reads the web copies in `assets/img/` and, of the originals in `assets/content/`, only the crest
 (`39ef9ae7e316.png`), the Strikers logo (`9f4ea14a6ad5.png`) and the building photo (`de1fed0d163f.png`), which stay
 in git. `tools/images.py` stops without writing anything while an original that `content/images.json` maps is missing
-from `assets/content/`, so run it after `crawl.py` and `extract.py`, or after putting back the 68 originals of the last
-commit that holds them, without re-crawling:
-
-    git restore --source=2d09564 --worktree -- assets/content   # ignored files, nothing staged (git checkout would stage them)
+from `assets/content/`, so run it after `crawl.py` and `extract.py`, which download the originals from the live site.
 
 For an image the live site no longer serves, `tools/images.py --allow-missing` keeps its entry in `content/images.json`
 and its web copy in `assets/img/` as they are, so a page that still names it builds.

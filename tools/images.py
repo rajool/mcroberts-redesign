@@ -5,9 +5,7 @@ Writes content/images.json: the map {original name: web copy name} and each web 
     python3 tools/images.py
 
 The originals are not in git (only the crest, the Strikers logo and the building photo are): tools/extract.py
-downloads them, and `git restore --source=2d09564 --worktree -- assets/content` puts back the 68 of the last commit
-that holds them without re-crawling (as ignored files, nothing staged; `git checkout` would stage them). The script
-refuses to run, and writes nothing, while an original that content/images.json maps is missing from assets/content,
+downloads them from the live site. The script refuses to run, and writes nothing, while an original that content/images.json maps is missing from assets/content,
 since it cannot remake that original's web copy.
     python3 tools/images.py --allow-missing   # for an image the live site no longer serves
 
@@ -22,7 +20,6 @@ SRC, DST = ROOT / "assets" / "content", ROOT / "assets" / "img"
 INDEX = ROOT / "content" / "images.json"
 MAX = 1600
 KEEP_PNG = {"39ef9ae7e316.png", "1653644d0ced.png", "ce22c9dd5452.png"}  # crest and district logo: untouched pixels
-RESTORE = "git restore --source=2d09564 --worktree -- assets/content"   # the originals of the last commit with them
 
 
 def props(p):
@@ -70,12 +67,11 @@ def main():
     missing = sorted(n for n in old["map"] if not (SRC / n).is_file())
     if missing and "--allow-missing" not in sys.argv[1:]:
         sys.exit("tools/images.py: assets/content lacks {} of the {} originals that content/images.json maps "
-                 "(for example {}). The originals are not in git. To put back the ones of the last commit that holds "
-                 "them, without re-crawling: {} (ignored files, nothing staged). Or run the refresh first "
-                 "(python3 tools/crawl.py, then python3 tools/extract.py). Then run this script again; with "
+                 "(for example {}). The originals are not in git: run the refresh first (python3 tools/crawl.py, "
+                 "then python3 tools/extract.py), which downloads them, then run this script again; with "
                  "--allow-missing it keeps the web copies in assets/img of the originals still missing. "
                  "Nothing was written."
-                 .format(len(missing), len(old["map"]), ", ".join(missing[:3]), RESTORE))
+                 .format(len(missing), len(old["map"]), ", ".join(missing[:3])))
     DST.mkdir(parents=True, exist_ok=True)
     made = {}   # original name -> (web copy name, [w, h])
     for p in sorted(SRC.iterdir()) if SRC.is_dir() else []:
