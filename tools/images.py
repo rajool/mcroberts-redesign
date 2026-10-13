@@ -3,8 +3,13 @@
 Longest side at most 1600 px; large opaque PNGs become JPEG. Uses macOS sips only.
 Prints a JSON map {original name: optimized name} into content/images.json.
     python3 tools/images.py
+
+The originals are not in git (only the crest, the Strikers logo and the building photo are): tools/extract.py
+downloads them. So the script refuses to run, and writes nothing, while any original that content/images.json maps
+is missing from assets/content; otherwise it would rewrite the map with only the images at hand.
+    python3 tools/images.py --allow-missing   # rebuild the map from the originals at hand (the live site dropped one)
 """
-import json, re, subprocess, time
+import json, re, subprocess, sys, time
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -25,7 +30,22 @@ def props(p):
     return w, h, alpha
 
 
+def missing_originals():
+    """Originals named in content/images.json's map that are not in assets/content."""
+    index = ROOT / "content" / "images.json"
+    if not index.exists():
+        return [], 0
+    names = json.loads(index.read_text())["map"]
+    return sorted(n for n in names if not (SRC / n).is_file()), len(names)
+
+
 def main():
+    missing, total = missing_originals()
+    if missing and "--allow-missing" not in sys.argv[1:]:
+        sys.exit("tools/images.py: assets/content lacks {} of the {} originals that content/images.json maps "
+                 "(for example {}). The originals are not in git: run the refresh first (python3 tools/crawl.py, "
+                 "then python3 tools/extract.py), then this script. Nothing was written."
+                 .format(len(missing), total, ", ".join(missing[:3])))
     DST.mkdir(parents=True, exist_ok=True)
     mapping, sizes = {}, {}
     for p in sorted(SRC.iterdir()):

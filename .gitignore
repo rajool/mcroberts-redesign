@@ -3,3 +3,8 @@ cache/
 __pycache__/
 *.pyc
 shots/
+# Originals crawled from the live site: tools/extract.py downloads them. The build reads only these three.
+assets/content/*
+!assets/content/39ef9ae7e316.png
+!assets/content/9f4ea14a6ad5.png
+!assets/content/de1fed0d163f.png
