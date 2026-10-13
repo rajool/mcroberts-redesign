@@ -2,7 +2,7 @@
 
 - School: **École Secondaire Hugh McRoberts Secondary School** - motto: *Learning Together... Achieving Our Dreams*
 - Address: 8980 Williams Road, Richmond, BC, V7A 1G6, Canada - phone 604-668-6600 - mcroberts@sd38.bc.ca
-- Logo: assets/content/39ef9ae7e316.png (original), header photo: assets/content/9f961d6d672b.jpg (green-tinted, 1400x400)
+- Logo: assets/content/39ef9ae7e316.png (original), header photo: assets/img/9f961d6d672b.jpg (web copy, green-tinted, 1400x400)
 - Pages: 142 - news items indexed: 308 - calendar events (ICS feed + calendar page): 359
 
 ## Main menu

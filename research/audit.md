@@ -156,9 +156,9 @@ far down it.**
   `/parents/student-attendance` (43 KB). The server returns HTML **without gzip or brotli** even when the request
   accepts them (`/` is 61 KB raw; the 3.87 MB page also goes out raw). Lighthouse DocumentLatency reports
   "Compression was applied: FAILED".
-- **Fix:** move the embedded images to managed files (a one-time content cleanup; the concept build has already
-  extracted them to `assets/content/`). Add a text-format filter that rejects `data:` URIs. Turn on compression at
-  the platform level (Platform.sh routes/web config) or in Drupal performance settings.
+- **Fix:** move the embedded images to managed files (a one-time content cleanup; the concept build extracts them
+  to image files and serves their web copies from `assets/img/`). Add a text-format filter that rejects `data:` URIs.
+  Turn on compression at the platform level (Platform.sh routes/web config) or in Drupal performance settings.
 
 **H5. The heading structure is broken on almost every page.**
 - Evidence: **183 of 191 pages have two `<h1>`s**, because the site name in the header is an `<h1>` wrapped in a link,

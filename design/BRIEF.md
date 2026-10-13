@@ -38,5 +38,7 @@ usable and beautiful secondary-school website we can make, built only from what 
 
 ## Sources
 
-`content/` (pages.json, menu.json, site.json, news.json, events.json, INVENTORY.md, corpus.txt), `assets/content/`
-(images from the live site), `cache/raw/` (raw crawled HTML of the live site, for reference only).
+`content/` (pages.json, menu.json, site.json, news.json, events.json, INVENTORY.md, corpus.txt), `assets/img/`
+(web copies of the live site's images; the originals in `assets/content/` come from the content refresh and are not in
+git, except the crest, the Strikers logo and the building photo), `cache/raw/` (raw crawled HTML of the live site, for
+reference only).
