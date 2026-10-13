@@ -22,12 +22,21 @@ calendar's current month, Collaboration Days) are rendered for the build day and
 To refresh the content from the live site:
 
     python3 tools/crawl.py           # live pages → cache/raw/ (not in git)
-    python3 tools/extract.py         # cache/raw/ → content/*.json (pages, menu, site, news, events)
+    python3 tools/extract.py         # cache/raw/ → content/*.json (pages, menu, site, news, events) + the original
+                                     # images → assets/content/ (not in git, except the three the build reads)
     python3 tools/images.py          # assets/content/ → assets/img/ (web sizes) + content/images.json
     python3 tools/inventory.py       # content/corpus.txt (every phrase the live site shows) + INVENTORY.md
     python3 tools/article_dates.py   # content/article-dates.json
     python3 tools/learning_story.py  # content/learning-story.json
     python3 build.py
+
+The build reads the web copies in `assets/img/` and, of the originals in `assets/content/`, only the crest
+(`39ef9ae7e316.png`), the Strikers logo (`9f4ea14a6ad5.png`) and the building photo (`de1fed0d163f.png`), which stay
+in git. `tools/images.py` stops without writing anything while an original that `content/images.json` maps is missing
+from `assets/content/`, so run it after `crawl.py` and `extract.py`, which download the originals from the live site.
+
+For an image the live site no longer serves, `tools/images.py --allow-missing` keeps its entry in `content/images.json`
+and its web copy in `assets/img/` as they are, so a page that still names it builds.
 
 ### The proposal
 
@@ -50,7 +59,7 @@ when the build finds it.
 | `design/` | The brief, the chosen direction (`decision.md`), the site structure (`ia.json`, explained in `ia.md`), and the proposal's stylesheet and screenshots (`proposal/`) |
 | `research/` | Audit of the live site, benchmark, best practices, and how every component maps to Drupal (`drupal-mapping.md`) |
 | `content/` | The live site's content as data. `corpus-images.txt` holds the words shown inside images, transcribed |
-| `assets/` | The live site's images (`content/`, originals; the crest is `39ef9ae7e316.png`) and web copies (`img/`) |
+| `assets/` | The live site's images: web copies (`img/`) and originals (`content/`, fetched by the refresh and not in git, except the crest `39ef9ae7e316.png`, the Strikers logo `9f4ea14a6ad5.png` and the building photo `de1fed0d163f.png`) |
 | `theme/` | The front-end code shared with the Drupal theme: `css/` (tokens, base, layout, components, pages, views, print) and `js/` (vanilla behaviours, each started from an `attach(context)` function) |
 | `drupal/mcroberts/` | The Drupal 10 sub-theme of Bootstrap Barrio (templates, preprocess, the IA as configuration changes); its `css/` and `js/` are copies of `theme/`. See its README |
 | `build.py` | Renders `content/` with `theme/` into `docs/` |

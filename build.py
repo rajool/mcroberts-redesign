@@ -3566,6 +3566,7 @@ LH_REDESIGN = {"home": (100, 100), "attendance": (100, 100)}
 AUDIT = {"multi_h1": "183 of 191", "heavy_page": 3.87e6, "images": 31.7e6, "link_fg": "#51ba8d", "link_bg": "#ffffff"}
 HEAVY_PAGE = "/our-school-story/news/2024/12/grade-8-student-mentor-connections"
 CAREER_PHOTO = "7551c96b0920.png"     # the Career Centre door photo (C5)
+CAREER_BEFORE = 24178678              # its bytes on the live site (C5); the original is not in git, only its web copy
 # design/ia.md §1: blind tree test with simulated testers, 26 tasks (success rate): the final menu (fresh re-test of
 # design/ia.json) and the live menu. With 2 testers per tree one task is worth about 4 points (ia.md §1, last bullet).
 TREE_TEST = {"tasks": 26, "new": "92.3%", "live": "73.1%", "point": "about 4 points"}
@@ -3742,7 +3743,7 @@ def render_proposal():
     one_h1 = sum(1 for t in texts if len(re.findall(r"<h1[\s>]", t)) == 1)
     multi_h1 = sum(1 for t in texts if len(re.findall(r"<h1[\s>]", t)) > 1)
     tel_pages = sum(1 for t in texts if 'href="tel:' in t)
-    career_before = (ROOT / "assets" / "content" / CAREER_PHOTO).stat().st_size
+    career_before = CAREER_BEFORE
     career_after = (DOCS / "assets" / "img" / IMAGES["map"].get(CAREER_PHOTO, CAREER_PHOTO)).stat().st_size
     heavy_file = out_file(canon(HEAVY_PAGE))
     heavy_html = heavy_file.read_text()
